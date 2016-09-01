@@ -1,0 +1,26 @@
+Last Modified Date & Time: 09/01/2016 21:14:33
+
+BLE_Heart_Rate_Collector: TopDesign.cysch
+	CYBLE [v3.10] to [v3.10]
+	Scanning_LED [v2.20] to [v2.20]
+	Notification_LED [v2.20] to [v2.20]
+	SW2 [v2.20] to [v2.20]
+	Disconnect_LED [v2.20] to [v2.20]
+	UART_DEB [v3.20] to [v3.20]
+
+BLE_Heart_Rate_Collector: BLE_Heart_Rate_Collector.cydwr
+	cy_boot [v4.20] to [v5.40]
+
+
+Last Modified Date & Time: 09/01/2016 21:19:18
+
+UART_to_BLE_central: TopDesign.cysch
+	BLE [v3.10] to [v3.10]
+	Scan_LED [v2.20] to [v2.20]
+	Conn_LED [v2.20] to [v2.20]
+	UART [v3.20] to [v3.20]
+
+UART_to_BLE_central: UART_to_BLE_central.cydwr
+	cy_boot [v4.20] to [v5.40]
+
+

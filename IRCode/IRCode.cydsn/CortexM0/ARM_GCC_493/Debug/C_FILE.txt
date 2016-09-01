@@ -1,0 +1,1 @@
+'C:\Users\zpstrwy\Documents\PSoC Creator\IRCode\IRCode.cydsn\app_ble.c' -o .o -T C_FILE -I 'C:\Users\zpstrwy\Documents\PSoC Creator\IRCode\IRCode.cydsn' -I 'C:\Users\zpstrwy\Documents\PSoC Creator\IRCode\IRCode.cydsn\Generated_Source\PSoC4' -f 'C:\Users\zpstrwy\Documents\PSoC Creator\IRCode\IRCode.cydsn\CortexM0\ARM_GCC_493\Debug\.deps\C_FILE.d'

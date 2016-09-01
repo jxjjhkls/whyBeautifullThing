@@ -1,0 +1,5 @@
+C:\Users\zpstrwy\Documents\PSoC Creator\IRCode\IRCode.cydsn\IRCode.cyprj|7de91a8b-c079-4a56-a9b8-32d03781ddc0
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|d40b935e-014b-47ff-b014-067f5fe503df
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|3a935259-cc8a-43ec-b86d-6ad363358377
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|1c9813e5-3d1a-4aa4-acbd-eb1872e76267
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|ffb052dd-2393-4a69-b129-cde52774c628

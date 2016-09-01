@@ -1,0 +1,4037 @@
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"IRCode.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	gtag_ircode,12,4
+  18              		.comm	decodemsg,128,4
+  19              		.comm	decodemsg_len,1,1
+  20              		.section	.text.Proc_SampDecodeData,"ax",%progbits
+  21              		.align	2
+  22              		.global	Proc_SampDecodeData
+  23              		.code	16
+  24              		.thumb_func
+  25              		.type	Proc_SampDecodeData, %function
+  26              	Proc_SampDecodeData:
+  27              	.LFB37:
+  28              		.file 1 ".\\IRCode.c"
+   1:.\IRCode.c    **** #include <project.h>
+   2:.\IRCode.c    **** #include "IRCode.h"
+   3:.\IRCode.c    **** #include "CyFlash.h"
+   4:.\IRCode.c    **** #include <stdlib.h>
+   5:.\IRCode.c    **** #include <stdio.h>
+   6:.\IRCode.c    **** #include <math.h>
+   7:.\IRCode.c    **** 
+   8:.\IRCode.c    **** volatile TAG_IRCODE gtag_ircode;
+   9:.\IRCode.c    **** uint8 decodemsg[128];
+  10:.\IRCode.c    **** uint8 decodemsg_len;
+  11:.\IRCode.c    **** 
+  12:.\IRCode.c    **** //解析红外解码
+  13:.\IRCode.c    **** 
+  14:.\IRCode.c    **** uint8 Proc_SampDecodeData(uint8 data)
+  15:.\IRCode.c    **** {
+  29              		.loc 1 15 0
+  30              		.cfi_startproc
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 84B0     		sub	sp, sp, #16
+  36              		.cfi_def_cfa_offset 24
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  39 0006 021C     		mov	r2, r0
+  40 0008 FB1D     		add	r3, r7, #7
+  41 000a 1A70     		strb	r2, [r3]
+  16:.\IRCode.c    **** 	static uint8 step = 0;
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 2
+
+
+  17:.\IRCode.c    **** 	uint8 status = 0;
+  42              		.loc 1 17 0
+  43 000c 0F23     		mov	r3, #15
+  44 000e FB18     		add	r3, r7, r3
+  45 0010 0022     		mov	r2, #0
+  46 0012 1A70     		strb	r2, [r3]
+  18:.\IRCode.c    **** 	gtag_ircode.tick_50us ++; 
+  47              		.loc 1 18 0
+  48 0014 604B     		ldr	r3, .L18
+  49 0016 9B68     		ldr	r3, [r3, #8]
+  50 0018 5A1C     		add	r2, r3, #1
+  51 001a 5F4B     		ldr	r3, .L18
+  52 001c 9A60     		str	r2, [r3, #8]
+  19:.\IRCode.c    **** 	if(gtag_ircode.IR_NewKeyflag)
+  53              		.loc 1 19 0
+  54 001e 5E4B     		ldr	r3, .L18
+  55 0020 9B78     		ldrb	r3, [r3, #2]
+  56 0022 DBB2     		uxtb	r3, r3
+  57 0024 002B     		cmp	r3, #0
+  58 0026 03D0     		beq	.L2
+  20:.\IRCode.c    **** 		return status;
+  59              		.loc 1 20 0
+  60 0028 0F23     		mov	r3, #15
+  61 002a FB18     		add	r3, r7, r3
+  62 002c 1B78     		ldrb	r3, [r3]
+  63 002e AEE0     		b	.L3
+  64              	.L2:
+  21:.\IRCode.c    **** 	switch(step)
+  65              		.loc 1 21 0
+  66 0030 5A4B     		ldr	r3, .L18+4
+  67 0032 1B78     		ldrb	r3, [r3]
+  68 0034 012B     		cmp	r3, #1
+  69 0036 2ED0     		beq	.L5
+  70 0038 022B     		cmp	r3, #2
+  71 003a 5FD0     		beq	.L6
+  72 003c 002B     		cmp	r3, #0
+  73 003e 00D0     		beq	.L7
+  22:.\IRCode.c    **** 	{
+  23:.\IRCode.c    **** 		case 0:
+  24:.\IRCode.c    **** 			if(data < gtag_ircode.IR_threshold )
+  25:.\IRCode.c    **** 			{
+  26:.\IRCode.c    **** 				
+  27:.\IRCode.c    **** 				gtag_ircode.decode_delta ++;
+  28:.\IRCode.c    **** 				if(gtag_ircode.decode_delta < 20)
+  29:.\IRCode.c    **** 					break;
+  30:.\IRCode.c    **** 				step ++;
+  31:.\IRCode.c    **** 				decodemsg_len = 0;
+  32:.\IRCode.c    **** 				status  = 1; 
+  33:.\IRCode.c    **** 			}
+  34:.\IRCode.c    **** 			else
+  35:.\IRCode.c    **** 			{
+  36:.\IRCode.c    **** 				gtag_ircode.decode_delta = 0;
+  37:.\IRCode.c    **** 				status  = 0;
+  38:.\IRCode.c    **** 			}
+  39:.\IRCode.c    **** 			break;
+  40:.\IRCode.c    **** 		case 1:   //开始计数  低电平
+  41:.\IRCode.c    **** 			if(data < gtag_ircode.IR_threshold)
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 3
+
+
+  42:.\IRCode.c    **** 			{
+  43:.\IRCode.c    **** 				gtag_ircode.decode_delta ++;
+  44:.\IRCode.c    **** 			}
+  45:.\IRCode.c    **** 			else 
+  46:.\IRCode.c    **** 			{
+  47:.\IRCode.c    **** 				step++;
+  48:.\IRCode.c    **** 				decodemsg[decodemsg_len++] = gtag_ircode.decode_delta;
+  49:.\IRCode.c    **** 				gtag_ircode.decode_delta = 0;
+  50:.\IRCode.c    **** 				if(decodemsg_len >= sizeof(decodemsg))
+  51:.\IRCode.c    **** 				decodemsg_len = 0;
+  52:.\IRCode.c    **** 			}
+  53:.\IRCode.c    **** 			status  = 1;  
+  54:.\IRCode.c    **** 			break;
+  55:.\IRCode.c    **** 		case 2://开始计数  高电平
+  56:.\IRCode.c    **** 			status  = 1;  
+  57:.\IRCode.c    **** 			if(data >= gtag_ircode.IR_threshold )
+  58:.\IRCode.c    **** 			{
+  59:.\IRCode.c    **** 				gtag_ircode.decode_delta ++;
+  60:.\IRCode.c    **** 				if(gtag_ircode.decode_delta > 250)
+  61:.\IRCode.c    **** 				{
+  62:.\IRCode.c    **** 					//按键存在
+  63:.\IRCode.c    **** 					step = 0;
+  64:.\IRCode.c    **** 					gtag_ircode.IR_NewKeyflag = 1;	
+  65:.\IRCode.c    **** 					gtag_ircode.decode_delta = 0;
+  66:.\IRCode.c    **** 					status  = 0;
+  67:.\IRCode.c    **** 				}
+  68:.\IRCode.c    **** 			}
+  69:.\IRCode.c    **** 			else
+  70:.\IRCode.c    **** 			{
+  71:.\IRCode.c    **** 				step--;
+  72:.\IRCode.c    **** 				decodemsg[decodemsg_len++] = gtag_ircode.decode_delta;
+  73:.\IRCode.c    **** 				gtag_ircode.decode_delta = 0;
+  74:.\IRCode.c    **** 				if(decodemsg_len >= sizeof(decodemsg))
+  75:.\IRCode.c    **** 				decodemsg_len = 0;			
+  76:.\IRCode.c    **** 			}
+  77:.\IRCode.c    **** 			break;
+  78:.\IRCode.c    **** 		
+  79:.\IRCode.c    **** 			
+  80:.\IRCode.c    **** 		
+  81:.\IRCode.c    **** 		default:break;
+  74              		.loc 1 81 0
+  75 0040 A2E0     		b	.L10
+  76              	.L7:
+  24:.\IRCode.c    **** 			{
+  77              		.loc 1 24 0
+  78 0042 554B     		ldr	r3, .L18
+  79 0044 1B78     		ldrb	r3, [r3]
+  80 0046 DBB2     		uxtb	r3, r3
+  81 0048 FA1D     		add	r2, r7, #7
+  82 004a 1278     		ldrb	r2, [r2]
+  83 004c 9A42     		cmp	r2, r3
+  84 004e 1AD2     		bcs	.L8
+  27:.\IRCode.c    **** 				if(gtag_ircode.decode_delta < 20)
+  85              		.loc 1 27 0
+  86 0050 514B     		ldr	r3, .L18
+  87 0052 9B88     		ldrh	r3, [r3, #4]
+  88 0054 9BB2     		uxth	r3, r3
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 4
+
+
+  89 0056 0133     		add	r3, r3, #1
+  90 0058 9AB2     		uxth	r2, r3
+  91 005a 4F4B     		ldr	r3, .L18
+  92 005c 9A80     		strh	r2, [r3, #4]
+  28:.\IRCode.c    **** 					break;
+  93              		.loc 1 28 0
+  94 005e 4E4B     		ldr	r3, .L18
+  95 0060 9B88     		ldrh	r3, [r3, #4]
+  96 0062 9BB2     		uxth	r3, r3
+  97 0064 132B     		cmp	r3, #19
+  98 0066 00D8     		bhi	.L9
+  29:.\IRCode.c    **** 				step ++;
+  99              		.loc 1 29 0
+ 100 0068 8EE0     		b	.L10
+ 101              	.L9:
+  30:.\IRCode.c    **** 				decodemsg_len = 0;
+ 102              		.loc 1 30 0
+ 103 006a 4C4B     		ldr	r3, .L18+4
+ 104 006c 1B78     		ldrb	r3, [r3]
+ 105 006e 0133     		add	r3, r3, #1
+ 106 0070 DAB2     		uxtb	r2, r3
+ 107 0072 4A4B     		ldr	r3, .L18+4
+ 108 0074 1A70     		strb	r2, [r3]
+  31:.\IRCode.c    **** 				status  = 1; 
+ 109              		.loc 1 31 0
+ 110 0076 4A4B     		ldr	r3, .L18+8
+ 111 0078 0022     		mov	r2, #0
+ 112 007a 1A70     		strb	r2, [r3]
+  32:.\IRCode.c    **** 			}
+ 113              		.loc 1 32 0
+ 114 007c 0F23     		mov	r3, #15
+ 115 007e FB18     		add	r3, r7, r3
+ 116 0080 0122     		mov	r2, #1
+ 117 0082 1A70     		strb	r2, [r3]
+  39:.\IRCode.c    **** 		case 1:   //开始计数  低电平
+ 118              		.loc 1 39 0
+ 119 0084 80E0     		b	.L10
+ 120              	.L8:
+  36:.\IRCode.c    **** 				status  = 0;
+ 121              		.loc 1 36 0
+ 122 0086 444B     		ldr	r3, .L18
+ 123 0088 0022     		mov	r2, #0
+ 124 008a 9A80     		strh	r2, [r3, #4]
+  37:.\IRCode.c    **** 			}
+ 125              		.loc 1 37 0
+ 126 008c 0F23     		mov	r3, #15
+ 127 008e FB18     		add	r3, r7, r3
+ 128 0090 0022     		mov	r2, #0
+ 129 0092 1A70     		strb	r2, [r3]
+  39:.\IRCode.c    **** 		case 1:   //开始计数  低电平
+ 130              		.loc 1 39 0
+ 131 0094 78E0     		b	.L10
+ 132              	.L5:
+  41:.\IRCode.c    **** 			{
+ 133              		.loc 1 41 0
+ 134 0096 404B     		ldr	r3, .L18
+ 135 0098 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 5
+
+
+ 136 009a DBB2     		uxtb	r3, r3
+ 137 009c FA1D     		add	r2, r7, #7
+ 138 009e 1278     		ldrb	r2, [r2]
+ 139 00a0 9A42     		cmp	r2, r3
+ 140 00a2 07D2     		bcs	.L12
+  43:.\IRCode.c    **** 			}
+ 141              		.loc 1 43 0
+ 142 00a4 3C4B     		ldr	r3, .L18
+ 143 00a6 9B88     		ldrh	r3, [r3, #4]
+ 144 00a8 9BB2     		uxth	r3, r3
+ 145 00aa 0133     		add	r3, r3, #1
+ 146 00ac 9AB2     		uxth	r2, r3
+ 147 00ae 3A4B     		ldr	r3, .L18
+ 148 00b0 9A80     		strh	r2, [r3, #4]
+ 149 00b2 1EE0     		b	.L13
+ 150              	.L12:
+  47:.\IRCode.c    **** 				decodemsg[decodemsg_len++] = gtag_ircode.decode_delta;
+ 151              		.loc 1 47 0
+ 152 00b4 394B     		ldr	r3, .L18+4
+ 153 00b6 1B78     		ldrb	r3, [r3]
+ 154 00b8 0133     		add	r3, r3, #1
+ 155 00ba DAB2     		uxtb	r2, r3
+ 156 00bc 374B     		ldr	r3, .L18+4
+ 157 00be 1A70     		strb	r2, [r3]
+  48:.\IRCode.c    **** 				gtag_ircode.decode_delta = 0;
+ 158              		.loc 1 48 0
+ 159 00c0 374B     		ldr	r3, .L18+8
+ 160 00c2 1B78     		ldrb	r3, [r3]
+ 161 00c4 5A1C     		add	r2, r3, #1
+ 162 00c6 D1B2     		uxtb	r1, r2
+ 163 00c8 354A     		ldr	r2, .L18+8
+ 164 00ca 1170     		strb	r1, [r2]
+ 165 00cc 1A1C     		mov	r2, r3
+ 166 00ce 324B     		ldr	r3, .L18
+ 167 00d0 9B88     		ldrh	r3, [r3, #4]
+ 168 00d2 9BB2     		uxth	r3, r3
+ 169 00d4 D9B2     		uxtb	r1, r3
+ 170 00d6 334B     		ldr	r3, .L18+12
+ 171 00d8 9954     		strb	r1, [r3, r2]
+  49:.\IRCode.c    **** 				if(decodemsg_len >= sizeof(decodemsg))
+ 172              		.loc 1 49 0
+ 173 00da 2F4B     		ldr	r3, .L18
+ 174 00dc 0022     		mov	r2, #0
+ 175 00de 9A80     		strh	r2, [r3, #4]
+  50:.\IRCode.c    **** 				decodemsg_len = 0;
+ 176              		.loc 1 50 0
+ 177 00e0 2F4B     		ldr	r3, .L18+8
+ 178 00e2 1B78     		ldrb	r3, [r3]
+ 179 00e4 DBB2     		uxtb	r3, r3
+ 180 00e6 5BB2     		sxtb	r3, r3
+ 181 00e8 002B     		cmp	r3, #0
+ 182 00ea 02DA     		bge	.L13
+  51:.\IRCode.c    **** 			}
+ 183              		.loc 1 51 0
+ 184 00ec 2C4B     		ldr	r3, .L18+8
+ 185 00ee 0022     		mov	r2, #0
+ 186 00f0 1A70     		strb	r2, [r3]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 6
+
+
+ 187              	.L13:
+  53:.\IRCode.c    **** 			break;
+ 188              		.loc 1 53 0
+ 189 00f2 0F23     		mov	r3, #15
+ 190 00f4 FB18     		add	r3, r7, r3
+ 191 00f6 0122     		mov	r2, #1
+ 192 00f8 1A70     		strb	r2, [r3]
+  54:.\IRCode.c    **** 		case 2://开始计数  高电平
+ 193              		.loc 1 54 0
+ 194 00fa 45E0     		b	.L10
+ 195              	.L6:
+  56:.\IRCode.c    **** 			if(data >= gtag_ircode.IR_threshold )
+ 196              		.loc 1 56 0
+ 197 00fc 0F23     		mov	r3, #15
+ 198 00fe FB18     		add	r3, r7, r3
+ 199 0100 0122     		mov	r2, #1
+ 200 0102 1A70     		strb	r2, [r3]
+  57:.\IRCode.c    **** 			{
+ 201              		.loc 1 57 0
+ 202 0104 244B     		ldr	r3, .L18
+ 203 0106 1B78     		ldrb	r3, [r3]
+ 204 0108 DBB2     		uxtb	r3, r3
+ 205 010a FA1D     		add	r2, r7, #7
+ 206 010c 1278     		ldrb	r2, [r2]
+ 207 010e 9A42     		cmp	r2, r3
+ 208 0110 19D3     		bcc	.L14
+  59:.\IRCode.c    **** 				if(gtag_ircode.decode_delta > 250)
+ 209              		.loc 1 59 0
+ 210 0112 214B     		ldr	r3, .L18
+ 211 0114 9B88     		ldrh	r3, [r3, #4]
+ 212 0116 9BB2     		uxth	r3, r3
+ 213 0118 0133     		add	r3, r3, #1
+ 214 011a 9AB2     		uxth	r2, r3
+ 215 011c 1E4B     		ldr	r3, .L18
+ 216 011e 9A80     		strh	r2, [r3, #4]
+  60:.\IRCode.c    **** 				{
+ 217              		.loc 1 60 0
+ 218 0120 1D4B     		ldr	r3, .L18
+ 219 0122 9B88     		ldrh	r3, [r3, #4]
+ 220 0124 9BB2     		uxth	r3, r3
+ 221 0126 FA2B     		cmp	r3, #250
+ 222 0128 2DD9     		bls	.L16
+  63:.\IRCode.c    **** 					gtag_ircode.IR_NewKeyflag = 1;	
+ 223              		.loc 1 63 0
+ 224 012a 1C4B     		ldr	r3, .L18+4
+ 225 012c 0022     		mov	r2, #0
+ 226 012e 1A70     		strb	r2, [r3]
+  64:.\IRCode.c    **** 					gtag_ircode.decode_delta = 0;
+ 227              		.loc 1 64 0
+ 228 0130 194B     		ldr	r3, .L18
+ 229 0132 0122     		mov	r2, #1
+ 230 0134 9A70     		strb	r2, [r3, #2]
+  65:.\IRCode.c    **** 					status  = 0;
+ 231              		.loc 1 65 0
+ 232 0136 184B     		ldr	r3, .L18
+ 233 0138 0022     		mov	r2, #0
+ 234 013a 9A80     		strh	r2, [r3, #4]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 7
+
+
+  66:.\IRCode.c    **** 				}
+ 235              		.loc 1 66 0
+ 236 013c 0F23     		mov	r3, #15
+ 237 013e FB18     		add	r3, r7, r3
+ 238 0140 0022     		mov	r2, #0
+ 239 0142 1A70     		strb	r2, [r3]
+  77:.\IRCode.c    **** 		
+ 240              		.loc 1 77 0
+ 241 0144 1FE0     		b	.L17
+ 242              	.L14:
+  71:.\IRCode.c    **** 				decodemsg[decodemsg_len++] = gtag_ircode.decode_delta;
+ 243              		.loc 1 71 0
+ 244 0146 154B     		ldr	r3, .L18+4
+ 245 0148 1B78     		ldrb	r3, [r3]
+ 246 014a 013B     		sub	r3, r3, #1
+ 247 014c DAB2     		uxtb	r2, r3
+ 248 014e 134B     		ldr	r3, .L18+4
+ 249 0150 1A70     		strb	r2, [r3]
+  72:.\IRCode.c    **** 				gtag_ircode.decode_delta = 0;
+ 250              		.loc 1 72 0
+ 251 0152 134B     		ldr	r3, .L18+8
+ 252 0154 1B78     		ldrb	r3, [r3]
+ 253 0156 5A1C     		add	r2, r3, #1
+ 254 0158 D1B2     		uxtb	r1, r2
+ 255 015a 114A     		ldr	r2, .L18+8
+ 256 015c 1170     		strb	r1, [r2]
+ 257 015e 1A1C     		mov	r2, r3
+ 258 0160 0D4B     		ldr	r3, .L18
+ 259 0162 9B88     		ldrh	r3, [r3, #4]
+ 260 0164 9BB2     		uxth	r3, r3
+ 261 0166 D9B2     		uxtb	r1, r3
+ 262 0168 0E4B     		ldr	r3, .L18+12
+ 263 016a 9954     		strb	r1, [r3, r2]
+  73:.\IRCode.c    **** 				if(decodemsg_len >= sizeof(decodemsg))
+ 264              		.loc 1 73 0
+ 265 016c 0A4B     		ldr	r3, .L18
+ 266 016e 0022     		mov	r2, #0
+ 267 0170 9A80     		strh	r2, [r3, #4]
+  74:.\IRCode.c    **** 				decodemsg_len = 0;			
+ 268              		.loc 1 74 0
+ 269 0172 0B4B     		ldr	r3, .L18+8
+ 270 0174 1B78     		ldrb	r3, [r3]
+ 271 0176 DBB2     		uxtb	r3, r3
+ 272 0178 5BB2     		sxtb	r3, r3
+ 273 017a 002B     		cmp	r3, #0
+ 274 017c 03DA     		bge	.L16
+  75:.\IRCode.c    **** 			}
+ 275              		.loc 1 75 0
+ 276 017e 084B     		ldr	r3, .L18+8
+ 277 0180 0022     		mov	r2, #0
+ 278 0182 1A70     		strb	r2, [r3]
+  77:.\IRCode.c    **** 		
+ 279              		.loc 1 77 0
+ 280 0184 FFE7     		b	.L17
+ 281              	.L16:
+ 282              	.L17:
+ 283 0186 C046     		mov	r8, r8
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 8
+
+
+ 284              	.L10:
+  82:.\IRCode.c    **** 	}
+  83:.\IRCode.c    ****     return status;
+ 285              		.loc 1 83 0
+ 286 0188 0F23     		mov	r3, #15
+ 287 018a FB18     		add	r3, r7, r3
+ 288 018c 1B78     		ldrb	r3, [r3]
+ 289              	.L3:
+  84:.\IRCode.c    **** }
+ 290              		.loc 1 84 0
+ 291 018e 181C     		mov	r0, r3
+ 292 0190 BD46     		mov	sp, r7
+ 293 0192 04B0     		add	sp, sp, #16
+ 294              		@ sp needed
+ 295 0194 80BD     		pop	{r7, pc}
+ 296              	.L19:
+ 297 0196 C046     		.align	2
+ 298              	.L18:
+ 299 0198 00000000 		.word	gtag_ircode
+ 300 019c 00000000 		.word	step.8757
+ 301 01a0 00000000 		.word	decodemsg_len
+ 302 01a4 00000000 		.word	decodemsg
+ 303              		.cfi_endproc
+ 304              	.LFE37:
+ 305              		.size	Proc_SampDecodeData, .-Proc_SampDecodeData
+ 306              		.section	.text.ADC_ISR_Handler,"ax",%progbits
+ 307              		.align	2
+ 308              		.global	ADC_ISR_Handler
+ 309              		.code	16
+ 310              		.thumb_func
+ 311              		.type	ADC_ISR_Handler, %function
+ 312              	ADC_ISR_Handler:
+ 313              	.LFB38:
+  85:.\IRCode.c    **** 
+  86:.\IRCode.c    **** 
+  87:.\IRCode.c    **** //uint16 output;
+  88:.\IRCode.c    **** //float32 VOUT;
+  89:.\IRCode.c    **** CY_ISR(ADC_ISR_Handler)
+  90:.\IRCode.c    **** {
+ 314              		.loc 1 90 0
+ 315              		.cfi_startproc
+ 316 0000 80B5     		push	{r7, lr}
+ 317              		.cfi_def_cfa_offset 8
+ 318              		.cfi_offset 7, -8
+ 319              		.cfi_offset 14, -4
+ 320 0002 82B0     		sub	sp, sp, #8
+ 321              		.cfi_def_cfa_offset 16
+ 322 0004 00AF     		add	r7, sp, #0
+ 323              		.cfi_def_cfa_register 7
+  91:.\IRCode.c    **** 	uint32 intr_status;
+  92:.\IRCode.c    **** 
+  93:.\IRCode.c    **** 	/* Read interrupt status register */
+  94:.\IRCode.c    **** 	intr_status = ADC_SAP_SAR_INTR_REG;
+ 324              		.loc 1 94 0
+ 325 0006 094B     		ldr	r3, .L21
+ 326 0008 1B68     		ldr	r3, [r3]
+ 327 000a 7B60     		str	r3, [r7, #4]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 9
+
+
+  95:.\IRCode.c    **** 
+  96:.\IRCode.c    **** 	//output = (int16)(ADC_SAP_SAR_CHAN0_RESULT_REG & ADC_SAP_RESULT_MASK); 
+  97:.\IRCode.c    **** 	//VOUT = ADC_SAP_CountsTo_Volts(0,output);
+  98:.\IRCode.c    **** 	Proc_SampDecodeData((int16)(ADC_SAP_SAR_CHAN0_RESULT_REG & ADC_SAP_RESULT_MASK)>> 3);
+ 328              		.loc 1 98 0
+ 329 000c 084B     		ldr	r3, .L21+4
+ 330 000e 1B68     		ldr	r3, [r3]
+ 331 0010 9BB2     		uxth	r3, r3
+ 332 0012 1BB2     		sxth	r3, r3
+ 333 0014 DB10     		asr	r3, r3, #3
+ 334 0016 9BB2     		uxth	r3, r3
+ 335 0018 DBB2     		uxtb	r3, r3
+ 336 001a 181C     		mov	r0, r3
+ 337 001c FFF7FEFF 		bl	Proc_SampDecodeData
+  99:.\IRCode.c    **** 	/* Clear handled interrupt */
+ 100:.\IRCode.c    **** 	ADC_SAP_SAR_INTR_REG = intr_status;
+ 338              		.loc 1 100 0
+ 339 0020 024B     		ldr	r3, .L21
+ 340 0022 7A68     		ldr	r2, [r7, #4]
+ 341 0024 1A60     		str	r2, [r3]
+ 101:.\IRCode.c    **** 
+ 102:.\IRCode.c    **** }
+ 342              		.loc 1 102 0
+ 343 0026 BD46     		mov	sp, r7
+ 344 0028 02B0     		add	sp, sp, #8
+ 345              		@ sp needed
+ 346 002a 80BD     		pop	{r7, pc}
+ 347              	.L22:
+ 348              		.align	2
+ 349              	.L21:
+ 350 002c 10023A40 		.word	1077543440
+ 351 0030 80013A40 		.word	1077543296
+ 352              		.cfi_endproc
+ 353              	.LFE38:
+ 354              		.size	ADC_ISR_Handler, .-ADC_ISR_Handler
+ 355              		.global	irinitkey
+ 356              		.section	.rodata
+ 357              		.align	2
+ 358              		.type	irinitkey, %object
+ 359              		.size	irinitkey, 128
+ 360              	irinitkey:
+ 361 0000 55       		.byte	85
+ 362 0001 04       		.byte	4
+ 363 0002 11       		.byte	17
+ 364 0003 EE       		.byte	-18
+ 365 0004 15       		.byte	21
+ 366 0005 EA       		.byte	-22
+ 367 0006 00000000 		.space	122
+ 367      00000000 
+ 367      00000000 
+ 367      00000000 
+ 367      00000000 
+ 368              		.section	.text.IrCode_InitKey,"ax",%progbits
+ 369              		.align	2
+ 370              		.global	IrCode_InitKey
+ 371              		.code	16
+ 372              		.thumb_func
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 10
+
+
+ 373              		.type	IrCode_InitKey, %function
+ 374              	IrCode_InitKey:
+ 375              	.LFB39:
+ 103:.\IRCode.c    **** 
+ 104:.\IRCode.c    **** const uint8 irinitkey[][128] =
+ 105:.\IRCode.c    **** {
+ 106:.\IRCode.c    **** 	{  //OK  
+ 107:.\IRCode.c    **** 		0x55,0x04,0x11,0xEE,0x15,0xea,
+ 108:.\IRCode.c    **** 	},
+ 109:.\IRCode.c    **** 	
+ 110:.\IRCode.c    **** };
+ 111:.\IRCode.c    **** void IrCode_InitKey(void)
+ 112:.\IRCode.c    **** {
+ 376              		.loc 1 112 0
+ 377              		.cfi_startproc
+ 378 0000 80B5     		push	{r7, lr}
+ 379              		.cfi_def_cfa_offset 8
+ 380              		.cfi_offset 7, -8
+ 381              		.cfi_offset 14, -4
+ 382 0002 82B0     		sub	sp, sp, #8
+ 383              		.cfi_def_cfa_offset 16
+ 384 0004 00AF     		add	r7, sp, #0
+ 385              		.cfi_def_cfa_register 7
+ 113:.\IRCode.c    **** 	uint8 *readBuf,i;
+ 114:.\IRCode.c    **** 	readBuf = (uint8*)((CY_FLASH_NUMBER_ROWS-1)*CYDEV_FLS_ROW_SIZE);
+ 386              		.loc 1 114 0
+ 387 0006 124B     		ldr	r3, .L28
+ 388 0008 3B60     		str	r3, [r7]
+ 115:.\IRCode.c    **** 	if(readBuf[0] == 0x55)	   //初始化过
+ 389              		.loc 1 115 0
+ 390 000a 3B68     		ldr	r3, [r7]
+ 391 000c 1B78     		ldrb	r3, [r3]
+ 392 000e 552B     		cmp	r3, #85
+ 393 0010 00D1     		bne	.L24
+ 116:.\IRCode.c    **** 	return;
+ 394              		.loc 1 116 0
+ 395 0012 19E0     		b	.L23
+ 396              	.L24:
+ 117:.\IRCode.c    **** 	for(i = 0;i < sizeof(irinitkey)/sizeof(irinitkey[0]);i++)
+ 397              		.loc 1 117 0
+ 398 0014 FB1D     		add	r3, r7, #7
+ 399 0016 0022     		mov	r2, #0
+ 400 0018 1A70     		strb	r2, [r3]
+ 401 001a 11E0     		b	.L26
+ 402              	.L27:
+ 118:.\IRCode.c    **** 	{
+ 119:.\IRCode.c    **** 		CySysFlashWriteRow(CY_FLASH_NUMBER_ROWS-1-i,irinitkey[i]);
+ 403              		.loc 1 119 0 discriminator 3
+ 404 001c FB1D     		add	r3, r7, #7
+ 405 001e 1B78     		ldrb	r3, [r3]
+ 406 0020 0C4A     		ldr	r2, .L28+4
+ 407 0022 D11A     		sub	r1, r2, r3
+ 408 0024 FB1D     		add	r3, r7, #7
+ 409 0026 1B78     		ldrb	r3, [r3]
+ 410 0028 DA01     		lsl	r2, r3, #7
+ 411 002a 0B4B     		ldr	r3, .L28+8
+ 412 002c D318     		add	r3, r2, r3
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 11
+
+
+ 413 002e 081C     		mov	r0, r1
+ 414 0030 191C     		mov	r1, r3
+ 415 0032 FFF7FEFF 		bl	CySysFlashWriteRow
+ 117:.\IRCode.c    **** 	for(i = 0;i < sizeof(irinitkey)/sizeof(irinitkey[0]);i++)
+ 416              		.loc 1 117 0 discriminator 3
+ 417 0036 FB1D     		add	r3, r7, #7
+ 418 0038 1A78     		ldrb	r2, [r3]
+ 419 003a FB1D     		add	r3, r7, #7
+ 420 003c 0132     		add	r2, r2, #1
+ 421 003e 1A70     		strb	r2, [r3]
+ 422              	.L26:
+ 117:.\IRCode.c    **** 	for(i = 0;i < sizeof(irinitkey)/sizeof(irinitkey[0]);i++)
+ 423              		.loc 1 117 0 is_stmt 0 discriminator 1
+ 424 0040 FB1D     		add	r3, r7, #7
+ 425 0042 1B78     		ldrb	r3, [r3]
+ 426 0044 002B     		cmp	r3, #0
+ 427 0046 E9D0     		beq	.L27
+ 428              	.L23:
+ 120:.\IRCode.c    **** 	}
+ 121:.\IRCode.c    **** }
+ 429              		.loc 1 121 0 is_stmt 1
+ 430 0048 BD46     		mov	sp, r7
+ 431 004a 02B0     		add	sp, sp, #8
+ 432              		@ sp needed
+ 433 004c 80BD     		pop	{r7, pc}
+ 434              	.L29:
+ 435 004e C046     		.align	2
+ 436              	.L28:
+ 437 0050 80FF0100 		.word	130944
+ 438 0054 FF030000 		.word	1023
+ 439 0058 00000000 		.word	irinitkey
+ 440              		.cfi_endproc
+ 441              	.LFE39:
+ 442              		.size	IrCode_InitKey, .-IrCode_InitKey
+ 443              		.section	.text.IrCode_Init,"ax",%progbits
+ 444              		.align	2
+ 445              		.global	IrCode_Init
+ 446              		.code	16
+ 447              		.thumb_func
+ 448              		.type	IrCode_Init, %function
+ 449              	IrCode_Init:
+ 450              	.LFB40:
+ 122:.\IRCode.c    **** 
+ 123:.\IRCode.c    **** void IrCode_Init(void)
+ 124:.\IRCode.c    **** {
+ 451              		.loc 1 124 0
+ 452              		.cfi_startproc
+ 453 0000 80B5     		push	{r7, lr}
+ 454              		.cfi_def_cfa_offset 8
+ 455              		.cfi_offset 7, -8
+ 456              		.cfi_offset 14, -4
+ 457 0002 82B0     		sub	sp, sp, #8
+ 458              		.cfi_def_cfa_offset 16
+ 459 0004 00AF     		add	r7, sp, #0
+ 460              		.cfi_def_cfa_register 7
+ 125:.\IRCode.c    **** 	uint8 i;
+ 126:.\IRCode.c    **** 	uint16 sum;
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 12
+
+
+ 127:.\IRCode.c    ****    	CTL_DOut_Write(0);
+ 461              		.loc 1 127 0
+ 462 0006 0020     		mov	r0, #0
+ 463 0008 FFF7FEFF 		bl	CTL_DOut_Write
+ 128:.\IRCode.c    ****     ADC_SAP_Start();           /* Initialize ADC */ 
+ 464              		.loc 1 128 0
+ 465 000c FFF7FEFF 		bl	ADC_SAP_Start
+ 129:.\IRCode.c    **** 	ADC_SAP_IRQ_StartEx(ADC_ISR_Handler);
+ 466              		.loc 1 129 0
+ 467 0010 234B     		ldr	r3, .L33
+ 468 0012 181C     		mov	r0, r3
+ 469 0014 FFF7FEFF 		bl	ADC_SAP_IRQ_StartEx
+ 130:.\IRCode.c    **** 	ADC_SAP_IRQ_Disable();
+ 470              		.loc 1 130 0
+ 471 0018 FFF7FEFF 		bl	ADC_SAP_IRQ_Disable
+ 131:.\IRCode.c    **** 	memset((uint8*)&gtag_ircode,0x00,sizeof(TAG_IRCODE));
+ 472              		.loc 1 131 0
+ 473 001c 214B     		ldr	r3, .L33+4
+ 474 001e 181C     		mov	r0, r3
+ 475 0020 0021     		mov	r1, #0
+ 476 0022 0C22     		mov	r2, #12
+ 477 0024 FFF7FEFF 		bl	memset
+ 132:.\IRCode.c    **** 	//获取一次
+ 133:.\IRCode.c    **** 	sum = 0;
+ 478              		.loc 1 133 0
+ 479 0028 3B1D     		add	r3, r7, #4
+ 480 002a 0022     		mov	r2, #0
+ 481 002c 1A80     		strh	r2, [r3]
+ 134:.\IRCode.c    **** 	for(i = 0;i < 8;i++)
+ 482              		.loc 1 134 0
+ 483 002e FB1D     		add	r3, r7, #7
+ 484 0030 0022     		mov	r2, #0
+ 485 0032 1A70     		strb	r2, [r3]
+ 486 0034 16E0     		b	.L31
+ 487              	.L32:
+ 135:.\IRCode.c    **** 	{
+ 136:.\IRCode.c    **** 		 ADC_SAP_StartConvert();    /* Start ADC conversions */	
+ 488              		.loc 1 136 0 discriminator 3
+ 489 0036 FFF7FEFF 		bl	ADC_SAP_StartConvert
+ 137:.\IRCode.c    **** 		 ADC_SAP_IsEndConversion(ADC_SAP_WAIT_FOR_RESULT);
+ 490              		.loc 1 137 0 discriminator 3
+ 491 003a 0220     		mov	r0, #2
+ 492 003c FFF7FEFF 		bl	ADC_SAP_IsEndConversion
+ 138:.\IRCode.c    **** 		 sum += ((int16)(ADC_SAP_SAR_CHAN0_RESULT_REG & ADC_SAP_RESULT_MASK)>> 3);
+ 493              		.loc 1 138 0 discriminator 3
+ 494 0040 194B     		ldr	r3, .L33+8
+ 495 0042 1B68     		ldr	r3, [r3]
+ 496 0044 9BB2     		uxth	r3, r3
+ 497 0046 1BB2     		sxth	r3, r3
+ 498 0048 DB10     		asr	r3, r3, #3
+ 499 004a 9BB2     		uxth	r3, r3
+ 500 004c 1BB2     		sxth	r3, r3
+ 501 004e 99B2     		uxth	r1, r3
+ 502 0050 3B1D     		add	r3, r7, #4
+ 503 0052 3A1D     		add	r2, r7, #4
+ 504 0054 1288     		ldrh	r2, [r2]
+ 505 0056 8A18     		add	r2, r1, r2
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 13
+
+
+ 506 0058 1A80     		strh	r2, [r3]
+ 134:.\IRCode.c    **** 	{
+ 507              		.loc 1 134 0 discriminator 3
+ 508 005a FB1D     		add	r3, r7, #7
+ 509 005c 1A78     		ldrb	r2, [r3]
+ 510 005e FB1D     		add	r3, r7, #7
+ 511 0060 0132     		add	r2, r2, #1
+ 512 0062 1A70     		strb	r2, [r3]
+ 513              	.L31:
+ 134:.\IRCode.c    **** 	{
+ 514              		.loc 1 134 0 is_stmt 0 discriminator 1
+ 515 0064 FB1D     		add	r3, r7, #7
+ 516 0066 1B78     		ldrb	r3, [r3]
+ 517 0068 072B     		cmp	r3, #7
+ 518 006a E4D9     		bls	.L32
+ 139:.\IRCode.c    **** 	}
+ 140:.\IRCode.c    **** 	gtag_ircode.IR_threshold = sum /8;
+ 519              		.loc 1 140 0 is_stmt 1
+ 520 006c 3B1D     		add	r3, r7, #4
+ 521 006e 1B88     		ldrh	r3, [r3]
+ 522 0070 DB08     		lsr	r3, r3, #3
+ 523 0072 9BB2     		uxth	r3, r3
+ 524 0074 DAB2     		uxtb	r2, r3
+ 525 0076 0B4B     		ldr	r3, .L33+4
+ 526 0078 1A70     		strb	r2, [r3]
+ 141:.\IRCode.c    **** 	gtag_ircode.IR_threshold/=2;
+ 527              		.loc 1 141 0
+ 528 007a 0A4B     		ldr	r3, .L33+4
+ 529 007c 1B78     		ldrb	r3, [r3]
+ 530 007e DBB2     		uxtb	r3, r3
+ 531 0080 5B08     		lsr	r3, r3, #1
+ 532 0082 DAB2     		uxtb	r2, r3
+ 533 0084 074B     		ldr	r3, .L33+4
+ 534 0086 1A70     		strb	r2, [r3]
+ 142:.\IRCode.c    **** 	ADC_SAP_IRQ_Enable();      /* Enable ADC interrupts */ 
+ 535              		.loc 1 142 0
+ 536 0088 FFF7FEFF 		bl	ADC_SAP_IRQ_Enable
+ 143:.\IRCode.c    **** 	IrCode_InitKey();
+ 537              		.loc 1 143 0
+ 538 008c FFF7FEFF 		bl	IrCode_InitKey
+ 144:.\IRCode.c    **** 	Timer_Start();
+ 539              		.loc 1 144 0
+ 540 0090 FFF7FEFF 		bl	Timer_Start
+ 145:.\IRCode.c    **** 	gtag_ircode.IR_NewKeyflag  =  1 ;   
+ 541              		.loc 1 145 0
+ 542 0094 034B     		ldr	r3, .L33+4
+ 543 0096 0122     		mov	r2, #1
+ 544 0098 9A70     		strb	r2, [r3, #2]
+ 146:.\IRCode.c    **** }
+ 545              		.loc 1 146 0
+ 546 009a BD46     		mov	sp, r7
+ 547 009c 02B0     		add	sp, sp, #8
+ 548              		@ sp needed
+ 549 009e 80BD     		pop	{r7, pc}
+ 550              	.L34:
+ 551              		.align	2
+ 552              	.L33:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 14
+
+
+ 553 00a0 00000000 		.word	ADC_ISR_Handler
+ 554 00a4 00000000 		.word	gtag_ircode
+ 555 00a8 80013A40 		.word	1077543296
+ 556              		.cfi_endproc
+ 557              	.LFE40:
+ 558              		.size	IrCode_Init, .-IrCode_Init
+ 559              		.section	.text.SampDecodeData_Loop,"ax",%progbits
+ 560              		.align	2
+ 561              		.global	SampDecodeData_Loop
+ 562              		.code	16
+ 563              		.thumb_func
+ 564              		.type	SampDecodeData_Loop, %function
+ 565              	SampDecodeData_Loop:
+ 566              	.LFB41:
+ 147:.\IRCode.c    **** 
+ 148:.\IRCode.c    **** void SampDecodeData_Loop(void)
+ 149:.\IRCode.c    **** {
+ 567              		.loc 1 149 0
+ 568              		.cfi_startproc
+ 569 0000 80B5     		push	{r7, lr}
+ 570              		.cfi_def_cfa_offset 8
+ 571              		.cfi_offset 7, -8
+ 572              		.cfi_offset 14, -4
+ 573 0002 00AF     		add	r7, sp, #0
+ 574              		.cfi_def_cfa_register 7
+ 150:.\IRCode.c    **** 	CyGlobalIntDisable;
+ 575              		.loc 1 150 0
+ 576              	@ 150 ".\IRCode.c" 1
+ 577 0004 72B6     		CPSID   i
+ 578              	@ 0 "" 2
+ 579              		.code	16
+ 580              	.L38:
+ 151:.\IRCode.c    **** 	while(1)
+ 152:.\IRCode.c    **** 	{
+ 153:.\IRCode.c    **** 		   /* Start ADC conversions */	
+ 154:.\IRCode.c    **** 		ADC_SAP_IsEndConversion(ADC_SAP_WAIT_FOR_RESULT);
+ 581              		.loc 1 154 0
+ 582 0006 0220     		mov	r0, #2
+ 583 0008 FFF7FEFF 		bl	ADC_SAP_IsEndConversion
+ 155:.\IRCode.c    **** 		if(Proc_SampDecodeData((int16)(ADC_SAP_SAR_CHAN0_RESULT_REG & ADC_SAP_RESULT_MASK)>> 3) == 0)
+ 584              		.loc 1 155 0
+ 585 000c 084B     		ldr	r3, .L40
+ 586 000e 1B68     		ldr	r3, [r3]
+ 587 0010 9BB2     		uxth	r3, r3
+ 588 0012 1BB2     		sxth	r3, r3
+ 589 0014 DB10     		asr	r3, r3, #3
+ 590 0016 9BB2     		uxth	r3, r3
+ 591 0018 DBB2     		uxtb	r3, r3
+ 592 001a 181C     		mov	r0, r3
+ 593 001c FFF7FEFF 		bl	Proc_SampDecodeData
+ 594 0020 031E     		sub	r3, r0, #0
+ 595 0022 00D1     		bne	.L36
+ 156:.\IRCode.c    **** 		{
+ 157:.\IRCode.c    **** 			break;
+ 596              		.loc 1 157 0
+ 597 0024 00E0     		b	.L39
+ 598              	.L36:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 15
+
+
+ 158:.\IRCode.c    **** 		}
+ 159:.\IRCode.c    **** 	}
+ 599              		.loc 1 159 0
+ 600 0026 EEE7     		b	.L38
+ 601              	.L39:
+ 160:.\IRCode.c    **** 	CyGlobalIntEnable;
+ 602              		.loc 1 160 0
+ 603              	@ 160 ".\IRCode.c" 1
+ 604 0028 62B6     		CPSIE   i
+ 605              	@ 0 "" 2
+ 161:.\IRCode.c    **** }
+ 606              		.loc 1 161 0
+ 607              		.code	16
+ 608 002a BD46     		mov	sp, r7
+ 609              		@ sp needed
+ 610 002c 80BD     		pop	{r7, pc}
+ 611              	.L41:
+ 612 002e C046     		.align	2
+ 613              	.L40:
+ 614 0030 80013A40 		.word	1077543296
+ 615              		.cfi_endproc
+ 616              	.LFE41:
+ 617              		.size	SampDecodeData_Loop, .-SampDecodeData_Loop
+ 618              		.section	.text.Ir_DecoderCode,"ax",%progbits
+ 619              		.align	2
+ 620              		.code	16
+ 621              		.thumb_func
+ 622              		.type	Ir_DecoderCode, %function
+ 623              	Ir_DecoderCode:
+ 624              	.LFB42:
+ 162:.\IRCode.c    **** 
+ 163:.\IRCode.c    **** 
+ 164:.\IRCode.c    **** static uint32 Ir_DecoderCode(void)
+ 165:.\IRCode.c    **** {
+ 625              		.loc 1 165 0
+ 626              		.cfi_startproc
+ 627 0000 80B5     		push	{r7, lr}
+ 628              		.cfi_def_cfa_offset 8
+ 629              		.cfi_offset 7, -8
+ 630              		.cfi_offset 14, -4
+ 631 0002 82B0     		sub	sp, sp, #8
+ 632              		.cfi_def_cfa_offset 16
+ 633 0004 00AF     		add	r7, sp, #0
+ 634              		.cfi_def_cfa_register 7
+ 166:.\IRCode.c    **** 	uint8 i,ucPreBit,ucCurBit;
+ 167:.\IRCode.c    **** 	uint32 uiRetCmd;
+ 168:.\IRCode.c    **** 	if(decodemsg_len != 32*2 + 1 + 2)
+ 635              		.loc 1 168 0
+ 636 0006 3E4B     		ldr	r3, .L58
+ 637 0008 1B78     		ldrb	r3, [r3]
+ 638 000a 432B     		cmp	r3, #67
+ 639 000c 01D0     		beq	.L43
+ 169:.\IRCode.c    **** 		return 0;
+ 640              		.loc 1 169 0
+ 641 000e 0023     		mov	r3, #0
+ 642 0010 72E0     		b	.L44
+ 643              	.L43:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 16
+
+
+ 170:.\IRCode.c    **** 	i = 0;
+ 644              		.loc 1 170 0
+ 645 0012 FB1D     		add	r3, r7, #7
+ 646 0014 0022     		mov	r2, #0
+ 647 0016 1A70     		strb	r2, [r3]
+ 171:.\IRCode.c    **** 	if(decodemsg[i++] < 135)   //9 ms
+ 648              		.loc 1 171 0
+ 649 0018 FB1D     		add	r3, r7, #7
+ 650 001a 1B78     		ldrb	r3, [r3]
+ 651 001c FA1D     		add	r2, r7, #7
+ 652 001e 591C     		add	r1, r3, #1
+ 653 0020 1170     		strb	r1, [r2]
+ 654 0022 1A1C     		mov	r2, r3
+ 655 0024 374B     		ldr	r3, .L58+4
+ 656 0026 9B5C     		ldrb	r3, [r3, r2]
+ 657 0028 862B     		cmp	r3, #134
+ 658 002a 01D8     		bhi	.L45
+ 172:.\IRCode.c    **** 		return 0;
+ 659              		.loc 1 172 0
+ 660 002c 0023     		mov	r3, #0
+ 661 002e 63E0     		b	.L44
+ 662              	.L45:
+ 173:.\IRCode.c    **** 	if(decodemsg[i++] < 59)   //   4ms
+ 663              		.loc 1 173 0
+ 664 0030 FB1D     		add	r3, r7, #7
+ 665 0032 1B78     		ldrb	r3, [r3]
+ 666 0034 FA1D     		add	r2, r7, #7
+ 667 0036 591C     		add	r1, r3, #1
+ 668 0038 1170     		strb	r1, [r2]
+ 669 003a 1A1C     		mov	r2, r3
+ 670 003c 314B     		ldr	r3, .L58+4
+ 671 003e 9B5C     		ldrb	r3, [r3, r2]
+ 672 0040 3A2B     		cmp	r3, #58
+ 673 0042 01D8     		bhi	.L46
+ 174:.\IRCode.c    **** 		return 0;	
+ 674              		.loc 1 174 0
+ 675 0044 0023     		mov	r3, #0
+ 676 0046 57E0     		b	.L44
+ 677              	.L46:
+ 175:.\IRCode.c    **** 	uiRetCmd = 0;
+ 678              		.loc 1 175 0
+ 679 0048 0023     		mov	r3, #0
+ 680 004a 3B60     		str	r3, [r7]
+ 176:.\IRCode.c    **** 	for(;i < decodemsg_len-1;i ++)
+ 681              		.loc 1 176 0
+ 682 004c 39E0     		b	.L47
+ 683              	.L55:
+ 177:.\IRCode.c    **** 	{
+ 178:.\IRCode.c    **** 		
+ 179:.\IRCode.c    **** 		if(decodemsg[i] < 26)
+ 684              		.loc 1 179 0
+ 685 004e FB1D     		add	r3, r7, #7
+ 686 0050 1B78     		ldrb	r3, [r3]
+ 687 0052 2C4A     		ldr	r2, .L58+4
+ 688 0054 D35C     		ldrb	r3, [r2, r3]
+ 689 0056 192B     		cmp	r3, #25
+ 690 0058 03D8     		bhi	.L48
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 17
+
+
+ 180:.\IRCode.c    **** 			ucCurBit = 0;
+ 691              		.loc 1 180 0
+ 692 005a 7B1D     		add	r3, r7, #5
+ 693 005c 0022     		mov	r2, #0
+ 694 005e 1A70     		strb	r2, [r3]
+ 695 0060 02E0     		b	.L49
+ 696              	.L48:
+ 181:.\IRCode.c    **** 		else 
+ 182:.\IRCode.c    **** 			ucCurBit = 1;
+ 697              		.loc 1 182 0
+ 698 0062 7B1D     		add	r3, r7, #5
+ 699 0064 0122     		mov	r2, #1
+ 700 0066 1A70     		strb	r2, [r3]
+ 701              	.L49:
+ 183:.\IRCode.c    **** 		if((i % 2) != 0)   //  到结果位
+ 702              		.loc 1 183 0
+ 703 0068 FB1D     		add	r3, r7, #7
+ 704 006a 1B78     		ldrb	r3, [r3]
+ 705 006c 0122     		mov	r2, #1
+ 706 006e 1340     		and	r3, r2
+ 707 0070 DBB2     		uxtb	r3, r3
+ 708 0072 002B     		cmp	r3, #0
+ 709 0074 1CD0     		beq	.L50
+ 184:.\IRCode.c    **** 		{
+ 185:.\IRCode.c    **** 			uiRetCmd >>= 1;
+ 710              		.loc 1 185 0
+ 711 0076 3B68     		ldr	r3, [r7]
+ 712 0078 5B08     		lsr	r3, r3, #1
+ 713 007a 3B60     		str	r3, [r7]
+ 186:.\IRCode.c    **** 			if(ucCurBit == 1 && ucPreBit == 0)
+ 714              		.loc 1 186 0
+ 715 007c 7B1D     		add	r3, r7, #5
+ 716 007e 1B78     		ldrb	r3, [r3]
+ 717 0080 012B     		cmp	r3, #1
+ 718 0082 09D1     		bne	.L51
+ 719              		.loc 1 186 0 is_stmt 0 discriminator 1
+ 720 0084 BB1D     		add	r3, r7, #6
+ 721 0086 1B78     		ldrb	r3, [r3]
+ 722 0088 002B     		cmp	r3, #0
+ 723 008a 05D1     		bne	.L51
+ 187:.\IRCode.c    **** 				uiRetCmd |= 0x80000000;
+ 724              		.loc 1 187 0 is_stmt 1
+ 725 008c 3B68     		ldr	r3, [r7]
+ 726 008e 8022     		mov	r2, #128
+ 727 0090 1206     		lsl	r2, r2, #24
+ 728 0092 1343     		orr	r3, r2
+ 729 0094 3B60     		str	r3, [r7]
+ 730 0096 0AE0     		b	.L52
+ 731              	.L51:
+ 188:.\IRCode.c    **** 			else if(ucCurBit == 0 && ucPreBit == 0)
+ 732              		.loc 1 188 0
+ 733 0098 7B1D     		add	r3, r7, #5
+ 734 009a 1B78     		ldrb	r3, [r3]
+ 735 009c 002B     		cmp	r3, #0
+ 736 009e 04D1     		bne	.L53
+ 737              		.loc 1 188 0 is_stmt 0 discriminator 1
+ 738 00a0 BB1D     		add	r3, r7, #6
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 18
+
+
+ 739 00a2 1B78     		ldrb	r3, [r3]
+ 740 00a4 002B     		cmp	r3, #0
+ 741 00a6 00D1     		bne	.L53
+ 189:.\IRCode.c    **** 				uiRetCmd |= 0x00;
+ 742              		.loc 1 189 0 is_stmt 1
+ 743 00a8 01E0     		b	.L52
+ 744              	.L53:
+ 190:.\IRCode.c    **** 			else 
+ 191:.\IRCode.c    **** 				return 0;
+ 745              		.loc 1 191 0
+ 746 00aa 0023     		mov	r3, #0
+ 747 00ac 24E0     		b	.L44
+ 748              	.L52:
+ 749 00ae 03E0     		b	.L54
+ 750              	.L50:
+ 192:.\IRCode.c    **** 		}
+ 193:.\IRCode.c    **** 		else
+ 194:.\IRCode.c    **** 			ucPreBit = ucCurBit;
+ 751              		.loc 1 194 0
+ 752 00b0 BB1D     		add	r3, r7, #6
+ 753 00b2 7A1D     		add	r2, r7, #5
+ 754 00b4 1278     		ldrb	r2, [r2]
+ 755 00b6 1A70     		strb	r2, [r3]
+ 756              	.L54:
+ 176:.\IRCode.c    **** 	{
+ 757              		.loc 1 176 0
+ 758 00b8 FB1D     		add	r3, r7, #7
+ 759 00ba 1A78     		ldrb	r2, [r3]
+ 760 00bc FB1D     		add	r3, r7, #7
+ 761 00be 0132     		add	r2, r2, #1
+ 762 00c0 1A70     		strb	r2, [r3]
+ 763              	.L47:
+ 176:.\IRCode.c    **** 	{
+ 764              		.loc 1 176 0 is_stmt 0 discriminator 1
+ 765 00c2 FB1D     		add	r3, r7, #7
+ 766 00c4 1A78     		ldrb	r2, [r3]
+ 767 00c6 0E4B     		ldr	r3, .L58
+ 768 00c8 1B78     		ldrb	r3, [r3]
+ 769 00ca 013B     		sub	r3, r3, #1
+ 770 00cc 9A42     		cmp	r2, r3
+ 771 00ce BEDB     		blt	.L55
+ 195:.\IRCode.c    **** 	}
+ 196:.\IRCode.c    **** 	if(decodemsg[i]  >  59)  //stop bit
+ 772              		.loc 1 196 0 is_stmt 1
+ 773 00d0 FB1D     		add	r3, r7, #7
+ 774 00d2 1B78     		ldrb	r3, [r3]
+ 775 00d4 0B4A     		ldr	r2, .L58+4
+ 776 00d6 D35C     		ldrb	r3, [r2, r3]
+ 777 00d8 3B2B     		cmp	r3, #59
+ 778 00da 01D9     		bls	.L56
+ 197:.\IRCode.c    **** 			return 0;
+ 779              		.loc 1 197 0
+ 780 00dc 0023     		mov	r3, #0
+ 781 00de 0BE0     		b	.L44
+ 782              	.L56:
+ 198:.\IRCode.c    **** 	// 判断命令是否重复
+ 199:.\IRCode.c    **** 	if((uiRetCmd >>24 & 0x00ff) != (~uiRetCmd >>16 & 0x00ff))
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 19
+
+
+ 783              		.loc 1 199 0
+ 784 00e0 3B68     		ldr	r3, [r7]
+ 785 00e2 1A0E     		lsr	r2, r3, #24
+ 786 00e4 3B68     		ldr	r3, [r7]
+ 787 00e6 DB43     		mvn	r3, r3
+ 788 00e8 1B0C     		lsr	r3, r3, #16
+ 789 00ea FF21     		mov	r1, #255
+ 790 00ec 0B40     		and	r3, r1
+ 791 00ee 9A42     		cmp	r2, r3
+ 792 00f0 01D0     		beq	.L57
+ 200:.\IRCode.c    **** 		return 0;
+ 793              		.loc 1 200 0
+ 794 00f2 0023     		mov	r3, #0
+ 795 00f4 00E0     		b	.L44
+ 796              	.L57:
+ 201:.\IRCode.c    **** 	return uiRetCmd;
+ 797              		.loc 1 201 0
+ 798 00f6 3B68     		ldr	r3, [r7]
+ 799              	.L44:
+ 202:.\IRCode.c    **** }
+ 800              		.loc 1 202 0
+ 801 00f8 181C     		mov	r0, r3
+ 802 00fa BD46     		mov	sp, r7
+ 803 00fc 02B0     		add	sp, sp, #8
+ 804              		@ sp needed
+ 805 00fe 80BD     		pop	{r7, pc}
+ 806              	.L59:
+ 807              		.align	2
+ 808              	.L58:
+ 809 0100 00000000 		.word	decodemsg_len
+ 810 0104 00000000 		.word	decodemsg
+ 811              		.cfi_endproc
+ 812              	.LFE42:
+ 813              		.size	Ir_DecoderCode, .-Ir_DecoderCode
+ 814              		.section	.text.IrCode_ScanKey,"ax",%progbits
+ 815              		.align	2
+ 816              		.global	IrCode_ScanKey
+ 817              		.code	16
+ 818              		.thumb_func
+ 819              		.type	IrCode_ScanKey, %function
+ 820              	IrCode_ScanKey:
+ 821              	.LFB43:
+ 203:.\IRCode.c    **** uint8 IrCode_ScanKey(void)
+ 204:.\IRCode.c    **** {
+ 822              		.loc 1 204 0
+ 823              		.cfi_startproc
+ 824 0000 80B5     		push	{r7, lr}
+ 825              		.cfi_def_cfa_offset 8
+ 826              		.cfi_offset 7, -8
+ 827              		.cfi_offset 14, -4
+ 828 0002 84B0     		sub	sp, sp, #16
+ 829              		.cfi_def_cfa_offset 24
+ 830 0004 00AF     		add	r7, sp, #0
+ 831              		.cfi_def_cfa_register 7
+ 205:.\IRCode.c    **** 	uint8 i;
+ 206:.\IRCode.c    **** 	uint8 *readBuf;
+ 207:.\IRCode.c    **** 	uint32 uiRetCmd,uiReadCmd;
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 20
+
+
+ 208:.\IRCode.c    **** 	//SampDecodeData_Loop();
+ 209:.\IRCode.c    **** 	if(!gtag_ircode.IR_NewKeyflag)
+ 832              		.loc 1 209 0
+ 833 0006 2E4B     		ldr	r3, .L70
+ 834 0008 9B78     		ldrb	r3, [r3, #2]
+ 835 000a DBB2     		uxtb	r3, r3
+ 836 000c 002B     		cmp	r3, #0
+ 837 000e 01D1     		bne	.L61
+ 210:.\IRCode.c    **** 	return 0;
+ 838              		.loc 1 210 0
+ 839 0010 0023     		mov	r3, #0
+ 840 0012 50E0     		b	.L62
+ 841              	.L61:
+ 211:.\IRCode.c    **** 	//查找类似按键 方差计算
+ 212:.\IRCode.c    **** 	uiRetCmd = Ir_DecoderCode();
+ 842              		.loc 1 212 0
+ 843 0014 FFF7FEFF 		bl	Ir_DecoderCode
+ 844 0018 031C     		mov	r3, r0
+ 845 001a BB60     		str	r3, [r7, #8]
+ 213:.\IRCode.c    **** 	gtag_ircode.IR_NewKeyflag = 0;
+ 846              		.loc 1 213 0
+ 847 001c 284B     		ldr	r3, .L70
+ 848 001e 0022     		mov	r2, #0
+ 849 0020 9A70     		strb	r2, [r3, #2]
+ 214:.\IRCode.c    **** 	if(uiRetCmd == 0)
+ 850              		.loc 1 214 0
+ 851 0022 BB68     		ldr	r3, [r7, #8]
+ 852 0024 002B     		cmp	r3, #0
+ 853 0026 01D1     		bne	.L63
+ 215:.\IRCode.c    **** 		return 0;
+ 854              		.loc 1 215 0
+ 855 0028 0023     		mov	r3, #0
+ 856 002a 44E0     		b	.L62
+ 857              	.L63:
+ 216:.\IRCode.c    **** 	for(i = 1;i < 0x7f;i++)
+ 858              		.loc 1 216 0
+ 859 002c 0F23     		mov	r3, #15
+ 860 002e FB18     		add	r3, r7, r3
+ 861 0030 0122     		mov	r2, #1
+ 862 0032 1A70     		strb	r2, [r3]
+ 863 0034 30E0     		b	.L64
+ 864              	.L68:
+ 217:.\IRCode.c    **** 	{
+ 218:.\IRCode.c    **** 		readBuf = (uint8*)((CY_FLASH_NUMBER_ROWS-i)*CYDEV_FLS_ROW_SIZE);
+ 865              		.loc 1 218 0
+ 866 0036 0F23     		mov	r3, #15
+ 867 0038 FB18     		add	r3, r7, r3
+ 868 003a 1A78     		ldrb	r2, [r3]
+ 869 003c 131C     		mov	r3, r2
+ 870 003e 5B06     		lsl	r3, r3, #25
+ 871 0040 9B1A     		sub	r3, r3, r2
+ 872 0042 DB01     		lsl	r3, r3, #7
+ 873 0044 8022     		mov	r2, #128
+ 874 0046 9202     		lsl	r2, r2, #10
+ 875 0048 9446     		mov	ip, r2
+ 876 004a 6344     		add	r3, r3, ip
+ 877 004c 7B60     		str	r3, [r7, #4]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 21
+
+
+ 219:.\IRCode.c    **** 		if(readBuf[0] != 0x55)
+ 878              		.loc 1 219 0
+ 879 004e 7B68     		ldr	r3, [r7, #4]
+ 880 0050 1B78     		ldrb	r3, [r3]
+ 881 0052 552B     		cmp	r3, #85
+ 882 0054 00D0     		beq	.L65
+ 220:.\IRCode.c    **** 			continue;
+ 883              		.loc 1 220 0
+ 884 0056 18E0     		b	.L66
+ 885              	.L65:
+ 221:.\IRCode.c    **** 		//存在数据比对
+ 222:.\IRCode.c    **** 		uiReadCmd = readBuf[2] +readBuf[3]*0x100+readBuf[4]*0x10000+readBuf[5]*0x1000000;
+ 886              		.loc 1 222 0
+ 887 0058 7B68     		ldr	r3, [r7, #4]
+ 888 005a 0233     		add	r3, r3, #2
+ 889 005c 1B78     		ldrb	r3, [r3]
+ 890 005e 1A1C     		mov	r2, r3
+ 891 0060 7B68     		ldr	r3, [r7, #4]
+ 892 0062 0333     		add	r3, r3, #3
+ 893 0064 1B78     		ldrb	r3, [r3]
+ 894 0066 1B02     		lsl	r3, r3, #8
+ 895 0068 D218     		add	r2, r2, r3
+ 896 006a 7B68     		ldr	r3, [r7, #4]
+ 897 006c 0433     		add	r3, r3, #4
+ 898 006e 1B78     		ldrb	r3, [r3]
+ 899 0070 1B04     		lsl	r3, r3, #16
+ 900 0072 D218     		add	r2, r2, r3
+ 901 0074 7B68     		ldr	r3, [r7, #4]
+ 902 0076 0533     		add	r3, r3, #5
+ 903 0078 1B78     		ldrb	r3, [r3]
+ 904 007a 1B06     		lsl	r3, r3, #24
+ 905 007c D318     		add	r3, r2, r3
+ 906 007e 3B60     		str	r3, [r7]
+ 223:.\IRCode.c    **** 		if(uiRetCmd == uiReadCmd)
+ 907              		.loc 1 223 0
+ 908 0080 BA68     		ldr	r2, [r7, #8]
+ 909 0082 3B68     		ldr	r3, [r7]
+ 910 0084 9A42     		cmp	r2, r3
+ 911 0086 00D1     		bne	.L66
+ 224:.\IRCode.c    **** 			break;
+ 912              		.loc 1 224 0
+ 913 0088 0BE0     		b	.L67
+ 914              	.L66:
+ 216:.\IRCode.c    **** 	{
+ 915              		.loc 1 216 0 discriminator 2
+ 916 008a 0F23     		mov	r3, #15
+ 917 008c FB18     		add	r3, r7, r3
+ 918 008e 1A78     		ldrb	r2, [r3]
+ 919 0090 0F23     		mov	r3, #15
+ 920 0092 FB18     		add	r3, r7, r3
+ 921 0094 0132     		add	r2, r2, #1
+ 922 0096 1A70     		strb	r2, [r3]
+ 923              	.L64:
+ 216:.\IRCode.c    **** 	{
+ 924              		.loc 1 216 0 is_stmt 0 discriminator 1
+ 925 0098 0F23     		mov	r3, #15
+ 926 009a FB18     		add	r3, r7, r3
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 22
+
+
+ 927 009c 1B78     		ldrb	r3, [r3]
+ 928 009e 7E2B     		cmp	r3, #126
+ 929 00a0 C9D9     		bls	.L68
+ 930              	.L67:
+ 225:.\IRCode.c    **** 	}
+ 226:.\IRCode.c    **** 	if(i == 0x7f)
+ 931              		.loc 1 226 0 is_stmt 1
+ 932 00a2 0F23     		mov	r3, #15
+ 933 00a4 FB18     		add	r3, r7, r3
+ 934 00a6 1B78     		ldrb	r3, [r3]
+ 935 00a8 7F2B     		cmp	r3, #127
+ 936 00aa 01D1     		bne	.L69
+ 227:.\IRCode.c    **** 		return 0 ;
+ 937              		.loc 1 227 0
+ 938 00ac 0023     		mov	r3, #0
+ 939 00ae 02E0     		b	.L62
+ 940              	.L69:
+ 228:.\IRCode.c    **** 	else 
+ 229:.\IRCode.c    **** 		return i;
+ 941              		.loc 1 229 0
+ 942 00b0 0F23     		mov	r3, #15
+ 943 00b2 FB18     		add	r3, r7, r3
+ 944 00b4 1B78     		ldrb	r3, [r3]
+ 945              	.L62:
+ 230:.\IRCode.c    **** }
+ 946              		.loc 1 230 0
+ 947 00b6 181C     		mov	r0, r3
+ 948 00b8 BD46     		mov	sp, r7
+ 949 00ba 04B0     		add	sp, sp, #16
+ 950              		@ sp needed
+ 951 00bc 80BD     		pop	{r7, pc}
+ 952              	.L71:
+ 953 00be C046     		.align	2
+ 954              	.L70:
+ 955 00c0 00000000 		.word	gtag_ircode
+ 956              		.cfi_endproc
+ 957              	.LFE43:
+ 958              		.size	IrCode_ScanKey, .-IrCode_ScanKey
+ 959              		.global	__aeabi_uidiv
+ 960              		.section	.text.SendTempKey,"ax",%progbits
+ 961              		.align	2
+ 962              		.global	SendTempKey
+ 963              		.code	16
+ 964              		.thumb_func
+ 965              		.type	SendTempKey, %function
+ 966              	SendTempKey:
+ 967              	.LFB44:
+ 231:.\IRCode.c    **** 
+ 232:.\IRCode.c    **** 
+ 233:.\IRCode.c    **** void SendTempKey(uint32 uiSendKey)
+ 234:.\IRCode.c    **** {
+ 968              		.loc 1 234 0
+ 969              		.cfi_startproc
+ 970 0000 90B5     		push	{r4, r7, lr}
+ 971              		.cfi_def_cfa_offset 12
+ 972              		.cfi_offset 4, -12
+ 973              		.cfi_offset 7, -8
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 23
+
+
+ 974              		.cfi_offset 14, -4
+ 975 0002 87B0     		sub	sp, sp, #28
+ 976              		.cfi_def_cfa_offset 40
+ 977 0004 00AF     		add	r7, sp, #0
+ 978              		.cfi_def_cfa_register 7
+ 979 0006 7860     		str	r0, [r7, #4]
+ 235:.\IRCode.c    **** 	uint32 cmd,i,uiCurTick;
+ 236:.\IRCode.c    **** 	cmd = uiSendKey;
+ 980              		.loc 1 236 0
+ 981 0008 7B68     		ldr	r3, [r7, #4]
+ 982 000a 7B61     		str	r3, [r7, #20]
+ 237:.\IRCode.c    **** 	//send startx;
+ 238:.\IRCode.c    **** 	PWM_SEND_Start();
+ 983              		.loc 1 238 0
+ 984 000c FFF7FEFF 		bl	PWM_SEND_Start
+ 239:.\IRCode.c    **** 	gtag_ircode.tick_50us = 0;
+ 985              		.loc 1 239 0
+ 986 0010 534B     		ldr	r3, .L84
+ 987 0012 0022     		mov	r2, #0
+ 988 0014 9A60     		str	r2, [r3, #8]
+ 240:.\IRCode.c    **** 	uiCurTick = 9000;
+ 989              		.loc 1 240 0
+ 990 0016 534B     		ldr	r3, .L84+4
+ 991 0018 FB60     		str	r3, [r7, #12]
+ 241:.\IRCode.c    **** 	while(gtag_ircode.tick_50us  < uiCurTick/50);
+ 992              		.loc 1 241 0
+ 993 001a C046     		mov	r8, r8
+ 994              	.L73:
+ 995              		.loc 1 241 0 is_stmt 0 discriminator 1
+ 996 001c 504B     		ldr	r3, .L84
+ 997 001e 9C68     		ldr	r4, [r3, #8]
+ 998 0020 FB68     		ldr	r3, [r7, #12]
+ 999 0022 181C     		mov	r0, r3
+ 1000 0024 3221     		mov	r1, #50
+ 1001 0026 FFF7FEFF 		bl	__aeabi_uidiv
+ 1002 002a 031C     		mov	r3, r0
+ 1003 002c 9C42     		cmp	r4, r3
+ 1004 002e F5D3     		bcc	.L73
+ 242:.\IRCode.c    **** 	PWM_SEND_Stop();
+ 1005              		.loc 1 242 0 is_stmt 1
+ 1006 0030 FFF7FEFF 		bl	PWM_SEND_Stop
+ 243:.\IRCode.c    **** 	uiCurTick += 4500;
+ 1007              		.loc 1 243 0
+ 1008 0034 FB68     		ldr	r3, [r7, #12]
+ 1009 0036 4C4A     		ldr	r2, .L84+8
+ 1010 0038 9446     		mov	ip, r2
+ 1011 003a 6344     		add	r3, r3, ip
+ 1012 003c FB60     		str	r3, [r7, #12]
+ 244:.\IRCode.c    **** 	while(gtag_ircode.tick_50us  < uiCurTick/50);
+ 1013              		.loc 1 244 0
+ 1014 003e C046     		mov	r8, r8
+ 1015              	.L74:
+ 1016              		.loc 1 244 0 is_stmt 0 discriminator 1
+ 1017 0040 474B     		ldr	r3, .L84
+ 1018 0042 9C68     		ldr	r4, [r3, #8]
+ 1019 0044 FB68     		ldr	r3, [r7, #12]
+ 1020 0046 181C     		mov	r0, r3
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 24
+
+
+ 1021 0048 3221     		mov	r1, #50
+ 1022 004a FFF7FEFF 		bl	__aeabi_uidiv
+ 1023 004e 031C     		mov	r3, r0
+ 1024 0050 9C42     		cmp	r4, r3
+ 1025 0052 F5D3     		bcc	.L74
+ 245:.\IRCode.c    **** 	for(i = 0;i < 32;i++)
+ 1026              		.loc 1 245 0 is_stmt 1
+ 1027 0054 0023     		mov	r3, #0
+ 1028 0056 3B61     		str	r3, [r7, #16]
+ 1029 0058 41E0     		b	.L75
+ 1030              	.L81:
+ 246:.\IRCode.c    **** 	{
+ 247:.\IRCode.c    **** 		PWM_SEND_Start();
+ 1031              		.loc 1 247 0
+ 1032 005a FFF7FEFF 		bl	PWM_SEND_Start
+ 248:.\IRCode.c    **** 		uiCurTick += 560;
+ 1033              		.loc 1 248 0
+ 1034 005e FB68     		ldr	r3, [r7, #12]
+ 1035 0060 8C22     		mov	r2, #140
+ 1036 0062 9200     		lsl	r2, r2, #2
+ 1037 0064 9446     		mov	ip, r2
+ 1038 0066 6344     		add	r3, r3, ip
+ 1039 0068 FB60     		str	r3, [r7, #12]
+ 249:.\IRCode.c    **** 		while(gtag_ircode.tick_50us  < uiCurTick/50);
+ 1040              		.loc 1 249 0
+ 1041 006a C046     		mov	r8, r8
+ 1042              	.L76:
+ 1043              		.loc 1 249 0 is_stmt 0 discriminator 1
+ 1044 006c 3C4B     		ldr	r3, .L84
+ 1045 006e 9C68     		ldr	r4, [r3, #8]
+ 1046 0070 FB68     		ldr	r3, [r7, #12]
+ 1047 0072 181C     		mov	r0, r3
+ 1048 0074 3221     		mov	r1, #50
+ 1049 0076 FFF7FEFF 		bl	__aeabi_uidiv
+ 1050 007a 031C     		mov	r3, r0
+ 1051 007c 9C42     		cmp	r4, r3
+ 1052 007e F5D3     		bcc	.L76
+ 250:.\IRCode.c    **** 		PWM_SEND_Stop();
+ 1053              		.loc 1 250 0 is_stmt 1
+ 1054 0080 FFF7FEFF 		bl	PWM_SEND_Stop
+ 251:.\IRCode.c    **** 		if(cmd&0x01)
+ 1055              		.loc 1 251 0
+ 1056 0084 7B69     		ldr	r3, [r7, #20]
+ 1057 0086 0122     		mov	r2, #1
+ 1058 0088 1340     		and	r3, r2
+ 1059 008a 11D0     		beq	.L77
+ 252:.\IRCode.c    **** 		{
+ 253:.\IRCode.c    **** 			uiCurTick += 1680;
+ 1060              		.loc 1 253 0
+ 1061 008c FB68     		ldr	r3, [r7, #12]
+ 1062 008e D222     		mov	r2, #210
+ 1063 0090 D200     		lsl	r2, r2, #3
+ 1064 0092 9446     		mov	ip, r2
+ 1065 0094 6344     		add	r3, r3, ip
+ 1066 0096 FB60     		str	r3, [r7, #12]
+ 254:.\IRCode.c    **** 			while(gtag_ircode.tick_50us  < uiCurTick/50);
+ 1067              		.loc 1 254 0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 25
+
+
+ 1068 0098 C046     		mov	r8, r8
+ 1069              	.L78:
+ 1070              		.loc 1 254 0 is_stmt 0 discriminator 1
+ 1071 009a 314B     		ldr	r3, .L84
+ 1072 009c 9C68     		ldr	r4, [r3, #8]
+ 1073 009e FB68     		ldr	r3, [r7, #12]
+ 1074 00a0 181C     		mov	r0, r3
+ 1075 00a2 3221     		mov	r1, #50
+ 1076 00a4 FFF7FEFF 		bl	__aeabi_uidiv
+ 1077 00a8 031C     		mov	r3, r0
+ 1078 00aa 9C42     		cmp	r4, r3
+ 1079 00ac F5D3     		bcc	.L78
+ 1080 00ae 10E0     		b	.L79
+ 1081              	.L77:
+ 255:.\IRCode.c    **** 
+ 256:.\IRCode.c    **** 		}else
+ 257:.\IRCode.c    **** 		{
+ 258:.\IRCode.c    **** 			uiCurTick += 560;
+ 1082              		.loc 1 258 0 is_stmt 1
+ 1083 00b0 FB68     		ldr	r3, [r7, #12]
+ 1084 00b2 8C22     		mov	r2, #140
+ 1085 00b4 9200     		lsl	r2, r2, #2
+ 1086 00b6 9446     		mov	ip, r2
+ 1087 00b8 6344     		add	r3, r3, ip
+ 1088 00ba FB60     		str	r3, [r7, #12]
+ 259:.\IRCode.c    **** 			while(gtag_ircode.tick_50us  < uiCurTick/50);		
+ 1089              		.loc 1 259 0
+ 1090 00bc C046     		mov	r8, r8
+ 1091              	.L80:
+ 1092              		.loc 1 259 0 is_stmt 0 discriminator 1
+ 1093 00be 284B     		ldr	r3, .L84
+ 1094 00c0 9C68     		ldr	r4, [r3, #8]
+ 1095 00c2 FB68     		ldr	r3, [r7, #12]
+ 1096 00c4 181C     		mov	r0, r3
+ 1097 00c6 3221     		mov	r1, #50
+ 1098 00c8 FFF7FEFF 		bl	__aeabi_uidiv
+ 1099 00cc 031C     		mov	r3, r0
+ 1100 00ce 9C42     		cmp	r4, r3
+ 1101 00d0 F5D3     		bcc	.L80
+ 1102              	.L79:
+ 260:.\IRCode.c    **** 		}
+ 261:.\IRCode.c    **** 		cmd >>=1;
+ 1103              		.loc 1 261 0 is_stmt 1 discriminator 2
+ 1104 00d2 7B69     		ldr	r3, [r7, #20]
+ 1105 00d4 5B08     		lsr	r3, r3, #1
+ 1106 00d6 7B61     		str	r3, [r7, #20]
+ 245:.\IRCode.c    **** 	{
+ 1107              		.loc 1 245 0 discriminator 2
+ 1108 00d8 3B69     		ldr	r3, [r7, #16]
+ 1109 00da 0133     		add	r3, r3, #1
+ 1110 00dc 3B61     		str	r3, [r7, #16]
+ 1111              	.L75:
+ 245:.\IRCode.c    **** 	{
+ 1112              		.loc 1 245 0 is_stmt 0 discriminator 1
+ 1113 00de 3B69     		ldr	r3, [r7, #16]
+ 1114 00e0 1F2B     		cmp	r3, #31
+ 1115 00e2 BAD9     		bls	.L81
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 26
+
+
+ 262:.\IRCode.c    **** 	}	
+ 263:.\IRCode.c    **** 	PWM_SEND_Start();
+ 1116              		.loc 1 263 0 is_stmt 1
+ 1117 00e4 FFF7FEFF 		bl	PWM_SEND_Start
+ 264:.\IRCode.c    **** 	uiCurTick += 560;
+ 1118              		.loc 1 264 0
+ 1119 00e8 FB68     		ldr	r3, [r7, #12]
+ 1120 00ea 8C22     		mov	r2, #140
+ 1121 00ec 9200     		lsl	r2, r2, #2
+ 1122 00ee 9446     		mov	ip, r2
+ 1123 00f0 6344     		add	r3, r3, ip
+ 1124 00f2 FB60     		str	r3, [r7, #12]
+ 265:.\IRCode.c    **** 	while(gtag_ircode.tick_50us  < uiCurTick/50);		
+ 1125              		.loc 1 265 0
+ 1126 00f4 C046     		mov	r8, r8
+ 1127              	.L82:
+ 1128              		.loc 1 265 0 is_stmt 0 discriminator 1
+ 1129 00f6 1A4B     		ldr	r3, .L84
+ 1130 00f8 9C68     		ldr	r4, [r3, #8]
+ 1131 00fa FB68     		ldr	r3, [r7, #12]
+ 1132 00fc 181C     		mov	r0, r3
+ 1133 00fe 3221     		mov	r1, #50
+ 1134 0100 FFF7FEFF 		bl	__aeabi_uidiv
+ 1135 0104 031C     		mov	r3, r0
+ 1136 0106 9C42     		cmp	r4, r3
+ 1137 0108 F5D3     		bcc	.L82
+ 266:.\IRCode.c    **** 	PWM_SEND_Stop();
+ 1138              		.loc 1 266 0 is_stmt 1
+ 1139 010a FFF7FEFF 		bl	PWM_SEND_Stop
+ 267:.\IRCode.c    **** 	uiCurTick = 108000;
+ 1140              		.loc 1 267 0
+ 1141 010e 174B     		ldr	r3, .L84+12
+ 1142 0110 FB60     		str	r3, [r7, #12]
+ 268:.\IRCode.c    **** 	while(gtag_ircode.tick_50us  < uiCurTick/50);	
+ 1143              		.loc 1 268 0
+ 1144 0112 C046     		mov	r8, r8
+ 1145              	.L83:
+ 1146              		.loc 1 268 0 is_stmt 0 discriminator 1
+ 1147 0114 124B     		ldr	r3, .L84
+ 1148 0116 9C68     		ldr	r4, [r3, #8]
+ 1149 0118 FB68     		ldr	r3, [r7, #12]
+ 1150 011a 181C     		mov	r0, r3
+ 1151 011c 3221     		mov	r1, #50
+ 1152 011e FFF7FEFF 		bl	__aeabi_uidiv
+ 1153 0122 031C     		mov	r3, r0
+ 1154 0124 9C42     		cmp	r4, r3
+ 1155 0126 F5D3     		bcc	.L83
+ 269:.\IRCode.c    **** 	uiCurTick = 0;
+ 1156              		.loc 1 269 0 is_stmt 1
+ 1157 0128 0023     		mov	r3, #0
+ 1158 012a FB60     		str	r3, [r7, #12]
+ 270:.\IRCode.c    **** 	PWM_SEND_Start();
+ 1159              		.loc 1 270 0
+ 1160 012c FFF7FEFF 		bl	PWM_SEND_Start
+ 271:.\IRCode.c    **** 	IrCode_DelayUs(9000);
+ 1161              		.loc 1 271 0
+ 1162 0130 0C4B     		ldr	r3, .L84+4
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 27
+
+
+ 1163 0132 181C     		mov	r0, r3
+ 1164 0134 FFF7FEFF 		bl	IrCode_DelayUs
+ 272:.\IRCode.c    **** 	PWM_SEND_Stop();
+ 1165              		.loc 1 272 0
+ 1166 0138 FFF7FEFF 		bl	PWM_SEND_Stop
+ 273:.\IRCode.c    **** 	IrCode_DelayUs(1680);
+ 1167              		.loc 1 273 0
+ 1168 013c D223     		mov	r3, #210
+ 1169 013e DB00     		lsl	r3, r3, #3
+ 1170 0140 181C     		mov	r0, r3
+ 1171 0142 FFF7FEFF 		bl	IrCode_DelayUs
+ 274:.\IRCode.c    **** 	PWM_SEND_Start();
+ 1172              		.loc 1 274 0
+ 1173 0146 FFF7FEFF 		bl	PWM_SEND_Start
+ 275:.\IRCode.c    **** 	IrCode_DelayUs(1680);
+ 1174              		.loc 1 275 0
+ 1175 014a D223     		mov	r3, #210
+ 1176 014c DB00     		lsl	r3, r3, #3
+ 1177 014e 181C     		mov	r0, r3
+ 1178 0150 FFF7FEFF 		bl	IrCode_DelayUs
+ 276:.\IRCode.c    **** 	PWM_SEND_Stop();
+ 1179              		.loc 1 276 0
+ 1180 0154 FFF7FEFF 		bl	PWM_SEND_Stop
+ 277:.\IRCode.c    **** }
+ 1181              		.loc 1 277 0
+ 1182 0158 BD46     		mov	sp, r7
+ 1183 015a 07B0     		add	sp, sp, #28
+ 1184              		@ sp needed
+ 1185 015c 90BD     		pop	{r4, r7, pc}
+ 1186              	.L85:
+ 1187 015e C046     		.align	2
+ 1188              	.L84:
+ 1189 0160 00000000 		.word	gtag_ircode
+ 1190 0164 28230000 		.word	9000
+ 1191 0168 94110000 		.word	4500
+ 1192 016c E0A50100 		.word	108000
+ 1193              		.cfi_endproc
+ 1194              	.LFE44:
+ 1195              		.size	SendTempKey, .-SendTempKey
+ 1196              		.section	.text.IrCode_SendKey,"ax",%progbits
+ 1197              		.align	2
+ 1198              		.global	IrCode_SendKey
+ 1199              		.code	16
+ 1200              		.thumb_func
+ 1201              		.type	IrCode_SendKey, %function
+ 1202              	IrCode_SendKey:
+ 1203              	.LFB45:
+ 278:.\IRCode.c    **** void IrCode_SendKey(uint8 key)
+ 279:.\IRCode.c    **** {
+ 1204              		.loc 1 279 0
+ 1205              		.cfi_startproc
+ 1206 0000 80B5     		push	{r7, lr}
+ 1207              		.cfi_def_cfa_offset 8
+ 1208              		.cfi_offset 7, -8
+ 1209              		.cfi_offset 14, -4
+ 1210 0002 84B0     		sub	sp, sp, #16
+ 1211              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 28
+
+
+ 1212 0004 00AF     		add	r7, sp, #0
+ 1213              		.cfi_def_cfa_register 7
+ 1214 0006 021C     		mov	r2, r0
+ 1215 0008 FB1D     		add	r3, r7, #7
+ 1216 000a 1A70     		strb	r2, [r3]
+ 280:.\IRCode.c    **** 	uint8 *readBuf;
+ 281:.\IRCode.c    **** 	uint32 uiReadCmdKey;
+ 282:.\IRCode.c    **** 	readBuf = (uint8*)((CY_FLASH_NUMBER_ROWS-key)*CYDEV_FLS_ROW_SIZE);
+ 1217              		.loc 1 282 0
+ 1218 000c FB1D     		add	r3, r7, #7
+ 1219 000e 1A78     		ldrb	r2, [r3]
+ 1220 0010 131C     		mov	r3, r2
+ 1221 0012 5B06     		lsl	r3, r3, #25
+ 1222 0014 9B1A     		sub	r3, r3, r2
+ 1223 0016 DB01     		lsl	r3, r3, #7
+ 1224 0018 8022     		mov	r2, #128
+ 1225 001a 9202     		lsl	r2, r2, #10
+ 1226 001c 9446     		mov	ip, r2
+ 1227 001e 6344     		add	r3, r3, ip
+ 1228 0020 FB60     		str	r3, [r7, #12]
+ 283:.\IRCode.c    **** 	if(readBuf[0] != 0x55)
+ 1229              		.loc 1 283 0
+ 1230 0022 FB68     		ldr	r3, [r7, #12]
+ 1231 0024 1B78     		ldrb	r3, [r3]
+ 1232 0026 552B     		cmp	r3, #85
+ 1233 0028 00D0     		beq	.L87
+ 284:.\IRCode.c    **** 		return;
+ 1234              		.loc 1 284 0
+ 1235 002a 17E0     		b	.L86
+ 1236              	.L87:
+ 285:.\IRCode.c    **** 	uiReadCmdKey  =readBuf[2] +readBuf[3]*0x100+readBuf[4]*0x10000+readBuf[5]*0x1000000;
+ 1237              		.loc 1 285 0
+ 1238 002c FB68     		ldr	r3, [r7, #12]
+ 1239 002e 0233     		add	r3, r3, #2
+ 1240 0030 1B78     		ldrb	r3, [r3]
+ 1241 0032 1A1C     		mov	r2, r3
+ 1242 0034 FB68     		ldr	r3, [r7, #12]
+ 1243 0036 0333     		add	r3, r3, #3
+ 1244 0038 1B78     		ldrb	r3, [r3]
+ 1245 003a 1B02     		lsl	r3, r3, #8
+ 1246 003c D218     		add	r2, r2, r3
+ 1247 003e FB68     		ldr	r3, [r7, #12]
+ 1248 0040 0433     		add	r3, r3, #4
+ 1249 0042 1B78     		ldrb	r3, [r3]
+ 1250 0044 1B04     		lsl	r3, r3, #16
+ 1251 0046 D218     		add	r2, r2, r3
+ 1252 0048 FB68     		ldr	r3, [r7, #12]
+ 1253 004a 0533     		add	r3, r3, #5
+ 1254 004c 1B78     		ldrb	r3, [r3]
+ 1255 004e 1B06     		lsl	r3, r3, #24
+ 1256 0050 D318     		add	r3, r2, r3
+ 1257 0052 BB60     		str	r3, [r7, #8]
+ 286:.\IRCode.c    **** 	SendTempKey(uiReadCmdKey);
+ 1258              		.loc 1 286 0
+ 1259 0054 BB68     		ldr	r3, [r7, #8]
+ 1260 0056 181C     		mov	r0, r3
+ 1261 0058 FFF7FEFF 		bl	SendTempKey
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 29
+
+
+ 1262              	.L86:
+ 287:.\IRCode.c    **** }
+ 1263              		.loc 1 287 0
+ 1264 005c BD46     		mov	sp, r7
+ 1265 005e 04B0     		add	sp, sp, #16
+ 1266              		@ sp needed
+ 1267 0060 80BD     		pop	{r7, pc}
+ 1268              		.cfi_endproc
+ 1269              	.LFE45:
+ 1270              		.size	IrCode_SendKey, .-IrCode_SendKey
+ 1271 0062 C046     		.section	.text.IrCode_DelayUs,"ax",%progbits
+ 1272              		.align	2
+ 1273              		.global	IrCode_DelayUs
+ 1274              		.code	16
+ 1275              		.thumb_func
+ 1276              		.type	IrCode_DelayUs, %function
+ 1277              	IrCode_DelayUs:
+ 1278              	.LFB46:
+ 288:.\IRCode.c    **** 
+ 289:.\IRCode.c    **** void IrCode_DelayUs(uint32 delay_us)
+ 290:.\IRCode.c    **** {
+ 1279              		.loc 1 290 0
+ 1280              		.cfi_startproc
+ 1281 0000 90B5     		push	{r4, r7, lr}
+ 1282              		.cfi_def_cfa_offset 12
+ 1283              		.cfi_offset 4, -12
+ 1284              		.cfi_offset 7, -8
+ 1285              		.cfi_offset 14, -4
+ 1286 0002 83B0     		sub	sp, sp, #12
+ 1287              		.cfi_def_cfa_offset 24
+ 1288 0004 00AF     		add	r7, sp, #0
+ 1289              		.cfi_def_cfa_register 7
+ 1290 0006 7860     		str	r0, [r7, #4]
+ 291:.\IRCode.c    **** 	gtag_ircode.tick_50us = 0;
+ 1291              		.loc 1 291 0
+ 1292 0008 084B     		ldr	r3, .L91
+ 1293 000a 0022     		mov	r2, #0
+ 1294 000c 9A60     		str	r2, [r3, #8]
+ 292:.\IRCode.c    **** 	while(gtag_ircode.tick_50us  < delay_us/50);
+ 1295              		.loc 1 292 0
+ 1296 000e C046     		mov	r8, r8
+ 1297              	.L90:
+ 1298              		.loc 1 292 0 is_stmt 0 discriminator 1
+ 1299 0010 064B     		ldr	r3, .L91
+ 1300 0012 9C68     		ldr	r4, [r3, #8]
+ 1301 0014 7B68     		ldr	r3, [r7, #4]
+ 1302 0016 181C     		mov	r0, r3
+ 1303 0018 3221     		mov	r1, #50
+ 1304 001a FFF7FEFF 		bl	__aeabi_uidiv
+ 1305 001e 031C     		mov	r3, r0
+ 1306 0020 9C42     		cmp	r4, r3
+ 1307 0022 F5D3     		bcc	.L90
+ 293:.\IRCode.c    **** }
+ 1308              		.loc 1 293 0 is_stmt 1
+ 1309 0024 BD46     		mov	sp, r7
+ 1310 0026 03B0     		add	sp, sp, #12
+ 1311              		@ sp needed
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 30
+
+
+ 1312 0028 90BD     		pop	{r4, r7, pc}
+ 1313              	.L92:
+ 1314 002a C046     		.align	2
+ 1315              	.L91:
+ 1316 002c 00000000 		.word	gtag_ircode
+ 1317              		.cfi_endproc
+ 1318              	.LFE46:
+ 1319              		.size	IrCode_DelayUs, .-IrCode_DelayUs
+ 1320              		.section	.text.IrBlink_RedLed,"ax",%progbits
+ 1321              		.align	2
+ 1322              		.global	IrBlink_RedLed
+ 1323              		.code	16
+ 1324              		.thumb_func
+ 1325              		.type	IrBlink_RedLed, %function
+ 1326              	IrBlink_RedLed:
+ 1327              	.LFB47:
+ 294:.\IRCode.c    **** void IrBlink_RedLed(void)
+ 295:.\IRCode.c    **** {
+ 1328              		.loc 1 295 0
+ 1329              		.cfi_startproc
+ 1330 0000 80B5     		push	{r7, lr}
+ 1331              		.cfi_def_cfa_offset 8
+ 1332              		.cfi_offset 7, -8
+ 1333              		.cfi_offset 14, -4
+ 1334 0002 00AF     		add	r7, sp, #0
+ 1335              		.cfi_def_cfa_register 7
+ 296:.\IRCode.c    **** 	Disconnect_LED_Write(0);
+ 1336              		.loc 1 296 0
+ 1337 0004 0020     		mov	r0, #0
+ 1338 0006 FFF7FEFF 		bl	Disconnect_LED_Write
+ 297:.\IRCode.c    **** 	IrCode_DelayUs(100000);
+ 1339              		.loc 1 297 0
+ 1340 000a 0D4B     		ldr	r3, .L94
+ 1341 000c 181C     		mov	r0, r3
+ 1342 000e FFF7FEFF 		bl	IrCode_DelayUs
+ 298:.\IRCode.c    **** 	Disconnect_LED_Write(1);
+ 1343              		.loc 1 298 0
+ 1344 0012 0120     		mov	r0, #1
+ 1345 0014 FFF7FEFF 		bl	Disconnect_LED_Write
+ 299:.\IRCode.c    **** 	IrCode_DelayUs(100000);
+ 1346              		.loc 1 299 0
+ 1347 0018 094B     		ldr	r3, .L94
+ 1348 001a 181C     		mov	r0, r3
+ 1349 001c FFF7FEFF 		bl	IrCode_DelayUs
+ 300:.\IRCode.c    **** 	Disconnect_LED_Write(0);
+ 1350              		.loc 1 300 0
+ 1351 0020 0020     		mov	r0, #0
+ 1352 0022 FFF7FEFF 		bl	Disconnect_LED_Write
+ 301:.\IRCode.c    **** 	IrCode_DelayUs(100000);
+ 1353              		.loc 1 301 0
+ 1354 0026 064B     		ldr	r3, .L94
+ 1355 0028 181C     		mov	r0, r3
+ 1356 002a FFF7FEFF 		bl	IrCode_DelayUs
+ 302:.\IRCode.c    **** 	Disconnect_LED_Write(1);
+ 1357              		.loc 1 302 0
+ 1358 002e 0120     		mov	r0, #1
+ 1359 0030 FFF7FEFF 		bl	Disconnect_LED_Write
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 31
+
+
+ 303:.\IRCode.c    **** 	IrCode_DelayUs(100000);    	
+ 1360              		.loc 1 303 0
+ 1361 0034 024B     		ldr	r3, .L94
+ 1362 0036 181C     		mov	r0, r3
+ 1363 0038 FFF7FEFF 		bl	IrCode_DelayUs
+ 304:.\IRCode.c    **** }
+ 1364              		.loc 1 304 0
+ 1365 003c BD46     		mov	sp, r7
+ 1366              		@ sp needed
+ 1367 003e 80BD     		pop	{r7, pc}
+ 1368              	.L95:
+ 1369              		.align	2
+ 1370              	.L94:
+ 1371 0040 A0860100 		.word	100000
+ 1372              		.cfi_endproc
+ 1373              	.LFE47:
+ 1374              		.size	IrBlink_RedLed, .-IrBlink_RedLed
+ 1375              		.section	.text.IrCode_Study,"ax",%progbits
+ 1376              		.align	2
+ 1377              		.global	IrCode_Study
+ 1378              		.code	16
+ 1379              		.thumb_func
+ 1380              		.type	IrCode_Study, %function
+ 1381              	IrCode_Study:
+ 1382              	.LFB48:
+ 305:.\IRCode.c    **** 
+ 306:.\IRCode.c    **** uint8 IrCode_Study(uint8 key)  //学习KEY键盘
+ 307:.\IRCode.c    **** {
+ 1383              		.loc 1 307 0
+ 1384              		.cfi_startproc
+ 1385 0000 80B5     		push	{r7, lr}
+ 1386              		.cfi_def_cfa_offset 8
+ 1387              		.cfi_offset 7, -8
+ 1388              		.cfi_offset 14, -4
+ 1389 0002 A4B0     		sub	sp, sp, #144
+ 1390              		.cfi_def_cfa_offset 152
+ 1391 0004 00AF     		add	r7, sp, #0
+ 1392              		.cfi_def_cfa_register 7
+ 1393 0006 021C     		mov	r2, r0
+ 1394 0008 FB1D     		add	r3, r7, #7
+ 1395 000a 1A70     		strb	r2, [r3]
+ 308:.\IRCode.c    **** 	uint32 uiRecvKey;
+ 309:.\IRCode.c    **** 	uint8 irinitkey[128] ={0,};
+ 1396              		.loc 1 309 0
+ 1397 000c 0C23     		mov	r3, #12
+ 1398 000e FB18     		add	r3, r7, r3
+ 1399 0010 1A1C     		mov	r2, r3
+ 1400 0012 8023     		mov	r3, #128
+ 1401 0014 101C     		mov	r0, r2
+ 1402 0016 0021     		mov	r1, #0
+ 1403 0018 1A1C     		mov	r2, r3
+ 1404 001a FFF7FEFF 		bl	memset
+ 1405              	.L101:
+ 310:.\IRCode.c    **** 	while(1)
+ 311:.\IRCode.c    **** 	{
+ 312:.\IRCode.c    **** 		if(gtag_ircode.IR_NewKeyflag == 0)
+ 1406              		.loc 1 312 0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 32
+
+
+ 1407 001e 1F4B     		ldr	r3, .L104
+ 1408 0020 9B78     		ldrb	r3, [r3, #2]
+ 1409 0022 DBB2     		uxtb	r3, r3
+ 1410 0024 002B     		cmp	r3, #0
+ 1411 0026 02D1     		bne	.L97
+ 313:.\IRCode.c    **** 		{
+ 314:.\IRCode.c    **** 			IrBlink_RedLed();
+ 1412              		.loc 1 314 0
+ 1413 0028 FFF7FEFF 		bl	IrBlink_RedLed
+ 315:.\IRCode.c    **** 			continue;
+ 1414              		.loc 1 315 0
+ 1415 002c 30E0     		b	.L98
+ 1416              	.L97:
+ 316:.\IRCode.c    **** 		}
+ 317:.\IRCode.c    **** 		uiRecvKey =  Ir_DecoderCode();
+ 1417              		.loc 1 317 0
+ 1418 002e FFF7FEFF 		bl	Ir_DecoderCode
+ 1419 0032 031C     		mov	r3, r0
+ 1420 0034 8C22     		mov	r2, #140
+ 1421 0036 BA18     		add	r2, r7, r2
+ 1422 0038 1360     		str	r3, [r2]
+ 318:.\IRCode.c    **** 		gtag_ircode.IR_NewKeyflag = 0;
+ 1423              		.loc 1 318 0
+ 1424 003a 184B     		ldr	r3, .L104
+ 1425 003c 0022     		mov	r2, #0
+ 1426 003e 9A70     		strb	r2, [r3, #2]
+ 319:.\IRCode.c    **** 		if(uiRecvKey == 0)
+ 1427              		.loc 1 319 0
+ 1428 0040 8C23     		mov	r3, #140
+ 1429 0042 FB18     		add	r3, r7, r3
+ 1430 0044 1B68     		ldr	r3, [r3]
+ 1431 0046 002B     		cmp	r3, #0
+ 1432 0048 00D1     		bne	.L99
+ 320:.\IRCode.c    **** 			continue;
+ 1433              		.loc 1 320 0
+ 1434 004a 21E0     		b	.L98
+ 1435              	.L99:
+ 321:.\IRCode.c    **** 		//收到键盘
+ 322:.\IRCode.c    **** 		irinitkey[0] = 0x55;
+ 1436              		.loc 1 322 0
+ 1437 004c 0C23     		mov	r3, #12
+ 1438 004e FB18     		add	r3, r7, r3
+ 1439 0050 5522     		mov	r2, #85
+ 1440 0052 1A70     		strb	r2, [r3]
+ 323:.\IRCode.c    **** 		irinitkey[1] = 0x04;
+ 1441              		.loc 1 323 0
+ 1442 0054 0C23     		mov	r3, #12
+ 1443 0056 FB18     		add	r3, r7, r3
+ 1444 0058 0422     		mov	r2, #4
+ 1445 005a 5A70     		strb	r2, [r3, #1]
+ 324:.\IRCode.c    **** 		memcpy(irinitkey+2,(uint8*)&uiRecvKey,4);
+ 1446              		.loc 1 324 0
+ 1447 005c 0C23     		mov	r3, #12
+ 1448 005e FB18     		add	r3, r7, r3
+ 1449 0060 9A1C     		add	r2, r3, #2
+ 1450 0062 8C23     		mov	r3, #140
+ 1451 0064 FB18     		add	r3, r7, r3
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 33
+
+
+ 1452 0066 101C     		mov	r0, r2
+ 1453 0068 191C     		mov	r1, r3
+ 1454 006a 0422     		mov	r2, #4
+ 1455 006c FFF7FEFF 		bl	memcpy
+ 325:.\IRCode.c    **** 		CySysFlashWriteRow(CY_FLASH_NUMBER_ROWS-key,irinitkey);
+ 1456              		.loc 1 325 0
+ 1457 0070 FB1D     		add	r3, r7, #7
+ 1458 0072 1B78     		ldrb	r3, [r3]
+ 1459 0074 8022     		mov	r2, #128
+ 1460 0076 D200     		lsl	r2, r2, #3
+ 1461 0078 D21A     		sub	r2, r2, r3
+ 1462 007a 0C23     		mov	r3, #12
+ 1463 007c FB18     		add	r3, r7, r3
+ 1464 007e 101C     		mov	r0, r2
+ 1465 0080 191C     		mov	r1, r3
+ 1466 0082 FFF7FEFF 		bl	CySysFlashWriteRow
+ 326:.\IRCode.c    **** 		IrBlink_RedLed();
+ 1467              		.loc 1 326 0
+ 1468 0086 FFF7FEFF 		bl	IrBlink_RedLed
+ 327:.\IRCode.c    **** 		IrBlink_RedLed();
+ 1469              		.loc 1 327 0
+ 1470 008a FFF7FEFF 		bl	IrBlink_RedLed
+ 328:.\IRCode.c    **** 		break;
+ 1471              		.loc 1 328 0
+ 1472 008e 00E0     		b	.L103
+ 1473              	.L98:
+ 329:.\IRCode.c    **** 	}
+ 1474              		.loc 1 329 0
+ 1475 0090 C5E7     		b	.L101
+ 1476              	.L103:
+ 330:.\IRCode.c    ****     return 0;
+ 1477              		.loc 1 330 0
+ 1478 0092 0023     		mov	r3, #0
+ 331:.\IRCode.c    **** }
+ 1479              		.loc 1 331 0
+ 1480 0094 181C     		mov	r0, r3
+ 1481 0096 BD46     		mov	sp, r7
+ 1482 0098 24B0     		add	sp, sp, #144
+ 1483              		@ sp needed
+ 1484 009a 80BD     		pop	{r7, pc}
+ 1485              	.L105:
+ 1486              		.align	2
+ 1487              	.L104:
+ 1488 009c 00000000 		.word	gtag_ircode
+ 1489              		.cfi_endproc
+ 1490              	.LFE48:
+ 1491              		.size	IrCode_Study, .-IrCode_Study
+ 1492              		.bss
+ 1493              	step.8757:
+ 1494 0000 00       		.space	1
+ 1495              		.text
+ 1496              	.Letext0:
+ 1497              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 1498              		.file 3 ".\\IRCode.h"
+ 1499              		.file 4 "Generated_Source\\PSoC4/BLE_Stack.h"
+ 1500              		.section	.debug_info,"",%progbits
+ 1501              	.Ldebug_info0:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 34
+
+
+ 1502 0000 F1050000 		.4byte	0x5f1
+ 1503 0004 0400     		.2byte	0x4
+ 1504 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1505 000a 04       		.byte	0x4
+ 1506 000b 01       		.uleb128 0x1
+ 1507 000c 140A0000 		.4byte	.LASF121
+ 1508 0010 01       		.byte	0x1
+ 1509 0011 7A090000 		.4byte	.LASF122
+ 1510 0015 E6020000 		.4byte	.LASF123
+ 1511 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1512 001d 00000000 		.4byte	0
+ 1513 0021 00000000 		.4byte	.Ldebug_line0
+ 1514 0025 02       		.uleb128 0x2
+ 1515 0026 01       		.byte	0x1
+ 1516 0027 06       		.byte	0x6
+ 1517 0028 78020000 		.4byte	.LASF0
+ 1518 002c 02       		.uleb128 0x2
+ 1519 002d 01       		.byte	0x1
+ 1520 002e 08       		.byte	0x8
+ 1521 002f DD070000 		.4byte	.LASF1
+ 1522 0033 02       		.uleb128 0x2
+ 1523 0034 02       		.byte	0x2
+ 1524 0035 05       		.byte	0x5
+ 1525 0036 24080000 		.4byte	.LASF2
+ 1526 003a 02       		.uleb128 0x2
+ 1527 003b 02       		.byte	0x2
+ 1528 003c 07       		.byte	0x7
+ 1529 003d D2040000 		.4byte	.LASF3
+ 1530 0041 02       		.uleb128 0x2
+ 1531 0042 04       		.byte	0x4
+ 1532 0043 05       		.byte	0x5
+ 1533 0044 60010000 		.4byte	.LASF4
+ 1534 0048 02       		.uleb128 0x2
+ 1535 0049 04       		.byte	0x4
+ 1536 004a 07       		.byte	0x7
+ 1537 004b 3C040000 		.4byte	.LASF5
+ 1538 004f 02       		.uleb128 0x2
+ 1539 0050 08       		.byte	0x8
+ 1540 0051 05       		.byte	0x5
+ 1541 0052 6A020000 		.4byte	.LASF6
+ 1542 0056 02       		.uleb128 0x2
+ 1543 0057 08       		.byte	0x8
+ 1544 0058 07       		.byte	0x7
+ 1545 0059 76010000 		.4byte	.LASF7
+ 1546 005d 03       		.uleb128 0x3
+ 1547 005e 04       		.byte	0x4
+ 1548 005f 05       		.byte	0x5
+ 1549 0060 696E7400 		.ascii	"int\000"
+ 1550 0064 02       		.uleb128 0x2
+ 1551 0065 04       		.byte	0x4
+ 1552 0066 07       		.byte	0x7
+ 1553 0067 25040000 		.4byte	.LASF8
+ 1554 006b 04       		.uleb128 0x4
+ 1555 006c 70030000 		.4byte	.LASF9
+ 1556 0070 02       		.byte	0x2
+ 1557 0071 9801     		.2byte	0x198
+ 1558 0073 2C000000 		.4byte	0x2c
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 35
+
+
+ 1559 0077 04       		.uleb128 0x4
+ 1560 0078 4B000000 		.4byte	.LASF10
+ 1561 007c 02       		.byte	0x2
+ 1562 007d 9901     		.2byte	0x199
+ 1563 007f 3A000000 		.4byte	0x3a
+ 1564 0083 04       		.uleb128 0x4
+ 1565 0084 B7030000 		.4byte	.LASF11
+ 1566 0088 02       		.byte	0x2
+ 1567 0089 9A01     		.2byte	0x19a
+ 1568 008b 48000000 		.4byte	0x48
+ 1569 008f 04       		.uleb128 0x4
+ 1570 0090 0E0A0000 		.4byte	.LASF12
+ 1571 0094 02       		.byte	0x2
+ 1572 0095 9C01     		.2byte	0x19c
+ 1573 0097 33000000 		.4byte	0x33
+ 1574 009b 02       		.uleb128 0x2
+ 1575 009c 04       		.byte	0x4
+ 1576 009d 04       		.byte	0x4
+ 1577 009e B0070000 		.4byte	.LASF13
+ 1578 00a2 02       		.uleb128 0x2
+ 1579 00a3 08       		.byte	0x8
+ 1580 00a4 04       		.byte	0x4
+ 1581 00a5 95030000 		.4byte	.LASF14
+ 1582 00a9 02       		.uleb128 0x2
+ 1583 00aa 01       		.byte	0x1
+ 1584 00ab 08       		.byte	0x8
+ 1585 00ac 00090000 		.4byte	.LASF15
+ 1586 00b0 04       		.uleb128 0x4
+ 1587 00b1 05060000 		.4byte	.LASF16
+ 1588 00b5 02       		.byte	0x2
+ 1589 00b6 4402     		.2byte	0x244
+ 1590 00b8 BC000000 		.4byte	0xbc
+ 1591 00bc 05       		.uleb128 0x5
+ 1592 00bd 83000000 		.4byte	0x83
+ 1593 00c1 02       		.uleb128 0x2
+ 1594 00c2 04       		.byte	0x4
+ 1595 00c3 07       		.byte	0x7
+ 1596 00c4 6E060000 		.4byte	.LASF17
+ 1597 00c8 06       		.uleb128 0x6
+ 1598 00c9 01       		.byte	0x1
+ 1599 00ca 04       		.byte	0x4
+ 1600 00cb 4201     		.2byte	0x142
+ 1601 00cd 85020000 		.4byte	0x285
+ 1602 00d1 07       		.uleb128 0x7
+ 1603 00d2 E5040000 		.4byte	.LASF18
+ 1604 00d6 00       		.sleb128 0
+ 1605 00d7 07       		.uleb128 0x7
+ 1606 00d8 84020000 		.4byte	.LASF19
+ 1607 00dc 01       		.sleb128 1
+ 1608 00dd 07       		.uleb128 0x7
+ 1609 00de 4E010000 		.4byte	.LASF20
+ 1610 00e2 02       		.sleb128 2
+ 1611 00e3 07       		.uleb128 0x7
+ 1612 00e4 9D090000 		.4byte	.LASF21
+ 1613 00e8 03       		.sleb128 3
+ 1614 00e9 07       		.uleb128 0x7
+ 1615 00ea 8D010000 		.4byte	.LASF22
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 36
+
+
+ 1616 00ee 04       		.sleb128 4
+ 1617 00ef 07       		.uleb128 0x7
+ 1618 00f0 2F000000 		.4byte	.LASF23
+ 1619 00f4 05       		.sleb128 5
+ 1620 00f5 07       		.uleb128 0x7
+ 1621 00f6 1A050000 		.4byte	.LASF24
+ 1622 00fa 06       		.sleb128 6
+ 1623 00fb 07       		.uleb128 0x7
+ 1624 00fc 0B060000 		.4byte	.LASF25
+ 1625 0100 20       		.sleb128 32
+ 1626 0101 07       		.uleb128 0x7
+ 1627 0102 B6020000 		.4byte	.LASF26
+ 1628 0106 21       		.sleb128 33
+ 1629 0107 07       		.uleb128 0x7
+ 1630 0108 33050000 		.4byte	.LASF27
+ 1631 010c 22       		.sleb128 34
+ 1632 010d 07       		.uleb128 0x7
+ 1633 010e 99050000 		.4byte	.LASF28
+ 1634 0112 23       		.sleb128 35
+ 1635 0113 07       		.uleb128 0x7
+ 1636 0114 F8060000 		.4byte	.LASF29
+ 1637 0118 24       		.sleb128 36
+ 1638 0119 07       		.uleb128 0x7
+ 1639 011a 77060000 		.4byte	.LASF30
+ 1640 011e 25       		.sleb128 37
+ 1641 011f 07       		.uleb128 0x7
+ 1642 0120 40030000 		.4byte	.LASF31
+ 1643 0124 26       		.sleb128 38
+ 1644 0125 07       		.uleb128 0x7
+ 1645 0126 57050000 		.4byte	.LASF32
+ 1646 012a 27       		.sleb128 39
+ 1647 012b 07       		.uleb128 0x7
+ 1648 012c 05090000 		.4byte	.LASF33
+ 1649 0130 28       		.sleb128 40
+ 1650 0131 07       		.uleb128 0x7
+ 1651 0132 01020000 		.4byte	.LASF34
+ 1652 0136 29       		.sleb128 41
+ 1653 0137 07       		.uleb128 0x7
+ 1654 0138 90000000 		.4byte	.LASF35
+ 1655 013c 2A       		.sleb128 42
+ 1656 013d 07       		.uleb128 0x7
+ 1657 013e 97020000 		.4byte	.LASF36
+ 1658 0142 2B       		.sleb128 43
+ 1659 0143 07       		.uleb128 0x7
+ 1660 0144 C90A0000 		.4byte	.LASF37
+ 1661 0148 2C       		.sleb128 44
+ 1662 0149 07       		.uleb128 0x7
+ 1663 014a 1E020000 		.4byte	.LASF38
+ 1664 014e 2D       		.sleb128 45
+ 1665 014f 07       		.uleb128 0x7
+ 1666 0150 EB070000 		.4byte	.LASF39
+ 1667 0154 2E       		.sleb128 46
+ 1668 0155 07       		.uleb128 0x7
+ 1669 0156 DA000000 		.4byte	.LASF40
+ 1670 015a 2F       		.sleb128 47
+ 1671 015b 07       		.uleb128 0x7
+ 1672 015c CC060000 		.4byte	.LASF41
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 37
+
+
+ 1673 0160 30       		.sleb128 48
+ 1674 0161 07       		.uleb128 0x7
+ 1675 0162 340B0000 		.4byte	.LASF42
+ 1676 0166 31       		.sleb128 49
+ 1677 0167 07       		.uleb128 0x7
+ 1678 0168 AB060000 		.4byte	.LASF43
+ 1679 016c 32       		.sleb128 50
+ 1680 016d 07       		.uleb128 0x7
+ 1681 016e B5080000 		.4byte	.LASF44
+ 1682 0172 33       		.sleb128 51
+ 1683 0173 07       		.uleb128 0x7
+ 1684 0174 9B080000 		.4byte	.LASF45
+ 1685 0178 C000     		.sleb128 64
+ 1686 017a 07       		.uleb128 0x7
+ 1687 017b BF050000 		.4byte	.LASF46
+ 1688 017f C100     		.sleb128 65
+ 1689 0181 07       		.uleb128 0x7
+ 1690 0182 580B0000 		.4byte	.LASF47
+ 1691 0186 C200     		.sleb128 66
+ 1692 0188 07       		.uleb128 0x7
+ 1693 0189 35070000 		.4byte	.LASF48
+ 1694 018d C300     		.sleb128 67
+ 1695 018f 07       		.uleb128 0x7
+ 1696 0190 68040000 		.4byte	.LASF49
+ 1697 0194 C400     		.sleb128 68
+ 1698 0196 07       		.uleb128 0x7
+ 1699 0197 89070000 		.4byte	.LASF50
+ 1700 019b C500     		.sleb128 69
+ 1701 019d 07       		.uleb128 0x7
+ 1702 019e 4D060000 		.4byte	.LASF51
+ 1703 01a2 C600     		.sleb128 70
+ 1704 01a4 07       		.uleb128 0x7
+ 1705 01a5 FC040000 		.4byte	.LASF52
+ 1706 01a9 C700     		.sleb128 71
+ 1707 01ab 07       		.uleb128 0x7
+ 1708 01ac A20A0000 		.4byte	.LASF53
+ 1709 01b0 C800     		.sleb128 72
+ 1710 01b2 07       		.uleb128 0x7
+ 1711 01b3 CD020000 		.4byte	.LASF54
+ 1712 01b7 C900     		.sleb128 73
+ 1713 01b9 07       		.uleb128 0x7
+ 1714 01ba F0090000 		.4byte	.LASF55
+ 1715 01be CA00     		.sleb128 74
+ 1716 01c0 07       		.uleb128 0x7
+ 1717 01c1 03010000 		.4byte	.LASF56
+ 1718 01c5 CB00     		.sleb128 75
+ 1719 01c7 07       		.uleb128 0x7
+ 1720 01c8 4E040000 		.4byte	.LASF57
+ 1721 01cc CC00     		.sleb128 76
+ 1722 01ce 07       		.uleb128 0x7
+ 1723 01cf 91060000 		.4byte	.LASF58
+ 1724 01d3 CD00     		.sleb128 77
+ 1725 01d5 07       		.uleb128 0x7
+ 1726 01d6 22030000 		.4byte	.LASF59
+ 1727 01da CE00     		.sleb128 78
+ 1728 01dc 07       		.uleb128 0x7
+ 1729 01dd 5B080000 		.4byte	.LASF60
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 38
+
+
+ 1730 01e1 CF00     		.sleb128 79
+ 1731 01e3 07       		.uleb128 0x7
+ 1732 01e4 22010000 		.4byte	.LASF61
+ 1733 01e8 D000     		.sleb128 80
+ 1734 01ea 07       		.uleb128 0x7
+ 1735 01eb 76030000 		.4byte	.LASF62
+ 1736 01ef D100     		.sleb128 81
+ 1737 01f1 07       		.uleb128 0x7
+ 1738 01f2 14070000 		.4byte	.LASF63
+ 1739 01f6 D200     		.sleb128 82
+ 1740 01f8 07       		.uleb128 0x7
+ 1741 01f9 3A080000 		.4byte	.LASF64
+ 1742 01fd D300     		.sleb128 83
+ 1743 01ff 07       		.uleb128 0x7
+ 1744 0200 7A080000 		.4byte	.LASF65
+ 1745 0204 D400     		.sleb128 84
+ 1746 0206 07       		.uleb128 0x7
+ 1747 0207 86040000 		.4byte	.LASF66
+ 1748 020b D500     		.sleb128 85
+ 1749 020d 07       		.uleb128 0x7
+ 1750 020e 03040000 		.4byte	.LASF67
+ 1751 0212 D600     		.sleb128 86
+ 1752 0214 07       		.uleb128 0x7
+ 1753 0215 27090000 		.4byte	.LASF68
+ 1754 0219 D700     		.sleb128 87
+ 1755 021b 07       		.uleb128 0x7
+ 1756 021c AA040000 		.4byte	.LASF69
+ 1757 0220 D800     		.sleb128 88
+ 1758 0222 07       		.uleb128 0x7
+ 1759 0223 DB010000 		.4byte	.LASF70
+ 1760 0227 F000     		.sleb128 112
+ 1761 0229 07       		.uleb128 0x7
+ 1762 022a 0E0B0000 		.4byte	.LASF71
+ 1763 022e F100     		.sleb128 113
+ 1764 0230 07       		.uleb128 0x7
+ 1765 0231 E9050000 		.4byte	.LASF72
+ 1766 0235 F200     		.sleb128 114
+ 1767 0237 07       		.uleb128 0x7
+ 1768 0238 2F060000 		.4byte	.LASF73
+ 1769 023c F300     		.sleb128 115
+ 1770 023e 07       		.uleb128 0x7
+ 1771 023f 5D070000 		.4byte	.LASF74
+ 1772 0243 F400     		.sleb128 116
+ 1773 0245 07       		.uleb128 0x7
+ 1774 0246 ED0A0000 		.4byte	.LASF75
+ 1775 024a F500     		.sleb128 117
+ 1776 024c 07       		.uleb128 0x7
+ 1777 024d B9000000 		.4byte	.LASF76
+ 1778 0251 F600     		.sleb128 118
+ 1779 0253 07       		.uleb128 0x7
+ 1780 0254 52000000 		.4byte	.LASF77
+ 1781 0258 F700     		.sleb128 119
+ 1782 025a 07       		.uleb128 0x7
+ 1783 025b 00000000 		.4byte	.LASF78
+ 1784 025f F800     		.sleb128 120
+ 1785 0261 07       		.uleb128 0x7
+ 1786 0262 47020000 		.4byte	.LASF79
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 39
+
+
+ 1787 0266 F900     		.sleb128 121
+ 1788 0268 07       		.uleb128 0x7
+ 1789 0269 DF030000 		.4byte	.LASF80
+ 1790 026d FA00     		.sleb128 122
+ 1791 026f 07       		.uleb128 0x7
+ 1792 0270 AF010000 		.4byte	.LASF81
+ 1793 0274 FA01     		.sleb128 250
+ 1794 0276 07       		.uleb128 0x7
+ 1795 0277 71000000 		.4byte	.LASF82
+ 1796 027b FB01     		.sleb128 251
+ 1797 027d 07       		.uleb128 0x7
+ 1798 027e BE030000 		.4byte	.LASF83
+ 1799 0282 FF01     		.sleb128 255
+ 1800 0284 00       		.byte	0
+ 1801 0285 08       		.uleb128 0x8
+ 1802 0286 04       		.byte	0x4
+ 1803 0287 6B000000 		.4byte	0x6b
+ 1804 028b 09       		.uleb128 0x9
+ 1805 028c 91090000 		.4byte	.LASF124
+ 1806 0290 0C       		.byte	0xc
+ 1807 0291 03       		.byte	0x3
+ 1808 0292 19       		.byte	0x19
+ 1809 0293 E0020000 		.4byte	0x2e0
+ 1810 0297 0A       		.uleb128 0xa
+ 1811 0298 41010000 		.4byte	.LASF84
+ 1812 029c 03       		.byte	0x3
+ 1813 029d 1B       		.byte	0x1b
+ 1814 029e 6B000000 		.4byte	0x6b
+ 1815 02a2 00       		.byte	0
+ 1816 02a3 0A       		.uleb128 0xa
+ 1817 02a4 760B0000 		.4byte	.LASF85
+ 1818 02a8 03       		.byte	0x3
+ 1819 02a9 1C       		.byte	0x1c
+ 1820 02aa 6B000000 		.4byte	0x6b
+ 1821 02ae 01       		.byte	0x1
+ 1822 02af 0A       		.uleb128 0xa
+ 1823 02b0 CD010000 		.4byte	.LASF86
+ 1824 02b4 03       		.byte	0x3
+ 1825 02b5 1D       		.byte	0x1d
+ 1826 02b6 6B000000 		.4byte	0x6b
+ 1827 02ba 02       		.byte	0x2
+ 1828 02bb 0A       		.uleb128 0xa
+ 1829 02bc 69010000 		.4byte	.LASF87
+ 1830 02c0 03       		.byte	0x3
+ 1831 02c1 1E       		.byte	0x1e
+ 1832 02c2 77000000 		.4byte	0x77
+ 1833 02c6 04       		.byte	0x4
+ 1834 02c7 0A       		.uleb128 0xa
+ 1835 02c8 ED060000 		.4byte	.LASF88
+ 1836 02cc 03       		.byte	0x3
+ 1837 02cd 1F       		.byte	0x1f
+ 1838 02ce 6B000000 		.4byte	0x6b
+ 1839 02d2 06       		.byte	0x6
+ 1840 02d3 0A       		.uleb128 0xa
+ 1841 02d4 CC030000 		.4byte	.LASF89
+ 1842 02d8 03       		.byte	0x3
+ 1843 02d9 20       		.byte	0x20
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 40
+
+
+ 1844 02da 83000000 		.4byte	0x83
+ 1845 02de 08       		.byte	0x8
+ 1846 02df 00       		.byte	0
+ 1847 02e0 0B       		.uleb128 0xb
+ 1848 02e1 C0090000 		.4byte	.LASF90
+ 1849 02e5 03       		.byte	0x3
+ 1850 02e6 21       		.byte	0x21
+ 1851 02e7 8B020000 		.4byte	0x28b
+ 1852 02eb 02       		.uleb128 0x2
+ 1853 02ec 08       		.byte	0x8
+ 1854 02ed 04       		.byte	0x4
+ 1855 02ee EB080000 		.4byte	.LASF91
+ 1856 02f2 0C       		.uleb128 0xc
+ 1857 02f3 66090000 		.4byte	.LASF102
+ 1858 02f7 01       		.byte	0x1
+ 1859 02f8 0E       		.byte	0xe
+ 1860 02f9 6B000000 		.4byte	0x6b
+ 1861 02fd 00000000 		.4byte	.LFB37
+ 1862 0301 A8010000 		.4byte	.LFE37-.LFB37
+ 1863 0305 01       		.uleb128 0x1
+ 1864 0306 9C       		.byte	0x9c
+ 1865 0307 39030000 		.4byte	0x339
+ 1866 030b 0D       		.uleb128 0xd
+ 1867 030c CD040000 		.4byte	.LASF106
+ 1868 0310 01       		.byte	0x1
+ 1869 0311 0E       		.byte	0xe
+ 1870 0312 6B000000 		.4byte	0x6b
+ 1871 0316 02       		.uleb128 0x2
+ 1872 0317 91       		.byte	0x91
+ 1873 0318 6F       		.sleb128 -17
+ 1874 0319 0E       		.uleb128 0xe
+ 1875 031a 0F080000 		.4byte	.LASF92
+ 1876 031e 01       		.byte	0x1
+ 1877 031f 10       		.byte	0x10
+ 1878 0320 6B000000 		.4byte	0x6b
+ 1879 0324 05       		.uleb128 0x5
+ 1880 0325 03       		.byte	0x3
+ 1881 0326 00000000 		.4byte	step.8757
+ 1882 032a 0E       		.uleb128 0xe
+ 1883 032b DA090000 		.4byte	.LASF93
+ 1884 032f 01       		.byte	0x1
+ 1885 0330 11       		.byte	0x11
+ 1886 0331 6B000000 		.4byte	0x6b
+ 1887 0335 02       		.uleb128 0x2
+ 1888 0336 91       		.byte	0x91
+ 1889 0337 77       		.sleb128 -9
+ 1890 0338 00       		.byte	0
+ 1891 0339 0F       		.uleb128 0xf
+ 1892 033a 14080000 		.4byte	.LASF95
+ 1893 033e 01       		.byte	0x1
+ 1894 033f 59       		.byte	0x59
+ 1895 0340 00000000 		.4byte	.LFB38
+ 1896 0344 34000000 		.4byte	.LFE38-.LFB38
+ 1897 0348 01       		.uleb128 0x1
+ 1898 0349 9C       		.byte	0x9c
+ 1899 034a 5D030000 		.4byte	0x35d
+ 1900 034e 0E       		.uleb128 0xe
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 41
+
+
+ 1901 034f AB030000 		.4byte	.LASF94
+ 1902 0353 01       		.byte	0x1
+ 1903 0354 5B       		.byte	0x5b
+ 1904 0355 83000000 		.4byte	0x83
+ 1905 0359 02       		.uleb128 0x2
+ 1906 035a 91       		.byte	0x91
+ 1907 035b 74       		.sleb128 -12
+ 1908 035c 00       		.byte	0
+ 1909 035d 0F       		.uleb128 0xf
+ 1910 035e E1090000 		.4byte	.LASF96
+ 1911 0362 01       		.byte	0x1
+ 1912 0363 6F       		.byte	0x6f
+ 1913 0364 00000000 		.4byte	.LFB39
+ 1914 0368 5C000000 		.4byte	.LFE39-.LFB39
+ 1915 036c 01       		.uleb128 0x1
+ 1916 036d 9C       		.byte	0x9c
+ 1917 036e 8D030000 		.4byte	0x38d
+ 1918 0372 0E       		.uleb128 0xe
+ 1919 0373 68030000 		.4byte	.LASF97
+ 1920 0377 01       		.byte	0x1
+ 1921 0378 71       		.byte	0x71
+ 1922 0379 85020000 		.4byte	0x285
+ 1923 037d 02       		.uleb128 0x2
+ 1924 037e 91       		.byte	0x91
+ 1925 037f 70       		.sleb128 -16
+ 1926 0380 10       		.uleb128 0x10
+ 1927 0381 6900     		.ascii	"i\000"
+ 1928 0383 01       		.byte	0x1
+ 1929 0384 71       		.byte	0x71
+ 1930 0385 6B000000 		.4byte	0x6b
+ 1931 0389 02       		.uleb128 0x2
+ 1932 038a 91       		.byte	0x91
+ 1933 038b 77       		.sleb128 -9
+ 1934 038c 00       		.byte	0
+ 1935 038d 0F       		.uleb128 0xf
+ 1936 038e 85090000 		.4byte	.LASF98
+ 1937 0392 01       		.byte	0x1
+ 1938 0393 7B       		.byte	0x7b
+ 1939 0394 00000000 		.4byte	.LFB40
+ 1940 0398 AC000000 		.4byte	.LFE40-.LFB40
+ 1941 039c 01       		.uleb128 0x1
+ 1942 039d 9C       		.byte	0x9c
+ 1943 039e BD030000 		.4byte	0x3bd
+ 1944 03a2 10       		.uleb128 0x10
+ 1945 03a3 6900     		.ascii	"i\000"
+ 1946 03a5 01       		.byte	0x1
+ 1947 03a6 7D       		.byte	0x7d
+ 1948 03a7 6B000000 		.4byte	0x6b
+ 1949 03ab 02       		.uleb128 0x2
+ 1950 03ac 91       		.byte	0x91
+ 1951 03ad 77       		.sleb128 -9
+ 1952 03ae 10       		.uleb128 0x10
+ 1953 03af 73756D00 		.ascii	"sum\000"
+ 1954 03b3 01       		.byte	0x1
+ 1955 03b4 7E       		.byte	0x7e
+ 1956 03b5 77000000 		.4byte	0x77
+ 1957 03b9 02       		.uleb128 0x2
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 42
+
+
+ 1958 03ba 91       		.byte	0x91
+ 1959 03bb 74       		.sleb128 -12
+ 1960 03bc 00       		.byte	0
+ 1961 03bd 11       		.uleb128 0x11
+ 1962 03be C9070000 		.4byte	.LASF113
+ 1963 03c2 01       		.byte	0x1
+ 1964 03c3 94       		.byte	0x94
+ 1965 03c4 00000000 		.4byte	.LFB41
+ 1966 03c8 34000000 		.4byte	.LFE41-.LFB41
+ 1967 03cc 01       		.uleb128 0x1
+ 1968 03cd 9C       		.byte	0x9c
+ 1969 03ce 12       		.uleb128 0x12
+ 1970 03cf DA050000 		.4byte	.LASF125
+ 1971 03d3 01       		.byte	0x1
+ 1972 03d4 A4       		.byte	0xa4
+ 1973 03d5 83000000 		.4byte	0x83
+ 1974 03d9 00000000 		.4byte	.LFB42
+ 1975 03dd 08010000 		.4byte	.LFE42-.LFB42
+ 1976 03e1 01       		.uleb128 0x1
+ 1977 03e2 9C       		.byte	0x9c
+ 1978 03e3 1E040000 		.4byte	0x41e
+ 1979 03e7 10       		.uleb128 0x10
+ 1980 03e8 6900     		.ascii	"i\000"
+ 1981 03ea 01       		.byte	0x1
+ 1982 03eb A6       		.byte	0xa6
+ 1983 03ec 6B000000 		.4byte	0x6b
+ 1984 03f0 02       		.uleb128 0x2
+ 1985 03f1 91       		.byte	0x91
+ 1986 03f2 77       		.sleb128 -9
+ 1987 03f3 0E       		.uleb128 0xe
+ 1988 03f4 C0070000 		.4byte	.LASF99
+ 1989 03f8 01       		.byte	0x1
+ 1990 03f9 A6       		.byte	0xa6
+ 1991 03fa 6B000000 		.4byte	0x6b
+ 1992 03fe 02       		.uleb128 0x2
+ 1993 03ff 91       		.byte	0x91
+ 1994 0400 76       		.sleb128 -10
+ 1995 0401 0E       		.uleb128 0xe
+ 1996 0402 D6030000 		.4byte	.LASF100
+ 1997 0406 01       		.byte	0x1
+ 1998 0407 A6       		.byte	0xa6
+ 1999 0408 6B000000 		.4byte	0x6b
+ 2000 040c 02       		.uleb128 0x2
+ 2001 040d 91       		.byte	0x91
+ 2002 040e 75       		.sleb128 -11
+ 2003 040f 0E       		.uleb128 0xe
+ 2004 0410 F7080000 		.4byte	.LASF101
+ 2005 0414 01       		.byte	0x1
+ 2006 0415 A7       		.byte	0xa7
+ 2007 0416 83000000 		.4byte	0x83
+ 2008 041a 02       		.uleb128 0x2
+ 2009 041b 91       		.byte	0x91
+ 2010 041c 70       		.sleb128 -16
+ 2011 041d 00       		.byte	0
+ 2012 041e 13       		.uleb128 0x13
+ 2013 041f 76050000 		.4byte	.LASF103
+ 2014 0423 01       		.byte	0x1
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 43
+
+
+ 2015 0424 CB       		.byte	0xcb
+ 2016 0425 6B000000 		.4byte	0x6b
+ 2017 0429 00000000 		.4byte	.LFB43
+ 2018 042d C4000000 		.4byte	.LFE43-.LFB43
+ 2019 0431 01       		.uleb128 0x1
+ 2020 0432 9C       		.byte	0x9c
+ 2021 0433 6E040000 		.4byte	0x46e
+ 2022 0437 10       		.uleb128 0x10
+ 2023 0438 6900     		.ascii	"i\000"
+ 2024 043a 01       		.byte	0x1
+ 2025 043b CD       		.byte	0xcd
+ 2026 043c 6B000000 		.4byte	0x6b
+ 2027 0440 02       		.uleb128 0x2
+ 2028 0441 91       		.byte	0x91
+ 2029 0442 77       		.sleb128 -9
+ 2030 0443 0E       		.uleb128 0xe
+ 2031 0444 68030000 		.4byte	.LASF97
+ 2032 0448 01       		.byte	0x1
+ 2033 0449 CE       		.byte	0xce
+ 2034 044a 85020000 		.4byte	0x285
+ 2035 044e 02       		.uleb128 0x2
+ 2036 044f 91       		.byte	0x91
+ 2037 0450 6C       		.sleb128 -20
+ 2038 0451 0E       		.uleb128 0xe
+ 2039 0452 F7080000 		.4byte	.LASF101
+ 2040 0456 01       		.byte	0x1
+ 2041 0457 CF       		.byte	0xcf
+ 2042 0458 83000000 		.4byte	0x83
+ 2043 045c 02       		.uleb128 0x2
+ 2044 045d 91       		.byte	0x91
+ 2045 045e 70       		.sleb128 -16
+ 2046 045f 0E       		.uleb128 0xe
+ 2047 0460 B6070000 		.4byte	.LASF104
+ 2048 0464 01       		.byte	0x1
+ 2049 0465 CF       		.byte	0xcf
+ 2050 0466 83000000 		.4byte	0x83
+ 2051 046a 02       		.uleb128 0x2
+ 2052 046b 91       		.byte	0x91
+ 2053 046c 68       		.sleb128 -24
+ 2054 046d 00       		.byte	0
+ 2055 046e 0F       		.uleb128 0xf
+ 2056 046f 2E080000 		.4byte	.LASF105
+ 2057 0473 01       		.byte	0x1
+ 2058 0474 E9       		.byte	0xe9
+ 2059 0475 00000000 		.4byte	.LFB44
+ 2060 0479 70010000 		.4byte	.LFE44-.LFB44
+ 2061 047d 01       		.uleb128 0x1
+ 2062 047e 9C       		.byte	0x9c
+ 2063 047f BA040000 		.4byte	0x4ba
+ 2064 0483 0D       		.uleb128 0xd
+ 2065 0484 B6090000 		.4byte	.LASF107
+ 2066 0488 01       		.byte	0x1
+ 2067 0489 E9       		.byte	0xe9
+ 2068 048a 83000000 		.4byte	0x83
+ 2069 048e 02       		.uleb128 0x2
+ 2070 048f 91       		.byte	0x91
+ 2071 0490 5C       		.sleb128 -36
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 44
+
+
+ 2072 0491 10       		.uleb128 0x10
+ 2073 0492 636D6400 		.ascii	"cmd\000"
+ 2074 0496 01       		.byte	0x1
+ 2075 0497 EB       		.byte	0xeb
+ 2076 0498 83000000 		.4byte	0x83
+ 2077 049c 02       		.uleb128 0x2
+ 2078 049d 91       		.byte	0x91
+ 2079 049e 6C       		.sleb128 -20
+ 2080 049f 10       		.uleb128 0x10
+ 2081 04a0 6900     		.ascii	"i\000"
+ 2082 04a2 01       		.byte	0x1
+ 2083 04a3 EB       		.byte	0xeb
+ 2084 04a4 83000000 		.4byte	0x83
+ 2085 04a8 02       		.uleb128 0x2
+ 2086 04a9 91       		.byte	0x91
+ 2087 04aa 68       		.sleb128 -24
+ 2088 04ab 0E       		.uleb128 0xe
+ 2089 04ac 32040000 		.4byte	.LASF108
+ 2090 04b0 01       		.byte	0x1
+ 2091 04b1 EB       		.byte	0xeb
+ 2092 04b2 83000000 		.4byte	0x83
+ 2093 04b6 02       		.uleb128 0x2
+ 2094 04b7 91       		.byte	0x91
+ 2095 04b8 64       		.sleb128 -28
+ 2096 04b9 00       		.byte	0
+ 2097 04ba 14       		.uleb128 0x14
+ 2098 04bb 9C030000 		.4byte	.LASF109
+ 2099 04bf 01       		.byte	0x1
+ 2100 04c0 1601     		.2byte	0x116
+ 2101 04c2 00000000 		.4byte	.LFB45
+ 2102 04c6 62000000 		.4byte	.LFE45-.LFB45
+ 2103 04ca 01       		.uleb128 0x1
+ 2104 04cb 9C       		.byte	0x9c
+ 2105 04cc FE040000 		.4byte	0x4fe
+ 2106 04d0 15       		.uleb128 0x15
+ 2107 04d1 6B657900 		.ascii	"key\000"
+ 2108 04d5 01       		.byte	0x1
+ 2109 04d6 1601     		.2byte	0x116
+ 2110 04d8 6B000000 		.4byte	0x6b
+ 2111 04dc 02       		.uleb128 0x2
+ 2112 04dd 91       		.byte	0x91
+ 2113 04de 6F       		.sleb128 -17
+ 2114 04df 16       		.uleb128 0x16
+ 2115 04e0 68030000 		.4byte	.LASF97
+ 2116 04e4 01       		.byte	0x1
+ 2117 04e5 1801     		.2byte	0x118
+ 2118 04e7 85020000 		.4byte	0x285
+ 2119 04eb 02       		.uleb128 0x2
+ 2120 04ec 91       		.byte	0x91
+ 2121 04ed 74       		.sleb128 -12
+ 2122 04ee 16       		.uleb128 0x16
+ 2123 04ef A2010000 		.4byte	.LASF110
+ 2124 04f3 01       		.byte	0x1
+ 2125 04f4 1901     		.2byte	0x119
+ 2126 04f6 83000000 		.4byte	0x83
+ 2127 04fa 02       		.uleb128 0x2
+ 2128 04fb 91       		.byte	0x91
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 45
+
+
+ 2129 04fc 70       		.sleb128 -16
+ 2130 04fd 00       		.byte	0
+ 2131 04fe 14       		.uleb128 0x14
+ 2132 04ff CB090000 		.4byte	.LASF111
+ 2133 0503 01       		.byte	0x1
+ 2134 0504 2101     		.2byte	0x121
+ 2135 0506 00000000 		.4byte	.LFB46
+ 2136 050a 30000000 		.4byte	.LFE46-.LFB46
+ 2137 050e 01       		.uleb128 0x1
+ 2138 050f 9C       		.byte	0x9c
+ 2139 0510 24050000 		.4byte	0x524
+ 2140 0514 17       		.uleb128 0x17
+ 2141 0515 5D090000 		.4byte	.LASF112
+ 2142 0519 01       		.byte	0x1
+ 2143 051a 2101     		.2byte	0x121
+ 2144 051c 83000000 		.4byte	0x83
+ 2145 0520 02       		.uleb128 0x2
+ 2146 0521 91       		.byte	0x91
+ 2147 0522 6C       		.sleb128 -20
+ 2148 0523 00       		.byte	0
+ 2149 0524 18       		.uleb128 0x18
+ 2150 0525 DC080000 		.4byte	.LASF114
+ 2151 0529 01       		.byte	0x1
+ 2152 052a 2601     		.2byte	0x126
+ 2153 052c 00000000 		.4byte	.LFB47
+ 2154 0530 44000000 		.4byte	.LFE47-.LFB47
+ 2155 0534 01       		.uleb128 0x1
+ 2156 0535 9C       		.byte	0x9c
+ 2157 0536 19       		.uleb128 0x19
+ 2158 0537 50090000 		.4byte	.LASF115
+ 2159 053b 01       		.byte	0x1
+ 2160 053c 3201     		.2byte	0x132
+ 2161 053e 6B000000 		.4byte	0x6b
+ 2162 0542 00000000 		.4byte	.LFB48
+ 2163 0546 A0000000 		.4byte	.LFE48-.LFB48
+ 2164 054a 01       		.uleb128 0x1
+ 2165 054b 9C       		.byte	0x9c
+ 2166 054c 80050000 		.4byte	0x580
+ 2167 0550 15       		.uleb128 0x15
+ 2168 0551 6B657900 		.ascii	"key\000"
+ 2169 0555 01       		.byte	0x1
+ 2170 0556 3201     		.2byte	0x132
+ 2171 0558 6B000000 		.4byte	0x6b
+ 2172 055c 03       		.uleb128 0x3
+ 2173 055d 91       		.byte	0x91
+ 2174 055e EF7E     		.sleb128 -145
+ 2175 0560 16       		.uleb128 0x16
+ 2176 0561 85050000 		.4byte	.LASF116
+ 2177 0565 01       		.byte	0x1
+ 2178 0566 3401     		.2byte	0x134
+ 2179 0568 83000000 		.4byte	0x83
+ 2180 056c 02       		.uleb128 0x2
+ 2181 056d 91       		.byte	0x91
+ 2182 056e 74       		.sleb128 -12
+ 2183 056f 16       		.uleb128 0x16
+ 2184 0570 53070000 		.4byte	.LASF117
+ 2185 0574 01       		.byte	0x1
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 46
+
+
+ 2186 0575 3501     		.2byte	0x135
+ 2187 0577 80050000 		.4byte	0x580
+ 2188 057b 03       		.uleb128 0x3
+ 2189 057c 91       		.byte	0x91
+ 2190 057d F47E     		.sleb128 -140
+ 2191 057f 00       		.byte	0
+ 2192 0580 1A       		.uleb128 0x1a
+ 2193 0581 6B000000 		.4byte	0x6b
+ 2194 0585 90050000 		.4byte	0x590
+ 2195 0589 1B       		.uleb128 0x1b
+ 2196 058a C1000000 		.4byte	0xc1
+ 2197 058e 7F       		.byte	0x7f
+ 2198 058f 00       		.byte	0
+ 2199 0590 1C       		.uleb128 0x1c
+ 2200 0591 23000000 		.4byte	.LASF118
+ 2201 0595 01       		.byte	0x1
+ 2202 0596 08       		.byte	0x8
+ 2203 0597 A1050000 		.4byte	0x5a1
+ 2204 059b 05       		.uleb128 0x5
+ 2205 059c 03       		.byte	0x3
+ 2206 059d 00000000 		.4byte	gtag_ircode
+ 2207 05a1 05       		.uleb128 0x5
+ 2208 05a2 E0020000 		.4byte	0x2e0
+ 2209 05a6 1C       		.uleb128 0x1c
+ 2210 05a7 8F050000 		.4byte	.LASF119
+ 2211 05ab 01       		.byte	0x1
+ 2212 05ac 09       		.byte	0x9
+ 2213 05ad 80050000 		.4byte	0x580
+ 2214 05b1 05       		.uleb128 0x5
+ 2215 05b2 03       		.byte	0x3
+ 2216 05b3 00000000 		.4byte	decodemsg
+ 2217 05b7 1C       		.uleb128 0x1c
+ 2218 05b8 7B070000 		.4byte	.LASF120
+ 2219 05bc 01       		.byte	0x1
+ 2220 05bd 0A       		.byte	0xa
+ 2221 05be 6B000000 		.4byte	0x6b
+ 2222 05c2 05       		.uleb128 0x5
+ 2223 05c3 03       		.byte	0x3
+ 2224 05c4 00000000 		.4byte	decodemsg_len
+ 2225 05c8 1A       		.uleb128 0x1a
+ 2226 05c9 6B000000 		.4byte	0x6b
+ 2227 05cd DE050000 		.4byte	0x5de
+ 2228 05d1 1B       		.uleb128 0x1b
+ 2229 05d2 C1000000 		.4byte	0xc1
+ 2230 05d6 00       		.byte	0
+ 2231 05d7 1B       		.uleb128 0x1b
+ 2232 05d8 C1000000 		.4byte	0xc1
+ 2233 05dc 7F       		.byte	0x7f
+ 2234 05dd 00       		.byte	0
+ 2235 05de 1C       		.uleb128 0x1c
+ 2236 05df 53070000 		.4byte	.LASF117
+ 2237 05e3 01       		.byte	0x1
+ 2238 05e4 68       		.byte	0x68
+ 2239 05e5 EF050000 		.4byte	0x5ef
+ 2240 05e9 05       		.uleb128 0x5
+ 2241 05ea 03       		.byte	0x3
+ 2242 05eb 00000000 		.4byte	irinitkey
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 47
+
+
+ 2243 05ef 1D       		.uleb128 0x1d
+ 2244 05f0 C8050000 		.4byte	0x5c8
+ 2245 05f4 00       		.byte	0
+ 2246              		.section	.debug_abbrev,"",%progbits
+ 2247              	.Ldebug_abbrev0:
+ 2248 0000 01       		.uleb128 0x1
+ 2249 0001 11       		.uleb128 0x11
+ 2250 0002 01       		.byte	0x1
+ 2251 0003 25       		.uleb128 0x25
+ 2252 0004 0E       		.uleb128 0xe
+ 2253 0005 13       		.uleb128 0x13
+ 2254 0006 0B       		.uleb128 0xb
+ 2255 0007 03       		.uleb128 0x3
+ 2256 0008 0E       		.uleb128 0xe
+ 2257 0009 1B       		.uleb128 0x1b
+ 2258 000a 0E       		.uleb128 0xe
+ 2259 000b 55       		.uleb128 0x55
+ 2260 000c 17       		.uleb128 0x17
+ 2261 000d 11       		.uleb128 0x11
+ 2262 000e 01       		.uleb128 0x1
+ 2263 000f 10       		.uleb128 0x10
+ 2264 0010 17       		.uleb128 0x17
+ 2265 0011 00       		.byte	0
+ 2266 0012 00       		.byte	0
+ 2267 0013 02       		.uleb128 0x2
+ 2268 0014 24       		.uleb128 0x24
+ 2269 0015 00       		.byte	0
+ 2270 0016 0B       		.uleb128 0xb
+ 2271 0017 0B       		.uleb128 0xb
+ 2272 0018 3E       		.uleb128 0x3e
+ 2273 0019 0B       		.uleb128 0xb
+ 2274 001a 03       		.uleb128 0x3
+ 2275 001b 0E       		.uleb128 0xe
+ 2276 001c 00       		.byte	0
+ 2277 001d 00       		.byte	0
+ 2278 001e 03       		.uleb128 0x3
+ 2279 001f 24       		.uleb128 0x24
+ 2280 0020 00       		.byte	0
+ 2281 0021 0B       		.uleb128 0xb
+ 2282 0022 0B       		.uleb128 0xb
+ 2283 0023 3E       		.uleb128 0x3e
+ 2284 0024 0B       		.uleb128 0xb
+ 2285 0025 03       		.uleb128 0x3
+ 2286 0026 08       		.uleb128 0x8
+ 2287 0027 00       		.byte	0
+ 2288 0028 00       		.byte	0
+ 2289 0029 04       		.uleb128 0x4
+ 2290 002a 16       		.uleb128 0x16
+ 2291 002b 00       		.byte	0
+ 2292 002c 03       		.uleb128 0x3
+ 2293 002d 0E       		.uleb128 0xe
+ 2294 002e 3A       		.uleb128 0x3a
+ 2295 002f 0B       		.uleb128 0xb
+ 2296 0030 3B       		.uleb128 0x3b
+ 2297 0031 05       		.uleb128 0x5
+ 2298 0032 49       		.uleb128 0x49
+ 2299 0033 13       		.uleb128 0x13
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 48
+
+
+ 2300 0034 00       		.byte	0
+ 2301 0035 00       		.byte	0
+ 2302 0036 05       		.uleb128 0x5
+ 2303 0037 35       		.uleb128 0x35
+ 2304 0038 00       		.byte	0
+ 2305 0039 49       		.uleb128 0x49
+ 2306 003a 13       		.uleb128 0x13
+ 2307 003b 00       		.byte	0
+ 2308 003c 00       		.byte	0
+ 2309 003d 06       		.uleb128 0x6
+ 2310 003e 04       		.uleb128 0x4
+ 2311 003f 01       		.byte	0x1
+ 2312 0040 0B       		.uleb128 0xb
+ 2313 0041 0B       		.uleb128 0xb
+ 2314 0042 3A       		.uleb128 0x3a
+ 2315 0043 0B       		.uleb128 0xb
+ 2316 0044 3B       		.uleb128 0x3b
+ 2317 0045 05       		.uleb128 0x5
+ 2318 0046 01       		.uleb128 0x1
+ 2319 0047 13       		.uleb128 0x13
+ 2320 0048 00       		.byte	0
+ 2321 0049 00       		.byte	0
+ 2322 004a 07       		.uleb128 0x7
+ 2323 004b 28       		.uleb128 0x28
+ 2324 004c 00       		.byte	0
+ 2325 004d 03       		.uleb128 0x3
+ 2326 004e 0E       		.uleb128 0xe
+ 2327 004f 1C       		.uleb128 0x1c
+ 2328 0050 0D       		.uleb128 0xd
+ 2329 0051 00       		.byte	0
+ 2330 0052 00       		.byte	0
+ 2331 0053 08       		.uleb128 0x8
+ 2332 0054 0F       		.uleb128 0xf
+ 2333 0055 00       		.byte	0
+ 2334 0056 0B       		.uleb128 0xb
+ 2335 0057 0B       		.uleb128 0xb
+ 2336 0058 49       		.uleb128 0x49
+ 2337 0059 13       		.uleb128 0x13
+ 2338 005a 00       		.byte	0
+ 2339 005b 00       		.byte	0
+ 2340 005c 09       		.uleb128 0x9
+ 2341 005d 13       		.uleb128 0x13
+ 2342 005e 01       		.byte	0x1
+ 2343 005f 03       		.uleb128 0x3
+ 2344 0060 0E       		.uleb128 0xe
+ 2345 0061 0B       		.uleb128 0xb
+ 2346 0062 0B       		.uleb128 0xb
+ 2347 0063 3A       		.uleb128 0x3a
+ 2348 0064 0B       		.uleb128 0xb
+ 2349 0065 3B       		.uleb128 0x3b
+ 2350 0066 0B       		.uleb128 0xb
+ 2351 0067 01       		.uleb128 0x1
+ 2352 0068 13       		.uleb128 0x13
+ 2353 0069 00       		.byte	0
+ 2354 006a 00       		.byte	0
+ 2355 006b 0A       		.uleb128 0xa
+ 2356 006c 0D       		.uleb128 0xd
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 49
+
+
+ 2357 006d 00       		.byte	0
+ 2358 006e 03       		.uleb128 0x3
+ 2359 006f 0E       		.uleb128 0xe
+ 2360 0070 3A       		.uleb128 0x3a
+ 2361 0071 0B       		.uleb128 0xb
+ 2362 0072 3B       		.uleb128 0x3b
+ 2363 0073 0B       		.uleb128 0xb
+ 2364 0074 49       		.uleb128 0x49
+ 2365 0075 13       		.uleb128 0x13
+ 2366 0076 38       		.uleb128 0x38
+ 2367 0077 0B       		.uleb128 0xb
+ 2368 0078 00       		.byte	0
+ 2369 0079 00       		.byte	0
+ 2370 007a 0B       		.uleb128 0xb
+ 2371 007b 16       		.uleb128 0x16
+ 2372 007c 00       		.byte	0
+ 2373 007d 03       		.uleb128 0x3
+ 2374 007e 0E       		.uleb128 0xe
+ 2375 007f 3A       		.uleb128 0x3a
+ 2376 0080 0B       		.uleb128 0xb
+ 2377 0081 3B       		.uleb128 0x3b
+ 2378 0082 0B       		.uleb128 0xb
+ 2379 0083 49       		.uleb128 0x49
+ 2380 0084 13       		.uleb128 0x13
+ 2381 0085 00       		.byte	0
+ 2382 0086 00       		.byte	0
+ 2383 0087 0C       		.uleb128 0xc
+ 2384 0088 2E       		.uleb128 0x2e
+ 2385 0089 01       		.byte	0x1
+ 2386 008a 3F       		.uleb128 0x3f
+ 2387 008b 19       		.uleb128 0x19
+ 2388 008c 03       		.uleb128 0x3
+ 2389 008d 0E       		.uleb128 0xe
+ 2390 008e 3A       		.uleb128 0x3a
+ 2391 008f 0B       		.uleb128 0xb
+ 2392 0090 3B       		.uleb128 0x3b
+ 2393 0091 0B       		.uleb128 0xb
+ 2394 0092 27       		.uleb128 0x27
+ 2395 0093 19       		.uleb128 0x19
+ 2396 0094 49       		.uleb128 0x49
+ 2397 0095 13       		.uleb128 0x13
+ 2398 0096 11       		.uleb128 0x11
+ 2399 0097 01       		.uleb128 0x1
+ 2400 0098 12       		.uleb128 0x12
+ 2401 0099 06       		.uleb128 0x6
+ 2402 009a 40       		.uleb128 0x40
+ 2403 009b 18       		.uleb128 0x18
+ 2404 009c 9742     		.uleb128 0x2117
+ 2405 009e 19       		.uleb128 0x19
+ 2406 009f 01       		.uleb128 0x1
+ 2407 00a0 13       		.uleb128 0x13
+ 2408 00a1 00       		.byte	0
+ 2409 00a2 00       		.byte	0
+ 2410 00a3 0D       		.uleb128 0xd
+ 2411 00a4 05       		.uleb128 0x5
+ 2412 00a5 00       		.byte	0
+ 2413 00a6 03       		.uleb128 0x3
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 50
+
+
+ 2414 00a7 0E       		.uleb128 0xe
+ 2415 00a8 3A       		.uleb128 0x3a
+ 2416 00a9 0B       		.uleb128 0xb
+ 2417 00aa 3B       		.uleb128 0x3b
+ 2418 00ab 0B       		.uleb128 0xb
+ 2419 00ac 49       		.uleb128 0x49
+ 2420 00ad 13       		.uleb128 0x13
+ 2421 00ae 02       		.uleb128 0x2
+ 2422 00af 18       		.uleb128 0x18
+ 2423 00b0 00       		.byte	0
+ 2424 00b1 00       		.byte	0
+ 2425 00b2 0E       		.uleb128 0xe
+ 2426 00b3 34       		.uleb128 0x34
+ 2427 00b4 00       		.byte	0
+ 2428 00b5 03       		.uleb128 0x3
+ 2429 00b6 0E       		.uleb128 0xe
+ 2430 00b7 3A       		.uleb128 0x3a
+ 2431 00b8 0B       		.uleb128 0xb
+ 2432 00b9 3B       		.uleb128 0x3b
+ 2433 00ba 0B       		.uleb128 0xb
+ 2434 00bb 49       		.uleb128 0x49
+ 2435 00bc 13       		.uleb128 0x13
+ 2436 00bd 02       		.uleb128 0x2
+ 2437 00be 18       		.uleb128 0x18
+ 2438 00bf 00       		.byte	0
+ 2439 00c0 00       		.byte	0
+ 2440 00c1 0F       		.uleb128 0xf
+ 2441 00c2 2E       		.uleb128 0x2e
+ 2442 00c3 01       		.byte	0x1
+ 2443 00c4 3F       		.uleb128 0x3f
+ 2444 00c5 19       		.uleb128 0x19
+ 2445 00c6 03       		.uleb128 0x3
+ 2446 00c7 0E       		.uleb128 0xe
+ 2447 00c8 3A       		.uleb128 0x3a
+ 2448 00c9 0B       		.uleb128 0xb
+ 2449 00ca 3B       		.uleb128 0x3b
+ 2450 00cb 0B       		.uleb128 0xb
+ 2451 00cc 27       		.uleb128 0x27
+ 2452 00cd 19       		.uleb128 0x19
+ 2453 00ce 11       		.uleb128 0x11
+ 2454 00cf 01       		.uleb128 0x1
+ 2455 00d0 12       		.uleb128 0x12
+ 2456 00d1 06       		.uleb128 0x6
+ 2457 00d2 40       		.uleb128 0x40
+ 2458 00d3 18       		.uleb128 0x18
+ 2459 00d4 9642     		.uleb128 0x2116
+ 2460 00d6 19       		.uleb128 0x19
+ 2461 00d7 01       		.uleb128 0x1
+ 2462 00d8 13       		.uleb128 0x13
+ 2463 00d9 00       		.byte	0
+ 2464 00da 00       		.byte	0
+ 2465 00db 10       		.uleb128 0x10
+ 2466 00dc 34       		.uleb128 0x34
+ 2467 00dd 00       		.byte	0
+ 2468 00de 03       		.uleb128 0x3
+ 2469 00df 08       		.uleb128 0x8
+ 2470 00e0 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 51
+
+
+ 2471 00e1 0B       		.uleb128 0xb
+ 2472 00e2 3B       		.uleb128 0x3b
+ 2473 00e3 0B       		.uleb128 0xb
+ 2474 00e4 49       		.uleb128 0x49
+ 2475 00e5 13       		.uleb128 0x13
+ 2476 00e6 02       		.uleb128 0x2
+ 2477 00e7 18       		.uleb128 0x18
+ 2478 00e8 00       		.byte	0
+ 2479 00e9 00       		.byte	0
+ 2480 00ea 11       		.uleb128 0x11
+ 2481 00eb 2E       		.uleb128 0x2e
+ 2482 00ec 00       		.byte	0
+ 2483 00ed 3F       		.uleb128 0x3f
+ 2484 00ee 19       		.uleb128 0x19
+ 2485 00ef 03       		.uleb128 0x3
+ 2486 00f0 0E       		.uleb128 0xe
+ 2487 00f1 3A       		.uleb128 0x3a
+ 2488 00f2 0B       		.uleb128 0xb
+ 2489 00f3 3B       		.uleb128 0x3b
+ 2490 00f4 0B       		.uleb128 0xb
+ 2491 00f5 27       		.uleb128 0x27
+ 2492 00f6 19       		.uleb128 0x19
+ 2493 00f7 11       		.uleb128 0x11
+ 2494 00f8 01       		.uleb128 0x1
+ 2495 00f9 12       		.uleb128 0x12
+ 2496 00fa 06       		.uleb128 0x6
+ 2497 00fb 40       		.uleb128 0x40
+ 2498 00fc 18       		.uleb128 0x18
+ 2499 00fd 9642     		.uleb128 0x2116
+ 2500 00ff 19       		.uleb128 0x19
+ 2501 0100 00       		.byte	0
+ 2502 0101 00       		.byte	0
+ 2503 0102 12       		.uleb128 0x12
+ 2504 0103 2E       		.uleb128 0x2e
+ 2505 0104 01       		.byte	0x1
+ 2506 0105 03       		.uleb128 0x3
+ 2507 0106 0E       		.uleb128 0xe
+ 2508 0107 3A       		.uleb128 0x3a
+ 2509 0108 0B       		.uleb128 0xb
+ 2510 0109 3B       		.uleb128 0x3b
+ 2511 010a 0B       		.uleb128 0xb
+ 2512 010b 27       		.uleb128 0x27
+ 2513 010c 19       		.uleb128 0x19
+ 2514 010d 49       		.uleb128 0x49
+ 2515 010e 13       		.uleb128 0x13
+ 2516 010f 11       		.uleb128 0x11
+ 2517 0110 01       		.uleb128 0x1
+ 2518 0111 12       		.uleb128 0x12
+ 2519 0112 06       		.uleb128 0x6
+ 2520 0113 40       		.uleb128 0x40
+ 2521 0114 18       		.uleb128 0x18
+ 2522 0115 9742     		.uleb128 0x2117
+ 2523 0117 19       		.uleb128 0x19
+ 2524 0118 01       		.uleb128 0x1
+ 2525 0119 13       		.uleb128 0x13
+ 2526 011a 00       		.byte	0
+ 2527 011b 00       		.byte	0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 52
+
+
+ 2528 011c 13       		.uleb128 0x13
+ 2529 011d 2E       		.uleb128 0x2e
+ 2530 011e 01       		.byte	0x1
+ 2531 011f 3F       		.uleb128 0x3f
+ 2532 0120 19       		.uleb128 0x19
+ 2533 0121 03       		.uleb128 0x3
+ 2534 0122 0E       		.uleb128 0xe
+ 2535 0123 3A       		.uleb128 0x3a
+ 2536 0124 0B       		.uleb128 0xb
+ 2537 0125 3B       		.uleb128 0x3b
+ 2538 0126 0B       		.uleb128 0xb
+ 2539 0127 27       		.uleb128 0x27
+ 2540 0128 19       		.uleb128 0x19
+ 2541 0129 49       		.uleb128 0x49
+ 2542 012a 13       		.uleb128 0x13
+ 2543 012b 11       		.uleb128 0x11
+ 2544 012c 01       		.uleb128 0x1
+ 2545 012d 12       		.uleb128 0x12
+ 2546 012e 06       		.uleb128 0x6
+ 2547 012f 40       		.uleb128 0x40
+ 2548 0130 18       		.uleb128 0x18
+ 2549 0131 9642     		.uleb128 0x2116
+ 2550 0133 19       		.uleb128 0x19
+ 2551 0134 01       		.uleb128 0x1
+ 2552 0135 13       		.uleb128 0x13
+ 2553 0136 00       		.byte	0
+ 2554 0137 00       		.byte	0
+ 2555 0138 14       		.uleb128 0x14
+ 2556 0139 2E       		.uleb128 0x2e
+ 2557 013a 01       		.byte	0x1
+ 2558 013b 3F       		.uleb128 0x3f
+ 2559 013c 19       		.uleb128 0x19
+ 2560 013d 03       		.uleb128 0x3
+ 2561 013e 0E       		.uleb128 0xe
+ 2562 013f 3A       		.uleb128 0x3a
+ 2563 0140 0B       		.uleb128 0xb
+ 2564 0141 3B       		.uleb128 0x3b
+ 2565 0142 05       		.uleb128 0x5
+ 2566 0143 27       		.uleb128 0x27
+ 2567 0144 19       		.uleb128 0x19
+ 2568 0145 11       		.uleb128 0x11
+ 2569 0146 01       		.uleb128 0x1
+ 2570 0147 12       		.uleb128 0x12
+ 2571 0148 06       		.uleb128 0x6
+ 2572 0149 40       		.uleb128 0x40
+ 2573 014a 18       		.uleb128 0x18
+ 2574 014b 9642     		.uleb128 0x2116
+ 2575 014d 19       		.uleb128 0x19
+ 2576 014e 01       		.uleb128 0x1
+ 2577 014f 13       		.uleb128 0x13
+ 2578 0150 00       		.byte	0
+ 2579 0151 00       		.byte	0
+ 2580 0152 15       		.uleb128 0x15
+ 2581 0153 05       		.uleb128 0x5
+ 2582 0154 00       		.byte	0
+ 2583 0155 03       		.uleb128 0x3
+ 2584 0156 08       		.uleb128 0x8
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 53
+
+
+ 2585 0157 3A       		.uleb128 0x3a
+ 2586 0158 0B       		.uleb128 0xb
+ 2587 0159 3B       		.uleb128 0x3b
+ 2588 015a 05       		.uleb128 0x5
+ 2589 015b 49       		.uleb128 0x49
+ 2590 015c 13       		.uleb128 0x13
+ 2591 015d 02       		.uleb128 0x2
+ 2592 015e 18       		.uleb128 0x18
+ 2593 015f 00       		.byte	0
+ 2594 0160 00       		.byte	0
+ 2595 0161 16       		.uleb128 0x16
+ 2596 0162 34       		.uleb128 0x34
+ 2597 0163 00       		.byte	0
+ 2598 0164 03       		.uleb128 0x3
+ 2599 0165 0E       		.uleb128 0xe
+ 2600 0166 3A       		.uleb128 0x3a
+ 2601 0167 0B       		.uleb128 0xb
+ 2602 0168 3B       		.uleb128 0x3b
+ 2603 0169 05       		.uleb128 0x5
+ 2604 016a 49       		.uleb128 0x49
+ 2605 016b 13       		.uleb128 0x13
+ 2606 016c 02       		.uleb128 0x2
+ 2607 016d 18       		.uleb128 0x18
+ 2608 016e 00       		.byte	0
+ 2609 016f 00       		.byte	0
+ 2610 0170 17       		.uleb128 0x17
+ 2611 0171 05       		.uleb128 0x5
+ 2612 0172 00       		.byte	0
+ 2613 0173 03       		.uleb128 0x3
+ 2614 0174 0E       		.uleb128 0xe
+ 2615 0175 3A       		.uleb128 0x3a
+ 2616 0176 0B       		.uleb128 0xb
+ 2617 0177 3B       		.uleb128 0x3b
+ 2618 0178 05       		.uleb128 0x5
+ 2619 0179 49       		.uleb128 0x49
+ 2620 017a 13       		.uleb128 0x13
+ 2621 017b 02       		.uleb128 0x2
+ 2622 017c 18       		.uleb128 0x18
+ 2623 017d 00       		.byte	0
+ 2624 017e 00       		.byte	0
+ 2625 017f 18       		.uleb128 0x18
+ 2626 0180 2E       		.uleb128 0x2e
+ 2627 0181 00       		.byte	0
+ 2628 0182 3F       		.uleb128 0x3f
+ 2629 0183 19       		.uleb128 0x19
+ 2630 0184 03       		.uleb128 0x3
+ 2631 0185 0E       		.uleb128 0xe
+ 2632 0186 3A       		.uleb128 0x3a
+ 2633 0187 0B       		.uleb128 0xb
+ 2634 0188 3B       		.uleb128 0x3b
+ 2635 0189 05       		.uleb128 0x5
+ 2636 018a 27       		.uleb128 0x27
+ 2637 018b 19       		.uleb128 0x19
+ 2638 018c 11       		.uleb128 0x11
+ 2639 018d 01       		.uleb128 0x1
+ 2640 018e 12       		.uleb128 0x12
+ 2641 018f 06       		.uleb128 0x6
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 54
+
+
+ 2642 0190 40       		.uleb128 0x40
+ 2643 0191 18       		.uleb128 0x18
+ 2644 0192 9642     		.uleb128 0x2116
+ 2645 0194 19       		.uleb128 0x19
+ 2646 0195 00       		.byte	0
+ 2647 0196 00       		.byte	0
+ 2648 0197 19       		.uleb128 0x19
+ 2649 0198 2E       		.uleb128 0x2e
+ 2650 0199 01       		.byte	0x1
+ 2651 019a 3F       		.uleb128 0x3f
+ 2652 019b 19       		.uleb128 0x19
+ 2653 019c 03       		.uleb128 0x3
+ 2654 019d 0E       		.uleb128 0xe
+ 2655 019e 3A       		.uleb128 0x3a
+ 2656 019f 0B       		.uleb128 0xb
+ 2657 01a0 3B       		.uleb128 0x3b
+ 2658 01a1 05       		.uleb128 0x5
+ 2659 01a2 27       		.uleb128 0x27
+ 2660 01a3 19       		.uleb128 0x19
+ 2661 01a4 49       		.uleb128 0x49
+ 2662 01a5 13       		.uleb128 0x13
+ 2663 01a6 11       		.uleb128 0x11
+ 2664 01a7 01       		.uleb128 0x1
+ 2665 01a8 12       		.uleb128 0x12
+ 2666 01a9 06       		.uleb128 0x6
+ 2667 01aa 40       		.uleb128 0x40
+ 2668 01ab 18       		.uleb128 0x18
+ 2669 01ac 9642     		.uleb128 0x2116
+ 2670 01ae 19       		.uleb128 0x19
+ 2671 01af 01       		.uleb128 0x1
+ 2672 01b0 13       		.uleb128 0x13
+ 2673 01b1 00       		.byte	0
+ 2674 01b2 00       		.byte	0
+ 2675 01b3 1A       		.uleb128 0x1a
+ 2676 01b4 01       		.uleb128 0x1
+ 2677 01b5 01       		.byte	0x1
+ 2678 01b6 49       		.uleb128 0x49
+ 2679 01b7 13       		.uleb128 0x13
+ 2680 01b8 01       		.uleb128 0x1
+ 2681 01b9 13       		.uleb128 0x13
+ 2682 01ba 00       		.byte	0
+ 2683 01bb 00       		.byte	0
+ 2684 01bc 1B       		.uleb128 0x1b
+ 2685 01bd 21       		.uleb128 0x21
+ 2686 01be 00       		.byte	0
+ 2687 01bf 49       		.uleb128 0x49
+ 2688 01c0 13       		.uleb128 0x13
+ 2689 01c1 2F       		.uleb128 0x2f
+ 2690 01c2 0B       		.uleb128 0xb
+ 2691 01c3 00       		.byte	0
+ 2692 01c4 00       		.byte	0
+ 2693 01c5 1C       		.uleb128 0x1c
+ 2694 01c6 34       		.uleb128 0x34
+ 2695 01c7 00       		.byte	0
+ 2696 01c8 03       		.uleb128 0x3
+ 2697 01c9 0E       		.uleb128 0xe
+ 2698 01ca 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 55
+
+
+ 2699 01cb 0B       		.uleb128 0xb
+ 2700 01cc 3B       		.uleb128 0x3b
+ 2701 01cd 0B       		.uleb128 0xb
+ 2702 01ce 49       		.uleb128 0x49
+ 2703 01cf 13       		.uleb128 0x13
+ 2704 01d0 3F       		.uleb128 0x3f
+ 2705 01d1 19       		.uleb128 0x19
+ 2706 01d2 02       		.uleb128 0x2
+ 2707 01d3 18       		.uleb128 0x18
+ 2708 01d4 00       		.byte	0
+ 2709 01d5 00       		.byte	0
+ 2710 01d6 1D       		.uleb128 0x1d
+ 2711 01d7 26       		.uleb128 0x26
+ 2712 01d8 00       		.byte	0
+ 2713 01d9 49       		.uleb128 0x49
+ 2714 01da 13       		.uleb128 0x13
+ 2715 01db 00       		.byte	0
+ 2716 01dc 00       		.byte	0
+ 2717 01dd 00       		.byte	0
+ 2718              		.section	.debug_aranges,"",%progbits
+ 2719 0000 74000000 		.4byte	0x74
+ 2720 0004 0200     		.2byte	0x2
+ 2721 0006 00000000 		.4byte	.Ldebug_info0
+ 2722 000a 04       		.byte	0x4
+ 2723 000b 00       		.byte	0
+ 2724 000c 0000     		.2byte	0
+ 2725 000e 0000     		.2byte	0
+ 2726 0010 00000000 		.4byte	.LFB37
+ 2727 0014 A8010000 		.4byte	.LFE37-.LFB37
+ 2728 0018 00000000 		.4byte	.LFB38
+ 2729 001c 34000000 		.4byte	.LFE38-.LFB38
+ 2730 0020 00000000 		.4byte	.LFB39
+ 2731 0024 5C000000 		.4byte	.LFE39-.LFB39
+ 2732 0028 00000000 		.4byte	.LFB40
+ 2733 002c AC000000 		.4byte	.LFE40-.LFB40
+ 2734 0030 00000000 		.4byte	.LFB41
+ 2735 0034 34000000 		.4byte	.LFE41-.LFB41
+ 2736 0038 00000000 		.4byte	.LFB42
+ 2737 003c 08010000 		.4byte	.LFE42-.LFB42
+ 2738 0040 00000000 		.4byte	.LFB43
+ 2739 0044 C4000000 		.4byte	.LFE43-.LFB43
+ 2740 0048 00000000 		.4byte	.LFB44
+ 2741 004c 70010000 		.4byte	.LFE44-.LFB44
+ 2742 0050 00000000 		.4byte	.LFB45
+ 2743 0054 62000000 		.4byte	.LFE45-.LFB45
+ 2744 0058 00000000 		.4byte	.LFB46
+ 2745 005c 30000000 		.4byte	.LFE46-.LFB46
+ 2746 0060 00000000 		.4byte	.LFB47
+ 2747 0064 44000000 		.4byte	.LFE47-.LFB47
+ 2748 0068 00000000 		.4byte	.LFB48
+ 2749 006c A0000000 		.4byte	.LFE48-.LFB48
+ 2750 0070 00000000 		.4byte	0
+ 2751 0074 00000000 		.4byte	0
+ 2752              		.section	.debug_ranges,"",%progbits
+ 2753              	.Ldebug_ranges0:
+ 2754 0000 00000000 		.4byte	.LFB37
+ 2755 0004 A8010000 		.4byte	.LFE37
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 56
+
+
+ 2756 0008 00000000 		.4byte	.LFB38
+ 2757 000c 34000000 		.4byte	.LFE38
+ 2758 0010 00000000 		.4byte	.LFB39
+ 2759 0014 5C000000 		.4byte	.LFE39
+ 2760 0018 00000000 		.4byte	.LFB40
+ 2761 001c AC000000 		.4byte	.LFE40
+ 2762 0020 00000000 		.4byte	.LFB41
+ 2763 0024 34000000 		.4byte	.LFE41
+ 2764 0028 00000000 		.4byte	.LFB42
+ 2765 002c 08010000 		.4byte	.LFE42
+ 2766 0030 00000000 		.4byte	.LFB43
+ 2767 0034 C4000000 		.4byte	.LFE43
+ 2768 0038 00000000 		.4byte	.LFB44
+ 2769 003c 70010000 		.4byte	.LFE44
+ 2770 0040 00000000 		.4byte	.LFB45
+ 2771 0044 62000000 		.4byte	.LFE45
+ 2772 0048 00000000 		.4byte	.LFB46
+ 2773 004c 30000000 		.4byte	.LFE46
+ 2774 0050 00000000 		.4byte	.LFB47
+ 2775 0054 44000000 		.4byte	.LFE47
+ 2776 0058 00000000 		.4byte	.LFB48
+ 2777 005c A0000000 		.4byte	.LFE48
+ 2778 0060 00000000 		.4byte	0
+ 2779 0064 00000000 		.4byte	0
+ 2780              		.section	.debug_line,"",%progbits
+ 2781              	.Ldebug_line0:
+ 2782 0000 8D020000 		.section	.debug_str,"MS",%progbits,1
+ 2782      02006200 
+ 2782      00000201 
+ 2782      FB0E0D00 
+ 2782      01010101 
+ 2783              	.LASF78:
+ 2784 0000 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_RX_CREDIT_IND\000"
+ 2784      455F4556 
+ 2784      545F4C32 
+ 2784      4341505F 
+ 2784      43424643 
+ 2785              	.LASF118:
+ 2786 0023 67746167 		.ascii	"gtag_ircode\000"
+ 2786      5F697263 
+ 2786      6F646500 
+ 2787              	.LASF23:
+ 2788 002f 4359424C 		.ascii	"CYBLE_EVT_STACK_BUSY_STATUS\000"
+ 2788      455F4556 
+ 2788      545F5354 
+ 2788      41434B5F 
+ 2788      42555359 
+ 2789              	.LASF10:
+ 2790 004b 75696E74 		.ascii	"uint16\000"
+ 2790      313600
+ 2791              	.LASF77:
+ 2792 0052 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_READ\000"
+ 2792      455F4556 
+ 2792      545F4C32 
+ 2792      4341505F 
+ 2792      43424643 
+ 2793              	.LASF82:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 57
+
+
+ 2794 0071 4359424C 		.ascii	"CYBLE_EVT_LE_PING_AUTH_TIMEOUT\000"
+ 2794      455F4556 
+ 2794      545F4C45 
+ 2794      5F50494E 
+ 2794      475F4155 
+ 2795              	.LASF35:
+ 2796 0090 4359424C 		.ascii	"CYBLE_EVT_GAP_CONNECTION_UPDATE_COMPLETE\000"
+ 2796      455F4556 
+ 2796      545F4741 
+ 2796      505F434F 
+ 2796      4E4E4543 
+ 2797              	.LASF76:
+ 2798 00b9 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_CNF\000"
+ 2798      455F4556 
+ 2798      545F4C32 
+ 2798      4341505F 
+ 2798      43424643 
+ 2799              	.LASF40:
+ 2800 00da 4359424C 		.ascii	"CYBLE_EVT_GAP_OOB_GENERATED_NOTIFICATION\000"
+ 2800      455F4556 
+ 2800      545F4741 
+ 2800      505F4F4F 
+ 2800      425F4745 
+ 2801              	.LASF56:
+ 2802 0103 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_MULTI_RSP\000"
+ 2802      455F4556 
+ 2802      545F4741 
+ 2802      5454435F 
+ 2802      52454144 
+ 2803              	.LASF61:
+ 2804 0122 4359424C 		.ascii	"CYBLE_EVT_GATTS_EXEC_WRITE_REQ\000"
+ 2804      455F4556 
+ 2804      545F4741 
+ 2804      5454535F 
+ 2804      45584543 
+ 2805              	.LASF84:
+ 2806 0141 49525F74 		.ascii	"IR_threshold\000"
+ 2806      68726573 
+ 2806      686F6C64 
+ 2806      00
+ 2807              	.LASF20:
+ 2808 014e 4359424C 		.ascii	"CYBLE_EVT_TIMEOUT\000"
+ 2808      455F4556 
+ 2808      545F5449 
+ 2808      4D454F55 
+ 2808      5400
+ 2809              	.LASF4:
+ 2810 0160 6C6F6E67 		.ascii	"long int\000"
+ 2810      20696E74 
+ 2810      00
+ 2811              	.LASF87:
+ 2812 0169 6465636F 		.ascii	"decode_delta\000"
+ 2812      64655F64 
+ 2812      656C7461 
+ 2812      00
+ 2813              	.LASF7:
+ 2814 0176 6C6F6E67 		.ascii	"long long unsigned int\000"
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 58
+
+
+ 2814      206C6F6E 
+ 2814      6720756E 
+ 2814      7369676E 
+ 2814      65642069 
+ 2815              	.LASF22:
+ 2816 018d 4359424C 		.ascii	"CYBLE_EVT_HCI_STATUS\000"
+ 2816      455F4556 
+ 2816      545F4843 
+ 2816      495F5354 
+ 2816      41545553 
+ 2817              	.LASF110:
+ 2818 01a2 75695265 		.ascii	"uiReadCmdKey\000"
+ 2818      6164436D 
+ 2818      644B6579 
+ 2818      00
+ 2819              	.LASF81:
+ 2820 01af 4359424C 		.ascii	"CYBLE_EVT_PENDING_FLASH_WRITE\000"
+ 2820      455F4556 
+ 2820      545F5045 
+ 2820      4E44494E 
+ 2820      475F464C 
+ 2821              	.LASF86:
+ 2822 01cd 49525F4E 		.ascii	"IR_NewKeyflag\000"
+ 2822      65774B65 
+ 2822      79666C61 
+ 2822      6700
+ 2823              	.LASF70:
+ 2824 01db 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_REQ\000"
+ 2824      455F4556 
+ 2824      545F4C32 
+ 2824      4341505F 
+ 2824      434F4E4E 
+ 2825              	.LASF34:
+ 2826 0201 4359424C 		.ascii	"CYBLE_EVT_GAP_ENCRYPT_CHANGE\000"
+ 2826      455F4556 
+ 2826      545F4741 
+ 2826      505F454E 
+ 2826      43525950 
+ 2827              	.LASF38:
+ 2828 021e 4359424C 		.ascii	"CYBLE_EVT_GAP_NUMERIC_COMPARISON_REQUEST\000"
+ 2828      455F4556 
+ 2828      545F4741 
+ 2828      505F4E55 
+ 2828      4D455249 
+ 2829              	.LASF79:
+ 2830 0247 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_TX_CREDIT_IND\000"
+ 2830      455F4556 
+ 2830      545F4C32 
+ 2830      4341505F 
+ 2830      43424643 
+ 2831              	.LASF6:
+ 2832 026a 6C6F6E67 		.ascii	"long long int\000"
+ 2832      206C6F6E 
+ 2832      6720696E 
+ 2832      7400
+ 2833              	.LASF0:
+ 2834 0278 7369676E 		.ascii	"signed char\000"
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 59
+
+
+ 2834      65642063 
+ 2834      68617200 
+ 2835              	.LASF19:
+ 2836 0284 4359424C 		.ascii	"CYBLE_EVT_STACK_ON\000"
+ 2836      455F4556 
+ 2836      545F5354 
+ 2836      41434B5F 
+ 2836      4F4E00
+ 2837              	.LASF36:
+ 2838 0297 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_START_STOP\000"
+ 2838      455F4556 
+ 2838      545F4741 
+ 2838      50435F53 
+ 2838      43414E5F 
+ 2839              	.LASF26:
+ 2840 02b6 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_REQ\000"
+ 2840      455F4556 
+ 2840      545F4741 
+ 2840      505F4155 
+ 2840      54485F52 
+ 2841              	.LASF54:
+ 2842 02cd 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_RSP\000"
+ 2842      455F4556 
+ 2842      545F4741 
+ 2842      5454435F 
+ 2842      52454144 
+ 2843              	.LASF123:
+ 2844 02e6 433A5C55 		.ascii	"C:\\Users\\zpstrwy\\Documents\\PSoC Creator\\IRCode"
+ 2844      73657273 
+ 2844      5C7A7073 
+ 2844      74727779 
+ 2844      5C446F63 
+ 2845 0314 5C495243 		.ascii	"\\IRCode.cydsn\000"
+ 2845      6F64652E 
+ 2845      63796473 
+ 2845      6E00
+ 2846              	.LASF59:
+ 2847 0322 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_CMD_REQ\000"
+ 2847      455F4556 
+ 2847      545F4741 
+ 2847      5454535F 
+ 2847      57524954 
+ 2848              	.LASF31:
+ 2849 0340 4359424C 		.ascii	"CYBLE_EVT_GAPP_ADVERTISEMENT_START_STOP\000"
+ 2849      455F4556 
+ 2849      545F4741 
+ 2849      50505F41 
+ 2849      44564552 
+ 2850              	.LASF97:
+ 2851 0368 72656164 		.ascii	"readBuf\000"
+ 2851      42756600 
+ 2852              	.LASF9:
+ 2853 0370 75696E74 		.ascii	"uint8\000"
+ 2853      3800
+ 2854              	.LASF62:
+ 2855 0376 4359424C 		.ascii	"CYBLE_EVT_GATTC_EXEC_WRITE_RSP\000"
+ 2855      455F4556 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 60
+
+
+ 2855      545F4741 
+ 2855      5454435F 
+ 2855      45584543 
+ 2856              	.LASF14:
+ 2857 0395 646F7562 		.ascii	"double\000"
+ 2857      6C6500
+ 2858              	.LASF109:
+ 2859 039c 4972436F 		.ascii	"IrCode_SendKey\000"
+ 2859      64655F53 
+ 2859      656E644B 
+ 2859      657900
+ 2860              	.LASF94:
+ 2861 03ab 696E7472 		.ascii	"intr_status\000"
+ 2861      5F737461 
+ 2861      74757300 
+ 2862              	.LASF11:
+ 2863 03b7 75696E74 		.ascii	"uint32\000"
+ 2863      333200
+ 2864              	.LASF83:
+ 2865 03be 4359424C 		.ascii	"CYBLE_EVT_MAX\000"
+ 2865      455F4556 
+ 2865      545F4D41 
+ 2865      5800
+ 2866              	.LASF89:
+ 2867 03cc 7469636B 		.ascii	"tick_50us\000"
+ 2867      5F353075 
+ 2867      7300
+ 2868              	.LASF100:
+ 2869 03d6 75634375 		.ascii	"ucCurBit\000"
+ 2869      72426974 
+ 2869      00
+ 2870              	.LASF80:
+ 2871 03df 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_WRITE_IND\000"
+ 2871      455F4556 
+ 2871      545F4C32 
+ 2871      4341505F 
+ 2871      43424643 
+ 2872              	.LASF67:
+ 2873 0403 4359424C 		.ascii	"CYBLE_EVT_GATTC_STOP_CMD_COMPLETE\000"
+ 2873      455F4556 
+ 2873      545F4741 
+ 2873      5454435F 
+ 2873      53544F50 
+ 2874              	.LASF8:
+ 2875 0425 756E7369 		.ascii	"unsigned int\000"
+ 2875      676E6564 
+ 2875      20696E74 
+ 2875      00
+ 2876              	.LASF108:
+ 2877 0432 75694375 		.ascii	"uiCurTick\000"
+ 2877      72546963 
+ 2877      6B00
+ 2878              	.LASF5:
+ 2879 043c 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2879      20756E73 
+ 2879      69676E65 
+ 2879      6420696E 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 61
+
+
+ 2879      7400
+ 2880              	.LASF57:
+ 2881 044e 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_REQ\000"
+ 2881      455F4556 
+ 2881      545F4741 
+ 2881      5454535F 
+ 2881      57524954 
+ 2882              	.LASF49:
+ 2883 0468 4359424C 		.ascii	"CYBLE_EVT_GATTC_XCHNG_MTU_RSP\000"
+ 2883      455F4556 
+ 2883      545F4741 
+ 2883      5454435F 
+ 2883      5843484E 
+ 2884              	.LASF66:
+ 2885 0486 4359424C 		.ascii	"CYBLE_EVT_GATTS_DATA_SIGNED_CMD_REQ\000"
+ 2885      455F4556 
+ 2885      545F4741 
+ 2885      5454535F 
+ 2885      44415441 
+ 2886              	.LASF69:
+ 2887 04aa 4359424C 		.ascii	"CYBLE_EVT_GATTC_LONG_PROCEDURE_END\000"
+ 2887      455F4556 
+ 2887      545F4741 
+ 2887      5454435F 
+ 2887      4C4F4E47 
+ 2888              	.LASF106:
+ 2889 04cd 64617461 		.ascii	"data\000"
+ 2889      00
+ 2890              	.LASF3:
+ 2891 04d2 73686F72 		.ascii	"short unsigned int\000"
+ 2891      7420756E 
+ 2891      7369676E 
+ 2891      65642069 
+ 2891      6E7400
+ 2892              	.LASF18:
+ 2893 04e5 4359424C 		.ascii	"CYBLE_EVT_HOST_INVALID\000"
+ 2893      455F4556 
+ 2893      545F484F 
+ 2893      53545F49 
+ 2893      4E56414C 
+ 2894              	.LASF52:
+ 2895 04fc 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_INFO_RSP\000"
+ 2895      455F4556 
+ 2895      545F4741 
+ 2895      5454435F 
+ 2895      46494E44 
+ 2896              	.LASF24:
+ 2897 051a 4359424C 		.ascii	"CYBLE_EVT_MEMORY_REQUEST\000"
+ 2897      455F4556 
+ 2897      545F4D45 
+ 2897      4D4F5259 
+ 2897      5F524551 
+ 2898              	.LASF27:
+ 2899 0533 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_ENTRY_REQUEST\000"
+ 2899      455F4556 
+ 2899      545F4741 
+ 2899      505F5041 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 62
+
+
+ 2899      53534B45 
+ 2900              	.LASF32:
+ 2901 0557 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_CONNECTED\000"
+ 2901      455F4556 
+ 2901      545F4741 
+ 2901      505F4445 
+ 2901      56494345 
+ 2902              	.LASF103:
+ 2903 0576 4972436F 		.ascii	"IrCode_ScanKey\000"
+ 2903      64655F53 
+ 2903      63616E4B 
+ 2903      657900
+ 2904              	.LASF116:
+ 2905 0585 75695265 		.ascii	"uiRecvKey\000"
+ 2905      63764B65 
+ 2905      7900
+ 2906              	.LASF119:
+ 2907 058f 6465636F 		.ascii	"decodemsg\000"
+ 2907      64656D73 
+ 2907      6700
+ 2908              	.LASF28:
+ 2909 0599 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_DISPLAY_REQUEST\000"
+ 2909      455F4556 
+ 2909      545F4741 
+ 2909      505F5041 
+ 2909      53534B45 
+ 2910              	.LASF46:
+ 2911 05bf 4359424C 		.ascii	"CYBLE_EVT_GATT_CONNECT_IND\000"
+ 2911      455F4556 
+ 2911      545F4741 
+ 2911      54545F43 
+ 2911      4F4E4E45 
+ 2912              	.LASF125:
+ 2913 05da 49725F44 		.ascii	"Ir_DecoderCode\000"
+ 2913      65636F64 
+ 2913      6572436F 
+ 2913      646500
+ 2914              	.LASF72:
+ 2915 05e9 4359424C 		.ascii	"CYBLE_EVT_L2CAP_COMMAND_REJ\000"
+ 2915      455F4556 
+ 2915      545F4C32 
+ 2915      4341505F 
+ 2915      434F4D4D 
+ 2916              	.LASF16:
+ 2917 0605 72656733 		.ascii	"reg32\000"
+ 2917      3200
+ 2918              	.LASF25:
+ 2919 060b 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_PROGRESS_RESULT\000"
+ 2919      455F4556 
+ 2919      545F4741 
+ 2919      50435F53 
+ 2919      43414E5F 
+ 2920              	.LASF73:
+ 2921 062f 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_IND\000"
+ 2921      455F4556 
+ 2921      545F4C32 
+ 2921      4341505F 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 63
+
+
+ 2921      43424643 
+ 2922              	.LASF51:
+ 2923 064d 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_TYPE_RSP\000"
+ 2923      455F4556 
+ 2923      545F4741 
+ 2923      5454435F 
+ 2923      52454144 
+ 2924              	.LASF17:
+ 2925 066e 73697A65 		.ascii	"sizetype\000"
+ 2925      74797065 
+ 2925      00
+ 2926              	.LASF30:
+ 2927 0677 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_FAILED\000"
+ 2927      455F4556 
+ 2927      545F4741 
+ 2927      505F4155 
+ 2927      54485F46 
+ 2928              	.LASF58:
+ 2929 0691 4359424C 		.ascii	"CYBLE_EVT_GATTC_WRITE_RSP\000"
+ 2929      455F4556 
+ 2929      545F4741 
+ 2929      5454435F 
+ 2929      57524954 
+ 2930              	.LASF43:
+ 2931 06ab 4359424C 		.ascii	"CYBLE_EVT_GAPC_DIRECT_ADV_REPORT\000"
+ 2931      455F4556 
+ 2931      545F4741 
+ 2931      50435F44 
+ 2931      49524543 
+ 2932              	.LASF41:
+ 2933 06cc 4359424C 		.ascii	"CYBLE_EVT_GAP_DATA_LENGTH_CHANGE\000"
+ 2933      455F4556 
+ 2933      545F4741 
+ 2933      505F4441 
+ 2933      54415F4C 
+ 2934              	.LASF88:
+ 2935 06ed 73747564 		.ascii	"study_flag\000"
+ 2935      795F666C 
+ 2935      616700
+ 2936              	.LASF29:
+ 2937 06f8 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_COMPLETE\000"
+ 2937      455F4556 
+ 2937      545F4741 
+ 2937      505F4155 
+ 2937      54485F43 
+ 2938              	.LASF63:
+ 2939 0714 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_NTF\000"
+ 2939      455F4556 
+ 2939      545F4741 
+ 2939      5454435F 
+ 2939      48414E44 
+ 2940              	.LASF48:
+ 2941 0735 4359424C 		.ascii	"CYBLE_EVT_GATTS_XCNHG_MTU_REQ\000"
+ 2941      455F4556 
+ 2941      545F4741 
+ 2941      5454535F 
+ 2941      58434E48 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 64
+
+
+ 2942              	.LASF117:
+ 2943 0753 6972696E 		.ascii	"irinitkey\000"
+ 2943      69746B65 
+ 2943      7900
+ 2944              	.LASF74:
+ 2945 075d 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_CNF\000"
+ 2945      455F4556 
+ 2945      545F4C32 
+ 2945      4341505F 
+ 2945      43424643 
+ 2946              	.LASF120:
+ 2947 077b 6465636F 		.ascii	"decodemsg_len\000"
+ 2947      64656D73 
+ 2947      675F6C65 
+ 2947      6E00
+ 2948              	.LASF50:
+ 2949 0789 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_GROUP_TYPE_RSP\000"
+ 2949      455F4556 
+ 2949      545F4741 
+ 2949      5454435F 
+ 2949      52454144 
+ 2950              	.LASF13:
+ 2951 07b0 666C6F61 		.ascii	"float\000"
+ 2951      7400
+ 2952              	.LASF104:
+ 2953 07b6 75695265 		.ascii	"uiReadCmd\000"
+ 2953      6164436D 
+ 2953      6400
+ 2954              	.LASF99:
+ 2955 07c0 75635072 		.ascii	"ucPreBit\000"
+ 2955      65426974 
+ 2955      00
+ 2956              	.LASF113:
+ 2957 07c9 53616D70 		.ascii	"SampDecodeData_Loop\000"
+ 2957      4465636F 
+ 2957      64654461 
+ 2957      74615F4C 
+ 2957      6F6F7000 
+ 2958              	.LASF1:
+ 2959 07dd 756E7369 		.ascii	"unsigned char\000"
+ 2959      676E6564 
+ 2959      20636861 
+ 2959      7200
+ 2960              	.LASF39:
+ 2961 07eb 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYPRESS_NOTIFICATION\000"
+ 2961      455F4556 
+ 2961      545F4741 
+ 2961      505F4B45 
+ 2961      59505245 
+ 2962              	.LASF92:
+ 2963 080f 73746570 		.ascii	"step\000"
+ 2963      00
+ 2964              	.LASF95:
+ 2965 0814 4144435F 		.ascii	"ADC_ISR_Handler\000"
+ 2965      4953525F 
+ 2965      48616E64 
+ 2965      6C657200 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 65
+
+
+ 2966              	.LASF2:
+ 2967 0824 73686F72 		.ascii	"short int\000"
+ 2967      7420696E 
+ 2967      7400
+ 2968              	.LASF105:
+ 2969 082e 53656E64 		.ascii	"SendTempKey\000"
+ 2969      54656D70 
+ 2969      4B657900 
+ 2970              	.LASF64:
+ 2971 083a 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_IND\000"
+ 2971      455F4556 
+ 2971      545F4741 
+ 2971      5454435F 
+ 2971      48414E44 
+ 2972              	.LASF60:
+ 2973 085b 4359424C 		.ascii	"CYBLE_EVT_GATTS_PREP_WRITE_REQ\000"
+ 2973      455F4556 
+ 2973      545F4741 
+ 2973      5454535F 
+ 2973      50524550 
+ 2974              	.LASF65:
+ 2975 087a 4359424C 		.ascii	"CYBLE_EVT_GATTS_HANDLE_VALUE_CNF\000"
+ 2975      455F4556 
+ 2975      545F4741 
+ 2975      5454535F 
+ 2975      48414E44 
+ 2976              	.LASF45:
+ 2977 089b 4359424C 		.ascii	"CYBLE_EVT_GATTC_ERROR_RSP\000"
+ 2977      455F4556 
+ 2977      545F4741 
+ 2977      5454435F 
+ 2977      4552524F 
+ 2978              	.LASF44:
+ 2979 08b5 4359424C 		.ascii	"CYBLE_EVT_GAP_SMP_NEGOTIATED_AUTH_INFO\000"
+ 2979      455F4556 
+ 2979      545F4741 
+ 2979      505F534D 
+ 2979      505F4E45 
+ 2980              	.LASF114:
+ 2981 08dc 4972426C 		.ascii	"IrBlink_RedLed\000"
+ 2981      696E6B5F 
+ 2981      5265644C 
+ 2981      656400
+ 2982              	.LASF91:
+ 2983 08eb 6C6F6E67 		.ascii	"long double\000"
+ 2983      20646F75 
+ 2983      626C6500 
+ 2984              	.LASF101:
+ 2985 08f7 75695265 		.ascii	"uiRetCmd\000"
+ 2985      74436D64 
+ 2985      00
+ 2986              	.LASF15:
+ 2987 0900 63686172 		.ascii	"char\000"
+ 2987      00
+ 2988              	.LASF33:
+ 2989 0905 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_DISCONNECTED\000"
+ 2989      455F4556 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 66
+
+
+ 2989      545F4741 
+ 2989      505F4445 
+ 2989      56494345 
+ 2990              	.LASF68:
+ 2991 0927 4359424C 		.ascii	"CYBLE_EVT_GATTS_READ_CHAR_VAL_ACCESS_REQ\000"
+ 2991      455F4556 
+ 2991      545F4741 
+ 2991      5454535F 
+ 2991      52454144 
+ 2992              	.LASF115:
+ 2993 0950 4972436F 		.ascii	"IrCode_Study\000"
+ 2993      64655F53 
+ 2993      74756479 
+ 2993      00
+ 2994              	.LASF112:
+ 2995 095d 64656C61 		.ascii	"delay_us\000"
+ 2995      795F7573 
+ 2995      00
+ 2996              	.LASF102:
+ 2997 0966 50726F63 		.ascii	"Proc_SampDecodeData\000"
+ 2997      5F53616D 
+ 2997      70446563 
+ 2997      6F646544 
+ 2997      61746100 
+ 2998              	.LASF122:
+ 2999 097a 2E5C4952 		.ascii	".\\IRCode.c\000"
+ 2999      436F6465 
+ 2999      2E6300
+ 3000              	.LASF98:
+ 3001 0985 4972436F 		.ascii	"IrCode_Init\000"
+ 3001      64655F49 
+ 3001      6E697400 
+ 3002              	.LASF124:
+ 3003 0991 5F746167 		.ascii	"_tag_ircode\000"
+ 3003      5F697263 
+ 3003      6F646500 
+ 3004              	.LASF21:
+ 3005 099d 4359424C 		.ascii	"CYBLE_EVT_HARDWARE_ERROR\000"
+ 3005      455F4556 
+ 3005      545F4841 
+ 3005      52445741 
+ 3005      52455F45 
+ 3006              	.LASF107:
+ 3007 09b6 75695365 		.ascii	"uiSendKey\000"
+ 3007      6E644B65 
+ 3007      7900
+ 3008              	.LASF90:
+ 3009 09c0 5441475F 		.ascii	"TAG_IRCODE\000"
+ 3009      4952434F 
+ 3009      444500
+ 3010              	.LASF111:
+ 3011 09cb 4972436F 		.ascii	"IrCode_DelayUs\000"
+ 3011      64655F44 
+ 3011      656C6179 
+ 3011      557300
+ 3012              	.LASF93:
+ 3013 09da 73746174 		.ascii	"status\000"
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 67
+
+
+ 3013      757300
+ 3014              	.LASF96:
+ 3015 09e1 4972436F 		.ascii	"IrCode_InitKey\000"
+ 3015      64655F49 
+ 3015      6E69744B 
+ 3015      657900
+ 3016              	.LASF55:
+ 3017 09f0 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BLOB_RSP\000"
+ 3017      455F4556 
+ 3017      545F4741 
+ 3017      5454435F 
+ 3017      52454144 
+ 3018              	.LASF12:
+ 3019 0a0e 696E7431 		.ascii	"int16\000"
+ 3019      3600
+ 3020              	.LASF121:
+ 3021 0a14 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 3021      4320342E 
+ 3021      392E3320 
+ 3021      32303135 
+ 3021      30333033 
+ 3022 0a47 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 3022      20726576 
+ 3022      6973696F 
+ 3022      6E203232 
+ 3022      31323230 
+ 3023 0a7a 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 3023      66756E63 
+ 3023      74696F6E 
+ 3023      2D736563 
+ 3023      74696F6E 
+ 3024              	.LASF53:
+ 3025 0aa2 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_BY_TYPE_VALUE_RSP\000"
+ 3025      455F4556 
+ 3025      545F4741 
+ 3025      5454435F 
+ 3025      46494E44 
+ 3026              	.LASF37:
+ 3027 0ac9 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYINFO_EXCHNGE_CMPLT\000"
+ 3027      455F4556 
+ 3027      545F4741 
+ 3027      505F4B45 
+ 3027      59494E46 
+ 3028              	.LASF75:
+ 3029 0aed 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_IND\000"
+ 3029      455F4556 
+ 3029      545F4C32 
+ 3029      4341505F 
+ 3029      43424643 
+ 3030              	.LASF71:
+ 3031 0b0e 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_RSP\000"
+ 3031      455F4556 
+ 3031      545F4C32 
+ 3031      4341505F 
+ 3031      434F4E4E 
+ 3032              	.LASF42:
+ 3033 0b34 4359424C 		.ascii	"CYBLE_EVT_GAP_ENHANCE_CONN_COMPLETE\000"
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\cctNxVi3.s 			page 68
+
+
+ 3033      455F4556 
+ 3033      545F4741 
+ 3033      505F454E 
+ 3033      48414E43 
+ 3034              	.LASF47:
+ 3035 0b58 4359424C 		.ascii	"CYBLE_EVT_GATT_DISCONNECT_IND\000"
+ 3035      455F4556 
+ 3035      545F4741 
+ 3035      54545F44 
+ 3035      4953434F 
+ 3036              	.LASF85:
+ 3037 0b76 49525F4B 		.ascii	"IR_Key\000"
+ 3037      657900
+ 3038              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

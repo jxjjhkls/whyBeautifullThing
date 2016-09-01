@@ -1,0 +1,2627 @@
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"BLE_HAL_Uart_UART.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BLE_HAL_Uart_UartInit,"ax",%progbits
+  18              		.align	2
+  19              		.global	BLE_HAL_Uart_UartInit
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	BLE_HAL_Uart_UartInit, %function
+  23              	BLE_HAL_Uart_UartInit:
+  24              	.LFB2:
+  25              		.file 1 ".\\Generated_Source\\PSoC4\\BLE_HAL_Uart_UART.c"
+   1:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * File Name: BLE_HAL_Uart_UART.c
+   3:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Version 3.10
+   4:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+   5:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Description:
+   6:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  This file provides the source code to the API for the SCB Component in
+   7:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  UART mode.
+   8:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+   9:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Note:
+  10:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+  11:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *******************************************************************************
+  12:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Copyright 2013-2015, Cypress Semiconductor Corporation.  All rights reserved.
+  13:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * You may use this file only in accordance with the license, terms, conditions,
+  14:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  15:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * the software package with which this file was provided.
+  16:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *******************************************************************************/
+  17:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  18:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #include "BLE_HAL_Uart_PVT.h"
+  19:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #include "BLE_HAL_Uart_SPI_UART_PVT.h"
+  20:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #include "cyapicallbacks.h"
+  21:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  22:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if(BLE_HAL_Uart_SCB_MODE_UNCONFIG_CONST_CFG)
+  23:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  24:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /***************************************
+  25:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Configuration Structure Initialization
+  26:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ***************************************/
+  27:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  28:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     const BLE_HAL_Uart_UART_INIT_STRUCT BLE_HAL_Uart_configUart =
+  29:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+  30:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_SUB_MODE,
+  31:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_DIRECTION,
+  32:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_DATA_BITS_NUM,
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 2
+
+
+  33:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_PARITY_TYPE,
+  34:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_STOP_BITS_NUM,
+  35:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_OVS_FACTOR,
+  36:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_IRDA_LOW_POWER,
+  37:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_MEDIAN_FILTER_ENABLE,
+  38:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_RETRY_ON_NACK,
+  39:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_IRDA_POLARITY,
+  40:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_DROP_ON_PARITY_ERR,
+  41:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_DROP_ON_FRAME_ERR,
+  42:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_WAKE_ENABLE,
+  43:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         0u,
+  44:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         NULL,
+  45:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         0u,
+  46:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         NULL,
+  47:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_MP_MODE_ENABLE,
+  48:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_MP_ACCEPT_ADDRESS,
+  49:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_MP_RX_ADDRESS,
+  50:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_MP_RX_ADDRESS_MASK,
+  51:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (uint32) BLE_HAL_Uart_SCB_IRQ_INTERNAL,
+  52:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_INTR_RX_MASK,
+  53:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_RX_TRIGGER_LEVEL,
+  54:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_INTR_TX_MASK,
+  55:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_TX_TRIGGER_LEVEL,
+  56:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (uint8) BLE_HAL_Uart_UART_BYTE_MODE_ENABLE,
+  57:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (uint8) BLE_HAL_Uart_UART_CTS_ENABLE,
+  58:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (uint8) BLE_HAL_Uart_UART_CTS_POLARITY,
+  59:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (uint8) BLE_HAL_Uart_UART_RTS_POLARITY,
+  60:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (uint8) BLE_HAL_Uart_UART_RTS_FIFO_LEVEL
+  61:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     };
+  62:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  63:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  64:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /*******************************************************************************
+  65:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Function Name: BLE_HAL_Uart_UartInit
+  66:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ********************************************************************************
+  67:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+  68:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Summary:
+  69:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Configures the SCB for the UART operation.
+  70:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+  71:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Parameters:
+  72:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  config:  Pointer to a structure that contains the following ordered list of
+  73:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *           fields. These fields match the selections available in the
+  74:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *           customizer.
+  75:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+  76:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Return:
+  77:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+  78:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+  79:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *******************************************************************************/
+  80:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     void BLE_HAL_Uart_UartInit(const BLE_HAL_Uart_UART_INIT_STRUCT *config)
+  81:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+  82:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         uint32 pinsConfig;
+  83:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  84:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         if (NULL == config)
+  85:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+  86:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             CYASSERT(0u != 0u); /* Halt execution due to bad function parameter */
+  87:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+  88:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         else
+  89:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 3
+
+
+  90:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Get direction to configure UART pins: TX, RX or TX+RX */
+  91:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             pinsConfig  = config->direction;
+  92:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  93:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #if !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1)
+  94:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Add RTS and CTS pins to configure */
+  95:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             pinsConfig |= (0u != config->rtsRxFifoLevel) ? (BLE_HAL_Uart_UART_RTS_PIN_ENABLE) : (0u
+  96:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             pinsConfig |= (0u != config->enableCts)      ? (BLE_HAL_Uart_UART_CTS_PIN_ENABLE) : (0u
+  97:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #endif /* !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1) */
+  98:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+  99:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure pins */
+ 100:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_SetPins(BLE_HAL_Uart_SCB_MODE_UART, config->mode, pinsConfig);
+ 101:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 102:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Store internal configuration */
+ 103:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_scbMode       = (uint8) BLE_HAL_Uart_SCB_MODE_UART;
+ 104:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_scbEnableWake = (uint8) config->enableWake;
+ 105:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_scbEnableIntr = (uint8) config->enableInterrupt;
+ 106:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 107:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Set RX direction internal variables */
+ 108:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_rxBuffer      =         config->rxBuffer;
+ 109:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_rxDataBits    = (uint8) config->dataBits;
+ 110:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_rxBufferSize  = (uint8) config->rxBufferSize;
+ 111:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 112:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Set TX direction internal variables */
+ 113:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_txBuffer      =         config->txBuffer;
+ 114:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_txDataBits    = (uint8) config->dataBits;
+ 115:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_txBufferSize  = (uint8) config->txBufferSize;
+ 116:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 117:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure UART interface */
+ 118:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             if(BLE_HAL_Uart_UART_MODE_IRDA == config->mode)
+ 119:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 120:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 /* OVS settings: IrDA */
+ 121:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_CTRL_REG  = ((0u != config->enableIrdaLowPower) ?
+ 122:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 (BLE_HAL_Uart_UART_GET_CTRL_OVS_IRDA_LP(config->ove
+ 123:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 (BLE_HAL_Uart_CTRL_OVS_IRDA_OVS16));
+ 124:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 125:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             else
+ 126:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 127:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 /* OVS settings: UART and SmartCard */
+ 128:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_CTRL_REG  = BLE_HAL_Uart_GET_CTRL_OVS(config->oversample);
+ 129:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 130:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 131:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_CTRL_REG     |= BLE_HAL_Uart_GET_CTRL_BYTE_MODE  (config->enableByteMode) 
+ 132:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                              BLE_HAL_Uart_GET_CTRL_ADDR_ACCEPT(config->multiprocAcc
+ 133:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                              BLE_HAL_Uart_CTRL_UART;
+ 134:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 135:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure sub-mode: UART, SmartCard or IrDA */
+ 136:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_CTRL_REG = BLE_HAL_Uart_GET_UART_CTRL_MODE(config->mode);
+ 137:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 138:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure RX direction */
+ 139:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_RX_CTRL_REG = BLE_HAL_Uart_GET_UART_RX_CTRL_MODE(config->stopBits)   
+ 140:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                         BLE_HAL_Uart_GET_UART_RX_CTRL_POLARITY(config->enableInvert
+ 141:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                         BLE_HAL_Uart_GET_UART_RX_CTRL_MP_MODE(config->enableMultipr
+ 142:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                         BLE_HAL_Uart_GET_UART_RX_CTRL_DROP_ON_PARITY_ERR(config->dr
+ 143:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                         BLE_HAL_Uart_GET_UART_RX_CTRL_DROP_ON_FRAME_ERR(config->dro
+ 144:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 145:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             if(BLE_HAL_Uart_UART_PARITY_NONE != config->parity)
+ 146:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 4
+
+
+ 147:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                BLE_HAL_Uart_UART_RX_CTRL_REG |= BLE_HAL_Uart_GET_UART_RX_CTRL_PARITY(config->parity
+ 148:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                     BLE_HAL_Uart_UART_RX_CTRL_PARITY_ENABLED;
+ 149:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 150:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 151:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_RX_CTRL_REG      = BLE_HAL_Uart_GET_RX_CTRL_DATA_WIDTH(config->dataBits)  
+ 152:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 BLE_HAL_Uart_GET_RX_CTRL_MEDIAN(config->enableMedia
+ 153:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 BLE_HAL_Uart_GET_UART_RX_CTRL_ENABLED(config->direc
+ 154:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 155:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_RX_FIFO_CTRL_REG = BLE_HAL_Uart_GET_RX_FIFO_CTRL_TRIGGER_LEVEL(config->rxT
+ 156:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 157:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure MP address */
+ 158:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_RX_MATCH_REG     = BLE_HAL_Uart_GET_RX_MATCH_ADDR(config->multiprocAddr) |
+ 159:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 BLE_HAL_Uart_GET_RX_MATCH_MASK(config->multiprocAdd
+ 160:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 161:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure RX direction */
+ 162:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_TX_CTRL_REG = BLE_HAL_Uart_GET_UART_TX_CTRL_MODE(config->stopBits) |
+ 163:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 BLE_HAL_Uart_GET_UART_TX_CTRL_RETRY_NACK(config->en
+ 164:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 165:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             if(BLE_HAL_Uart_UART_PARITY_NONE != config->parity)
+ 166:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 167:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                BLE_HAL_Uart_UART_TX_CTRL_REG |= BLE_HAL_Uart_GET_UART_TX_CTRL_PARITY(config->parity
+ 168:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                     BLE_HAL_Uart_UART_TX_CTRL_PARITY_ENABLED;
+ 169:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 170:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 171:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_TX_CTRL_REG      = BLE_HAL_Uart_GET_TX_CTRL_DATA_WIDTH(config->dataBits)  
+ 172:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                                 BLE_HAL_Uart_GET_UART_TX_CTRL_ENABLED(config->direc
+ 173:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 174:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_TX_FIFO_CTRL_REG = BLE_HAL_Uart_GET_TX_FIFO_CTRL_TRIGGER_LEVEL(config->txT
+ 175:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 176:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #if !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1)
+ 177:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_FLOW_CTRL_REG = BLE_HAL_Uart_GET_UART_FLOW_CTRL_CTS_ENABLE(config->en
+ 178:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                             BLE_HAL_Uart_GET_UART_FLOW_CTRL_CTS_POLARITY (config->c
+ 179:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                             BLE_HAL_Uart_GET_UART_FLOW_CTRL_RTS_POLARITY (config->r
+ 180:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                             BLE_HAL_Uart_GET_UART_FLOW_CTRL_TRIGGER_LEVEL(config->r
+ 181:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #endif /* !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1) */
+ 182:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 183:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure interrupt with UART handler but do not enable it */
+ 184:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             CyIntDisable    (BLE_HAL_Uart_ISR_NUMBER);
+ 185:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             CyIntSetPriority(BLE_HAL_Uart_ISR_NUMBER, BLE_HAL_Uart_ISR_PRIORITY);
+ 186:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             (void) CyIntSetVector(BLE_HAL_Uart_ISR_NUMBER, &BLE_HAL_Uart_SPI_UART_ISR);
+ 187:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 188:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure WAKE interrupt */
+ 189:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #if(BLE_HAL_Uart_UART_RX_WAKEUP_IRQ)
+ 190:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             CyIntDisable    (BLE_HAL_Uart_RX_WAKE_ISR_NUMBER);
+ 191:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             CyIntSetPriority(BLE_HAL_Uart_RX_WAKE_ISR_NUMBER, BLE_HAL_Uart_RX_WAKE_ISR_PRIORITY);
+ 192:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             (void) CyIntSetVector(BLE_HAL_Uart_RX_WAKE_ISR_NUMBER, &BLE_HAL_Uart_UART_WAKEUP_ISR);
+ 193:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #endif /* (BLE_HAL_Uart_UART_RX_WAKEUP_IRQ) */
+ 194:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 195:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Configure interrupt sources */
+ 196:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_INTR_I2C_EC_MASK_REG = BLE_HAL_Uart_NO_INTR_SOURCES;
+ 197:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_INTR_SPI_EC_MASK_REG = BLE_HAL_Uart_NO_INTR_SOURCES;
+ 198:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_INTR_SLAVE_MASK_REG  = BLE_HAL_Uart_NO_INTR_SOURCES;
+ 199:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_INTR_MASTER_MASK_REG = BLE_HAL_Uart_NO_INTR_SOURCES;
+ 200:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_INTR_RX_MASK_REG     = config->rxInterruptMask;
+ 201:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_INTR_TX_MASK_REG     = config->txInterruptMask;
+ 202:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 203:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Clear RX buffer indexes */
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 5
+
+
+ 204:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_rxBufferHead     = 0u;
+ 205:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_rxBufferTail     = 0u;
+ 206:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_rxBufferOverflow = 0u;
+ 207:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 208:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Clear TX buffer indexes */
+ 209:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_txBufferHead = 0u;
+ 210:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_txBufferTail = 0u;
+ 211:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 212:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 213:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 214:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #else
+ 215:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 216:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /*******************************************************************************
+ 217:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Function Name: BLE_HAL_Uart_UartInit
+ 218:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ********************************************************************************
+ 219:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 220:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Summary:
+ 221:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Configures the SCB for the UART operation.
+ 222:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 223:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Parameters:
+ 224:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+ 225:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 226:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Return:
+ 227:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+ 228:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 229:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *******************************************************************************/
+ 230:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     void BLE_HAL_Uart_UartInit(void)
+ 231:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+  26              		.loc 1 231 0
+  27              		.cfi_startproc
+  28 0000 80B5     		push	{r7, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 7, -8
+  31              		.cfi_offset 14, -4
+  32 0002 00AF     		add	r7, sp, #0
+  33              		.cfi_def_cfa_register 7
+ 232:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure UART interface */
+ 233:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_CTRL;
+  34              		.loc 1 233 0
+  35 0004 194B     		ldr	r3, .L2
+  36 0006 1A4A     		ldr	r2, .L2+4
+  37 0008 1A60     		str	r2, [r3]
+ 234:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 235:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure sub-mode: UART, SmartCard or IrDA */
+ 236:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_UART_CTRL;
+  38              		.loc 1 236 0
+  39 000a 1A4B     		ldr	r3, .L2+8
+  40 000c 0022     		mov	r2, #0
+  41 000e 1A60     		str	r2, [r3]
+ 237:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 238:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure RX direction */
+ 239:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_RX_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_UART_RX_CTRL;
+  42              		.loc 1 239 0
+  43 0010 194B     		ldr	r3, .L2+12
+  44 0012 0122     		mov	r2, #1
+  45 0014 1A60     		str	r2, [r3]
+ 240:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_RX_CTRL_REG      = BLE_HAL_Uart_UART_DEFAULT_RX_CTRL;
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 6
+
+
+  46              		.loc 1 240 0
+  47 0016 194B     		ldr	r3, .L2+16
+  48 0018 194A     		ldr	r2, .L2+20
+  49 001a 1A60     		str	r2, [r3]
+ 241:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_RX_FIFO_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_RX_FIFO_CTRL;
+  50              		.loc 1 241 0
+  51 001c 194B     		ldr	r3, .L2+24
+  52 001e 0722     		mov	r2, #7
+  53 0020 1A60     		str	r2, [r3]
+ 242:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_RX_MATCH_REG     = BLE_HAL_Uart_UART_DEFAULT_RX_MATCH_REG;
+  54              		.loc 1 242 0
+  55 0022 194B     		ldr	r3, .L2+28
+  56 0024 0022     		mov	r2, #0
+  57 0026 1A60     		str	r2, [r3]
+ 243:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 244:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure TX direction */
+ 245:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_TX_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_UART_TX_CTRL;
+  58              		.loc 1 245 0
+  59 0028 184B     		ldr	r3, .L2+32
+  60 002a 0122     		mov	r2, #1
+  61 002c 1A60     		str	r2, [r3]
+ 246:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_TX_CTRL_REG      = BLE_HAL_Uart_UART_DEFAULT_TX_CTRL;
+  62              		.loc 1 246 0
+  63 002e 184B     		ldr	r3, .L2+36
+  64 0030 134A     		ldr	r2, .L2+20
+  65 0032 1A60     		str	r2, [r3]
+ 247:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_TX_FIFO_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_TX_FIFO_CTRL;
+  66              		.loc 1 247 0
+  67 0034 174B     		ldr	r3, .L2+40
+  68 0036 0022     		mov	r2, #0
+  69 0038 1A60     		str	r2, [r3]
+ 248:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 249:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1)
+ 250:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UART_FLOW_CTRL_REG = BLE_HAL_Uart_UART_DEFAULT_FLOW_CTRL;
+  70              		.loc 1 250 0
+  71 003a 174B     		ldr	r3, .L2+44
+  72 003c 174A     		ldr	r2, .L2+48
+  73 003e 1A60     		str	r2, [r3]
+ 251:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1) */
+ 252:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 253:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure interrupt with UART handler but do not enable it */
+ 254:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if(BLE_HAL_Uart_SCB_IRQ_INTERNAL)
+ 255:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         CyIntDisable    (BLE_HAL_Uart_ISR_NUMBER);
+ 256:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         CyIntSetPriority(BLE_HAL_Uart_ISR_NUMBER, BLE_HAL_Uart_ISR_PRIORITY);
+ 257:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (void) CyIntSetVector(BLE_HAL_Uart_ISR_NUMBER, &BLE_HAL_Uart_SPI_UART_ISR);
+ 258:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_SCB_IRQ_INTERNAL) */
+ 259:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 260:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure WAKE interrupt */
+ 261:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if(BLE_HAL_Uart_UART_RX_WAKEUP_IRQ)
+ 262:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         CyIntDisable    (BLE_HAL_Uart_RX_WAKE_ISR_NUMBER);
+ 263:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         CyIntSetPriority(BLE_HAL_Uart_RX_WAKE_ISR_NUMBER, BLE_HAL_Uart_RX_WAKE_ISR_PRIORITY);
+ 264:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         (void) CyIntSetVector(BLE_HAL_Uart_RX_WAKE_ISR_NUMBER, &BLE_HAL_Uart_UART_WAKEUP_ISR);
+ 265:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_UART_RX_WAKEUP_IRQ) */
+ 266:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 267:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Configure interrupt sources */
+ 268:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_INTR_I2C_EC_MASK_REG = BLE_HAL_Uart_UART_DEFAULT_INTR_I2C_EC_MASK;
+  74              		.loc 1 268 0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 7
+
+
+  75 0040 174B     		ldr	r3, .L2+52
+  76 0042 0022     		mov	r2, #0
+  77 0044 1A60     		str	r2, [r3]
+ 269:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_INTR_SPI_EC_MASK_REG = BLE_HAL_Uart_UART_DEFAULT_INTR_SPI_EC_MASK;
+  78              		.loc 1 269 0
+  79 0046 174B     		ldr	r3, .L2+56
+  80 0048 0022     		mov	r2, #0
+  81 004a 1A60     		str	r2, [r3]
+ 270:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_INTR_SLAVE_MASK_REG  = BLE_HAL_Uart_UART_DEFAULT_INTR_SLAVE_MASK;
+  82              		.loc 1 270 0
+  83 004c 164B     		ldr	r3, .L2+60
+  84 004e 0022     		mov	r2, #0
+  85 0050 1A60     		str	r2, [r3]
+ 271:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_INTR_MASTER_MASK_REG = BLE_HAL_Uart_UART_DEFAULT_INTR_MASTER_MASK;
+  86              		.loc 1 271 0
+  87 0052 164B     		ldr	r3, .L2+64
+  88 0054 0022     		mov	r2, #0
+  89 0056 1A60     		str	r2, [r3]
+ 272:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_INTR_RX_MASK_REG     = BLE_HAL_Uart_UART_DEFAULT_INTR_RX_MASK;
+  90              		.loc 1 272 0
+  91 0058 154B     		ldr	r3, .L2+68
+  92 005a 6422     		mov	r2, #100
+  93 005c 1A60     		str	r2, [r3]
+ 273:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_INTR_TX_MASK_REG     = BLE_HAL_Uart_UART_DEFAULT_INTR_TX_MASK;
+  94              		.loc 1 273 0
+  95 005e 154B     		ldr	r3, .L2+72
+  96 0060 8822     		mov	r2, #136
+  97 0062 9200     		lsl	r2, r2, #2
+  98 0064 1A60     		str	r2, [r3]
+ 274:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 275:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if(BLE_HAL_Uart_INTERNAL_RX_SW_BUFFER_CONST)
+ 276:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_rxBufferHead     = 0u;
+ 277:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_rxBufferTail     = 0u;
+ 278:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_rxBufferOverflow = 0u;
+ 279:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_INTERNAL_RX_SW_BUFFER_CONST) */
+ 280:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 281:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if(BLE_HAL_Uart_INTERNAL_TX_SW_BUFFER_CONST)
+ 282:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_txBufferHead = 0u;
+ 283:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_txBufferTail = 0u;
+ 284:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_INTERNAL_TX_SW_BUFFER_CONST) */
+ 285:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+  99              		.loc 1 285 0
+ 100 0066 BD46     		mov	sp, r7
+ 101              		@ sp needed
+ 102 0068 80BD     		pop	{r7, pc}
+ 103              	.L3:
+ 104 006a C046     		.align	2
+ 105              	.L2:
+ 106 006c 00002440 		.word	1076101120
+ 107 0070 0F000002 		.word	33554447
+ 108 0074 40002440 		.word	1076101184
+ 109 0078 48002440 		.word	1076101192
+ 110 007c 00032440 		.word	1076101888
+ 111 0080 07000080 		.word	-2147483641
+ 112 0084 04032440 		.word	1076101892
+ 113 0088 10032440 		.word	1076101904
+ 114 008c 44002440 		.word	1076101188
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 8
+
+
+ 115 0090 00022440 		.word	1076101632
+ 116 0094 04022440 		.word	1076101636
+ 117 0098 50002440 		.word	1076101200
+ 118 009c 04000002 		.word	33554436
+ 119 00a0 880E2440 		.word	1076104840
+ 120 00a4 C80E2440 		.word	1076104904
+ 121 00a8 480F2440 		.word	1076105032
+ 122 00ac 080F2440 		.word	1076104968
+ 123 00b0 C80F2440 		.word	1076105160
+ 124 00b4 880F2440 		.word	1076105096
+ 125              		.cfi_endproc
+ 126              	.LFE2:
+ 127              		.size	BLE_HAL_Uart_UartInit, .-BLE_HAL_Uart_UartInit
+ 128              		.section	.text.BLE_HAL_Uart_UartPostEnable,"ax",%progbits
+ 129              		.align	2
+ 130              		.global	BLE_HAL_Uart_UartPostEnable
+ 131              		.code	16
+ 132              		.thumb_func
+ 133              		.type	BLE_HAL_Uart_UartPostEnable, %function
+ 134              	BLE_HAL_Uart_UartPostEnable:
+ 135              	.LFB3:
+ 286:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 287:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 288:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 289:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** /*******************************************************************************
+ 290:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Function Name: BLE_HAL_Uart_UartPostEnable
+ 291:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** ********************************************************************************
+ 292:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 293:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Summary:
+ 294:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  Restores HSIOM settings for the UART output pins (TX and/or RTS) to be 
+ 295:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  controlled by the SCB UART.
+ 296:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 297:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Parameters:
+ 298:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  None
+ 299:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 300:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Return:
+ 301:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  None
+ 302:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 303:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *******************************************************************************/
+ 304:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** void BLE_HAL_Uart_UartPostEnable(void)
+ 305:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** {
+ 136              		.loc 1 305 0
+ 137              		.cfi_startproc
+ 138 0000 80B5     		push	{r7, lr}
+ 139              		.cfi_def_cfa_offset 8
+ 140              		.cfi_offset 7, -8
+ 141              		.cfi_offset 14, -4
+ 142 0002 00AF     		add	r7, sp, #0
+ 143              		.cfi_def_cfa_register 7
+ 306:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if (BLE_HAL_Uart_SCB_MODE_UNCONFIG_CONST_CFG)
+ 307:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 308:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if (BLE_HAL_Uart_TX_SCL_MISO_PIN)
+ 309:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     if (BLE_HAL_Uart_CHECK_TX_SCL_MISO_PIN_USED)
+ 310:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+ 311:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Set SCB UART to drive the output pin */
+ 312:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_TX_SCL_MISO_HSIOM_REG, BLE_HAL_Uart_TX_SCL_MISO_HSI
+ 313:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                        BLE_HAL_Uart_TX_SCL_MISO_HSIOM_POS, BLE_HAL_Uart_HSIOM_UART_
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 9
+
+
+ 314:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 315:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_TX_SCL_MISO_PIN_PIN) */
+ 316:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 317:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if (BLE_HAL_Uart_RTS_SS0_PIN)
+ 318:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     if (BLE_HAL_Uart_CHECK_RTS_SS0_PIN_USED)
+ 319:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+ 320:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Set SCB UART to drive the output pin */
+ 321:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_RTS_SS0_HSIOM_REG, BLE_HAL_Uart_RTS_SS0_HSIOM_MASK,
+ 322:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                        BLE_HAL_Uart_RTS_SS0_HSIOM_POS, BLE_HAL_Uart_HSIOM_UART_SEL)
+ 323:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 324:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_RTS_SS0_PIN) */
+ 325:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 326:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #else
+ 327:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if (BLE_HAL_Uart_UART_TX_PIN)
+ 328:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****      /* Set SCB UART to drive the output pin */
+ 329:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_TX_HSIOM_REG, BLE_HAL_Uart_TX_HSIOM_MASK,
+ 144              		.loc 1 329 0
+ 145 0004 094B     		ldr	r3, .L5
+ 146 0006 094A     		ldr	r2, .L5
+ 147 0008 1268     		ldr	r2, [r2]
+ 148 000a 0949     		ldr	r1, .L5+4
+ 149 000c 0A40     		and	r2, r1
+ 150 000e 9021     		mov	r1, #144
+ 151 0010 0904     		lsl	r1, r1, #16
+ 152 0012 0A43     		orr	r2, r1
+ 153 0014 1A60     		str	r2, [r3]
+ 330:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                    BLE_HAL_Uart_TX_HSIOM_POS, BLE_HAL_Uart_HSIOM_UART_SEL);
+ 331:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_UART_TX_PIN) */
+ 332:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 333:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if (BLE_HAL_Uart_UART_RTS_PIN)
+ 334:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /* Set SCB UART to drive the output pin */
+ 335:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_RTS_HSIOM_REG, BLE_HAL_Uart_RTS_HSIOM_MASK,
+ 154              		.loc 1 335 0
+ 155 0016 074B     		ldr	r3, .L5+8
+ 156 0018 064A     		ldr	r2, .L5+8
+ 157 001a 1268     		ldr	r2, [r2]
+ 158 001c 0649     		ldr	r1, .L5+12
+ 159 001e 0A40     		and	r2, r1
+ 160 0020 9021     		mov	r1, #144
+ 161 0022 0905     		lsl	r1, r1, #20
+ 162 0024 0A43     		orr	r2, r1
+ 163 0026 1A60     		str	r2, [r3]
+ 336:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                    BLE_HAL_Uart_RTS_HSIOM_POS, BLE_HAL_Uart_HSIOM_UART_SEL);
+ 337:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_UART_RTS_PIN) */
+ 338:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 339:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 340:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** }
+ 164              		.loc 1 340 0
+ 165 0028 BD46     		mov	sp, r7
+ 166              		@ sp needed
+ 167 002a 80BD     		pop	{r7, pc}
+ 168              	.L6:
+ 169              		.align	2
+ 170              	.L5:
+ 171 002c 00000240 		.word	1073872896
+ 172 0030 FFFF0FFF 		.word	-15728641
+ 173 0034 00010240 		.word	1073873152
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 10
+
+
+ 174 0038 FFFFFFF0 		.word	-251658241
+ 175              		.cfi_endproc
+ 176              	.LFE3:
+ 177              		.size	BLE_HAL_Uart_UartPostEnable, .-BLE_HAL_Uart_UartPostEnable
+ 178              		.section	.text.BLE_HAL_Uart_UartStop,"ax",%progbits
+ 179              		.align	2
+ 180              		.global	BLE_HAL_Uart_UartStop
+ 181              		.code	16
+ 182              		.thumb_func
+ 183              		.type	BLE_HAL_Uart_UartStop, %function
+ 184              	BLE_HAL_Uart_UartStop:
+ 185              	.LFB4:
+ 341:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 342:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 343:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** /*******************************************************************************
+ 344:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Function Name: BLE_HAL_Uart_UartStop
+ 345:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** ********************************************************************************
+ 346:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 347:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Summary:
+ 348:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  Changes the HSIOM settings for the UART output pins (TX and/or RTS) to keep
+ 349:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  them inactive after the block is disabled. The output pins are controlled by
+ 350:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  the GPIO data register. Also, the function disables the skip start feature to
+ 351:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  not cause it to trigger after the component is enabled.
+ 352:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 353:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Parameters:
+ 354:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  None
+ 355:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 356:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Return:
+ 357:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  None
+ 358:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 359:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *******************************************************************************/
+ 360:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** void BLE_HAL_Uart_UartStop(void)
+ 361:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** {
+ 186              		.loc 1 361 0
+ 187              		.cfi_startproc
+ 188 0000 80B5     		push	{r7, lr}
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 7, -8
+ 191              		.cfi_offset 14, -4
+ 192 0002 00AF     		add	r7, sp, #0
+ 193              		.cfi_def_cfa_register 7
+ 362:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if(BLE_HAL_Uart_SCB_MODE_UNCONFIG_CONST_CFG)
+ 363:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if (BLE_HAL_Uart_TX_SCL_MISO_PIN)
+ 364:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         if (BLE_HAL_Uart_CHECK_TX_SCL_MISO_PIN_USED)
+ 365:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 366:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Set GPIO to drive output pin */
+ 367:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_TX_SCL_MISO_HSIOM_REG, BLE_HAL_Uart_TX_SCL_MISO
+ 368:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                            BLE_HAL_Uart_TX_SCL_MISO_HSIOM_POS, BLE_HAL_Uart_HSIOM_G
+ 369:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 370:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_TX_SCL_MISO_PIN_PIN) */
+ 371:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 372:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if (BLE_HAL_Uart_RTS_SS0_PIN)
+ 373:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         if (BLE_HAL_Uart_CHECK_RTS_SS0_PIN_USED)
+ 374:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 375:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Set output pin state after block is disabled */
+ 376:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_uart_rts_spi_ss0_Write(BLE_HAL_Uart_GET_UART_RTS_INACTIVE);
+ 377:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 11
+
+
+ 378:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Set GPIO to drive output pin */
+ 379:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_RTS_SS0_HSIOM_REG, BLE_HAL_Uart_RTS_SS0_HSIOM_M
+ 380:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                            BLE_HAL_Uart_RTS_SS0_HSIOM_POS, BLE_HAL_Uart_HSIOM_GPIO_
+ 381:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 382:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_SS0_PIN) */
+ 383:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 384:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #else
+ 385:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if (BLE_HAL_Uart_UART_TX_PIN)
+ 386:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Set GPIO to drive output pin */
+ 387:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_TX_HSIOM_REG, BLE_HAL_Uart_TX_HSIOM_MASK,
+ 194              		.loc 1 387 0
+ 195 0004 0C4B     		ldr	r3, .L8
+ 196 0006 0C4A     		ldr	r2, .L8
+ 197 0008 1268     		ldr	r2, [r2]
+ 198 000a 0C49     		ldr	r1, .L8+4
+ 199 000c 0A40     		and	r2, r1
+ 200 000e 1A60     		str	r2, [r3]
+ 388:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                        BLE_HAL_Uart_TX_HSIOM_POS, BLE_HAL_Uart_HSIOM_GPIO_SEL);
+ 389:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_UART_TX_PIN) */
+ 390:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 391:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if (BLE_HAL_Uart_UART_RTS_PIN)
+ 392:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Set output pin state after block is disabled */
+ 393:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_rts_Write(BLE_HAL_Uart_GET_UART_RTS_INACTIVE);
+ 201              		.loc 1 393 0
+ 202 0010 0B4B     		ldr	r3, .L8+8
+ 203 0012 1A68     		ldr	r2, [r3]
+ 204 0014 8023     		mov	r3, #128
+ 205 0016 5B02     		lsl	r3, r3, #9
+ 206 0018 1340     		and	r3, r2
+ 207 001a 5A1E     		sub	r2, r3, #1
+ 208 001c 9341     		sbc	r3, r3, r2
+ 209 001e DBB2     		uxtb	r3, r3
+ 210 0020 181C     		mov	r0, r3
+ 211 0022 FFF7FEFF 		bl	BLE_HAL_Uart_rts_Write
+ 394:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 395:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Set GPIO to drive output pin */
+ 396:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_SET_HSIOM_SEL(BLE_HAL_Uart_RTS_HSIOM_REG, BLE_HAL_Uart_RTS_HSIOM_MASK,
+ 212              		.loc 1 396 0
+ 213 0026 074B     		ldr	r3, .L8+12
+ 214 0028 064A     		ldr	r2, .L8+12
+ 215 002a 1268     		ldr	r2, [r2]
+ 216 002c 0649     		ldr	r1, .L8+16
+ 217 002e 0A40     		and	r2, r1
+ 218 0030 1A60     		str	r2, [r3]
+ 397:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                                        BLE_HAL_Uart_RTS_HSIOM_POS, BLE_HAL_Uart_HSIOM_GPIO_SEL);
+ 398:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* (BLE_HAL_Uart_UART_RTS_PIN) */
+ 399:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 400:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 401:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 402:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if (BLE_HAL_Uart_UART_WAKE_ENABLE_CONST)
+ 403:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /* Disable skip start feature used for wakeup */
+ 404:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     BLE_HAL_Uart_UART_RX_CTRL_REG &= (uint32) ~BLE_HAL_Uart_UART_RX_CTRL_SKIP_START;
+ 405:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_UART_WAKE_ENABLE_CONST) */
+ 406:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** }
+ 219              		.loc 1 406 0
+ 220 0032 BD46     		mov	sp, r7
+ 221              		@ sp needed
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 12
+
+
+ 222 0034 80BD     		pop	{r7, pc}
+ 223              	.L9:
+ 224 0036 C046     		.align	2
+ 225              	.L8:
+ 226 0038 00000240 		.word	1073872896
+ 227 003c FFFF0FFF 		.word	-15728641
+ 228 0040 50002440 		.word	1076101200
+ 229 0044 00010240 		.word	1073873152
+ 230 0048 FFFFFFF0 		.word	-251658241
+ 231              		.cfi_endproc
+ 232              	.LFE4:
+ 233              		.size	BLE_HAL_Uart_UartStop, .-BLE_HAL_Uart_UartStop
+ 234              		.section	.text.BLE_HAL_Uart_UartSetRxAddress,"ax",%progbits
+ 235              		.align	2
+ 236              		.global	BLE_HAL_Uart_UartSetRxAddress
+ 237              		.code	16
+ 238              		.thumb_func
+ 239              		.type	BLE_HAL_Uart_UartSetRxAddress, %function
+ 240              	BLE_HAL_Uart_UartSetRxAddress:
+ 241              	.LFB5:
+ 407:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 408:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 409:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** /*******************************************************************************
+ 410:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Function Name: BLE_HAL_Uart_UartSetRxAddress
+ 411:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** ********************************************************************************
+ 412:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 413:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Summary:
+ 414:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  Sets the hardware detectable receiver address for the UART in the
+ 415:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  Multiprocessor mode.
+ 416:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 417:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Parameters:
+ 418:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  address: Address for hardware address detection.
+ 419:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 420:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Return:
+ 421:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  None
+ 422:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 423:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *******************************************************************************/
+ 424:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** void BLE_HAL_Uart_UartSetRxAddress(uint32 address)
+ 425:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** {
+ 242              		.loc 1 425 0
+ 243              		.cfi_startproc
+ 244 0000 80B5     		push	{r7, lr}
+ 245              		.cfi_def_cfa_offset 8
+ 246              		.cfi_offset 7, -8
+ 247              		.cfi_offset 14, -4
+ 248 0002 84B0     		sub	sp, sp, #16
+ 249              		.cfi_def_cfa_offset 24
+ 250 0004 00AF     		add	r7, sp, #0
+ 251              		.cfi_def_cfa_register 7
+ 252 0006 7860     		str	r0, [r7, #4]
+ 426:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****      uint32 matchReg;
+ 427:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 428:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     matchReg = BLE_HAL_Uart_RX_MATCH_REG;
+ 253              		.loc 1 428 0
+ 254 0008 094B     		ldr	r3, .L11
+ 255 000a 1B68     		ldr	r3, [r3]
+ 256 000c FB60     		str	r3, [r7, #12]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 13
+
+
+ 429:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 430:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     matchReg &= ((uint32) ~BLE_HAL_Uart_RX_MATCH_ADDR_MASK); /* Clear address bits */
+ 257              		.loc 1 430 0
+ 258 000e FB68     		ldr	r3, [r7, #12]
+ 259 0010 FF22     		mov	r2, #255
+ 260 0012 9343     		bic	r3, r2
+ 261 0014 FB60     		str	r3, [r7, #12]
+ 431:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     matchReg |= ((uint32)  (address & BLE_HAL_Uart_RX_MATCH_ADDR_MASK)); /* Set address  */
+ 262              		.loc 1 431 0
+ 263 0016 7B68     		ldr	r3, [r7, #4]
+ 264 0018 FF22     		mov	r2, #255
+ 265 001a 1340     		and	r3, r2
+ 266 001c FA68     		ldr	r2, [r7, #12]
+ 267 001e 1343     		orr	r3, r2
+ 268 0020 FB60     		str	r3, [r7, #12]
+ 432:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 433:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     BLE_HAL_Uart_RX_MATCH_REG = matchReg;
+ 269              		.loc 1 433 0
+ 270 0022 034B     		ldr	r3, .L11
+ 271 0024 FA68     		ldr	r2, [r7, #12]
+ 272 0026 1A60     		str	r2, [r3]
+ 434:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** }
+ 273              		.loc 1 434 0
+ 274 0028 BD46     		mov	sp, r7
+ 275 002a 04B0     		add	sp, sp, #16
+ 276              		@ sp needed
+ 277 002c 80BD     		pop	{r7, pc}
+ 278              	.L12:
+ 279 002e C046     		.align	2
+ 280              	.L11:
+ 281 0030 10032440 		.word	1076101904
+ 282              		.cfi_endproc
+ 283              	.LFE5:
+ 284              		.size	BLE_HAL_Uart_UartSetRxAddress, .-BLE_HAL_Uart_UartSetRxAddress
+ 285              		.section	.text.BLE_HAL_Uart_UartSetRxAddressMask,"ax",%progbits
+ 286              		.align	2
+ 287              		.global	BLE_HAL_Uart_UartSetRxAddressMask
+ 288              		.code	16
+ 289              		.thumb_func
+ 290              		.type	BLE_HAL_Uart_UartSetRxAddressMask, %function
+ 291              	BLE_HAL_Uart_UartSetRxAddressMask:
+ 292              	.LFB6:
+ 435:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 436:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 437:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** /*******************************************************************************
+ 438:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Function Name: BLE_HAL_Uart_UartSetRxAddressMask
+ 439:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** ********************************************************************************
+ 440:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 441:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Summary:
+ 442:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  Sets the hardware address mask for the UART in the Multiprocessor mode.
+ 443:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 444:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Parameters:
+ 445:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  addressMask: Address mask.
+ 446:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *   0 - address bit does not care while comparison.
+ 447:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *   1 - address bit is significant while comparison.
+ 448:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 449:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** * Return:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 14
+
+
+ 450:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *  None
+ 451:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *
+ 452:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** *******************************************************************************/
+ 453:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** void BLE_HAL_Uart_UartSetRxAddressMask(uint32 addressMask)
+ 454:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** {
+ 293              		.loc 1 454 0
+ 294              		.cfi_startproc
+ 295 0000 80B5     		push	{r7, lr}
+ 296              		.cfi_def_cfa_offset 8
+ 297              		.cfi_offset 7, -8
+ 298              		.cfi_offset 14, -4
+ 299 0002 84B0     		sub	sp, sp, #16
+ 300              		.cfi_def_cfa_offset 24
+ 301 0004 00AF     		add	r7, sp, #0
+ 302              		.cfi_def_cfa_register 7
+ 303 0006 7860     		str	r0, [r7, #4]
+ 455:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     uint32 matchReg;
+ 456:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 457:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     matchReg = BLE_HAL_Uart_RX_MATCH_REG;
+ 304              		.loc 1 457 0
+ 305 0008 084B     		ldr	r3, .L14
+ 306 000a 1B68     		ldr	r3, [r3]
+ 307 000c FB60     		str	r3, [r7, #12]
+ 458:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 459:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     matchReg &= ((uint32) ~BLE_HAL_Uart_RX_MATCH_MASK_MASK); /* Clear address mask bits */
+ 308              		.loc 1 459 0
+ 309 000e FB68     		ldr	r3, [r7, #12]
+ 310 0010 074A     		ldr	r2, .L14+4
+ 311 0012 1340     		and	r3, r2
+ 312 0014 FB60     		str	r3, [r7, #12]
+ 460:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     matchReg |= ((uint32) (addressMask << BLE_HAL_Uart_RX_MATCH_MASK_POS));
+ 313              		.loc 1 460 0
+ 314 0016 7B68     		ldr	r3, [r7, #4]
+ 315 0018 1B04     		lsl	r3, r3, #16
+ 316 001a FA68     		ldr	r2, [r7, #12]
+ 317 001c 1343     		orr	r3, r2
+ 318 001e FB60     		str	r3, [r7, #12]
+ 461:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 462:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     BLE_HAL_Uart_RX_MATCH_REG = matchReg;
+ 319              		.loc 1 462 0
+ 320 0020 024B     		ldr	r3, .L14
+ 321 0022 FA68     		ldr	r2, [r7, #12]
+ 322 0024 1A60     		str	r2, [r3]
+ 463:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** }
+ 323              		.loc 1 463 0
+ 324 0026 BD46     		mov	sp, r7
+ 325 0028 04B0     		add	sp, sp, #16
+ 326              		@ sp needed
+ 327 002a 80BD     		pop	{r7, pc}
+ 328              	.L15:
+ 329              		.align	2
+ 330              	.L14:
+ 331 002c 10032440 		.word	1076101904
+ 332 0030 FFFF00FF 		.word	-16711681
+ 333              		.cfi_endproc
+ 334              	.LFE6:
+ 335              		.size	BLE_HAL_Uart_UartSetRxAddressMask, .-BLE_HAL_Uart_UartSetRxAddressMask
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 15
+
+
+ 336              		.section	.text.BLE_HAL_Uart_UartGetChar,"ax",%progbits
+ 337              		.align	2
+ 338              		.global	BLE_HAL_Uart_UartGetChar
+ 339              		.code	16
+ 340              		.thumb_func
+ 341              		.type	BLE_HAL_Uart_UartGetChar, %function
+ 342              	BLE_HAL_Uart_UartGetChar:
+ 343              	.LFB7:
+ 464:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 465:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 466:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if(BLE_HAL_Uart_UART_RX_DIRECTION)
+ 467:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /*******************************************************************************
+ 468:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Function Name: BLE_HAL_Uart_UartGetChar
+ 469:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ********************************************************************************
+ 470:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 471:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Summary:
+ 472:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Retrieves the next data element from the receive buffer.
+ 473:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  This function is designed for ASCII characters and returns a char
+ 474:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  where 1 to 255 are valid characters and 0 indicates an error occurred or
+ 475:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  no data present.
+ 476:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  - The RX software buffer is disabled: returns the data element
+ 477:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *    retrieved from the RX FIFO.
+ 478:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *    Undefined data will be returned if the RX FIFO is empty.
+ 479:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  - The RX software buffer is enabled: returns the data element from
+ 480:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *    the software receive buffer.
+ 481:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 482:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Parameters:
+ 483:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+ 484:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 485:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Return:
+ 486:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  The next data element from the receive buffer.
+ 487:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  ASCII character values from 1 to 255 are valid.
+ 488:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  A returned zero signifies an error condition or no data available.
+ 489:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 490:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Side Effects:
+ 491:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  The errors bits may not correspond with reading characters due to RX FIFO
+ 492:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  and software buffer usage.
+ 493:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  RX software buffer is enabled: The internal software buffer overflow
+ 494:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  does not treat as an error condition.
+ 495:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Check SCB_rxBufferOverflow to capture that error condition.
+ 496:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 497:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *******************************************************************************/
+ 498:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     uint32 BLE_HAL_Uart_UartGetChar(void)
+ 499:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+ 344              		.loc 1 499 0
+ 345              		.cfi_startproc
+ 346 0000 80B5     		push	{r7, lr}
+ 347              		.cfi_def_cfa_offset 8
+ 348              		.cfi_offset 7, -8
+ 349              		.cfi_offset 14, -4
+ 350 0002 82B0     		sub	sp, sp, #8
+ 351              		.cfi_def_cfa_offset 16
+ 352 0004 00AF     		add	r7, sp, #0
+ 353              		.cfi_def_cfa_register 7
+ 500:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         uint32 rxData = 0u;
+ 354              		.loc 1 500 0
+ 355 0006 0023     		mov	r3, #0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 16
+
+
+ 356 0008 7B60     		str	r3, [r7, #4]
+ 501:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 502:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Reads data only if there is data to read */
+ 503:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         if (0u != BLE_HAL_Uart_SpiUartGetRxBufferSize())
+ 357              		.loc 1 503 0
+ 358 000a FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartGetRxBufferSize
+ 359 000e 031E     		sub	r3, r0, #0
+ 360 0010 03D0     		beq	.L17
+ 504:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 505:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             rxData = BLE_HAL_Uart_SpiUartReadRxData();
+ 361              		.loc 1 505 0
+ 362 0012 FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartReadRxData
+ 363 0016 031C     		mov	r3, r0
+ 364 0018 7B60     		str	r3, [r7, #4]
+ 365              	.L17:
+ 506:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 507:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 508:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         if (BLE_HAL_Uart_CHECK_INTR_RX(BLE_HAL_Uart_INTR_RX_ERR))
+ 366              		.loc 1 508 0
+ 367 001a 084B     		ldr	r3, .L20
+ 368 001c 1A68     		ldr	r2, [r3]
+ 369 001e D823     		mov	r3, #216
+ 370 0020 9B00     		lsl	r3, r3, #2
+ 371 0022 1340     		and	r3, r2
+ 372 0024 05D0     		beq	.L18
+ 509:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 510:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             rxData = 0u; /* Error occurred: returns zero */
+ 373              		.loc 1 510 0
+ 374 0026 0023     		mov	r3, #0
+ 375 0028 7B60     		str	r3, [r7, #4]
+ 511:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_ClearRxInterruptSource(BLE_HAL_Uart_INTR_RX_ERR);
+ 376              		.loc 1 511 0
+ 377 002a 044B     		ldr	r3, .L20
+ 378 002c D822     		mov	r2, #216
+ 379 002e 9200     		lsl	r2, r2, #2
+ 380 0030 1A60     		str	r2, [r3]
+ 381              	.L18:
+ 512:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 513:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 514:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         return (rxData);
+ 382              		.loc 1 514 0
+ 383 0032 7B68     		ldr	r3, [r7, #4]
+ 515:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 384              		.loc 1 515 0
+ 385 0034 181C     		mov	r0, r3
+ 386 0036 BD46     		mov	sp, r7
+ 387 0038 02B0     		add	sp, sp, #8
+ 388              		@ sp needed
+ 389 003a 80BD     		pop	{r7, pc}
+ 390              	.L21:
+ 391              		.align	2
+ 392              	.L20:
+ 393 003c C00F2440 		.word	1076105152
+ 394              		.cfi_endproc
+ 395              	.LFE7:
+ 396              		.size	BLE_HAL_Uart_UartGetChar, .-BLE_HAL_Uart_UartGetChar
+ 397              		.section	.text.BLE_HAL_Uart_UartGetByte,"ax",%progbits
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 17
+
+
+ 398              		.align	2
+ 399              		.global	BLE_HAL_Uart_UartGetByte
+ 400              		.code	16
+ 401              		.thumb_func
+ 402              		.type	BLE_HAL_Uart_UartGetByte, %function
+ 403              	BLE_HAL_Uart_UartGetByte:
+ 404              	.LFB8:
+ 516:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 517:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 518:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /*******************************************************************************
+ 519:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Function Name: BLE_HAL_Uart_UartGetByte
+ 520:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ********************************************************************************
+ 521:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 522:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Summary:
+ 523:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Retrieves the next data element from the receive buffer, returns the
+ 524:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  received byte and error condition.
+ 525:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *   - The RX software buffer is disabled: returns the data element retrieved
+ 526:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *     from the RX FIFO. Undefined data will be returned if the RX FIFO is
+ 527:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *     empty.
+ 528:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *   - The RX software buffer is enabled: returns data element from the
+ 529:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *     software receive buffer.
+ 530:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 531:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Parameters:
+ 532:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+ 533:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 534:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Return:
+ 535:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Bits 7-0 contain the next data element from the receive buffer and
+ 536:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  other bits contain the error condition.
+ 537:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 538:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Side Effects:
+ 539:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  The errors bits may not correspond with reading characters due to RX FIFO
+ 540:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  and software buffer usage.
+ 541:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  RX software buffer is disabled: The internal software buffer overflow
+ 542:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  is not returned as status by this function.
+ 543:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Check SCB_rxBufferOverflow to capture that error condition.
+ 544:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 545:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *******************************************************************************/
+ 546:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     uint32 BLE_HAL_Uart_UartGetByte(void)
+ 547:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+ 405              		.loc 1 547 0
+ 406              		.cfi_startproc
+ 407 0000 80B5     		push	{r7, lr}
+ 408              		.cfi_def_cfa_offset 8
+ 409              		.cfi_offset 7, -8
+ 410              		.cfi_offset 14, -4
+ 411 0002 82B0     		sub	sp, sp, #8
+ 412              		.cfi_def_cfa_offset 16
+ 413 0004 00AF     		add	r7, sp, #0
+ 414              		.cfi_def_cfa_register 7
+ 548:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         uint32 rxData;
+ 549:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         uint32 tmpStatus;
+ 550:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 551:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #if (BLE_HAL_Uart_CHECK_RX_SW_BUFFER)
+ 552:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 553:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_DisableInt();
+ 554:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 555:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         #endif
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 18
+
+
+ 556:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 557:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         if (0u != BLE_HAL_Uart_SpiUartGetRxBufferSize())
+ 415              		.loc 1 557 0
+ 416 0006 FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartGetRxBufferSize
+ 417 000a 031E     		sub	r3, r0, #0
+ 418 000c 04D0     		beq	.L23
+ 558:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 559:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Enables interrupt to receive more bytes: at least one byte is in
+ 560:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             * buffer.
+ 561:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             */
+ 562:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             #if (BLE_HAL_Uart_CHECK_RX_SW_BUFFER)
+ 563:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {            
+ 564:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_EnableInt();
+ 565:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 566:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             #endif
+ 567:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 568:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Get received byte */
+ 569:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             rxData = BLE_HAL_Uart_SpiUartReadRxData();
+ 419              		.loc 1 569 0
+ 420 000e FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartReadRxData
+ 421 0012 031C     		mov	r3, r0
+ 422 0014 7B60     		str	r3, [r7, #4]
+ 423 0016 02E0     		b	.L24
+ 424              	.L23:
+ 570:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 571:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         else
+ 572:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 573:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Reads a byte directly from RX FIFO: underflow is raised in the case
+ 574:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             * of empty. Otherwise the first received byte will be read.
+ 575:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             */
+ 576:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             rxData = BLE_HAL_Uart_RX_FIFO_RD_REG;
+ 425              		.loc 1 576 0
+ 426 0018 0B4B     		ldr	r3, .L26
+ 427 001a 1B68     		ldr	r3, [r3]
+ 428 001c 7B60     		str	r3, [r7, #4]
+ 429              	.L24:
+ 577:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 578:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             /* Enables interrupt to receive more bytes.
+ 579:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             * The RX_NOT_EMPTY interrupt is cleared by the interrupt routine
+ 580:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             * in case the byte was received and read by code above.
+ 581:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             */
+ 582:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             #if (BLE_HAL_Uart_CHECK_RX_SW_BUFFER)
+ 583:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 584:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_EnableInt();
+ 585:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 586:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             #endif
+ 587:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 588:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 589:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Get and clear RX error mask */
+ 590:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         tmpStatus = (BLE_HAL_Uart_GetRxInterruptSource() & BLE_HAL_Uart_INTR_RX_ERR);
+ 430              		.loc 1 590 0
+ 431 001e 0B4B     		ldr	r3, .L26+4
+ 432 0020 1A68     		ldr	r2, [r3]
+ 433 0022 D823     		mov	r3, #216
+ 434 0024 9B00     		lsl	r3, r3, #2
+ 435 0026 1340     		and	r3, r2
+ 436 0028 3B60     		str	r3, [r7]
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 19
+
+
+ 591:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_ClearRxInterruptSource(BLE_HAL_Uart_INTR_RX_ERR);
+ 437              		.loc 1 591 0
+ 438 002a 084B     		ldr	r3, .L26+4
+ 439 002c D822     		mov	r2, #216
+ 440 002e 9200     		lsl	r2, r2, #2
+ 441 0030 1A60     		str	r2, [r3]
+ 592:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 593:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Puts together data and error status:
+ 594:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * MP mode and accept address: 9th bit is set to notify mark.
+ 595:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         */
+ 596:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         rxData |= ((uint32) (tmpStatus << 8u));
+ 442              		.loc 1 596 0
+ 443 0032 3B68     		ldr	r3, [r7]
+ 444 0034 1B02     		lsl	r3, r3, #8
+ 445 0036 7A68     		ldr	r2, [r7, #4]
+ 446 0038 1343     		orr	r3, r2
+ 447 003a 7B60     		str	r3, [r7, #4]
+ 597:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 598:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         return (rxData);
+ 448              		.loc 1 598 0
+ 449 003c 7B68     		ldr	r3, [r7, #4]
+ 599:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 450              		.loc 1 599 0
+ 451 003e 181C     		mov	r0, r3
+ 452 0040 BD46     		mov	sp, r7
+ 453 0042 02B0     		add	sp, sp, #8
+ 454              		@ sp needed
+ 455 0044 80BD     		pop	{r7, pc}
+ 456              	.L27:
+ 457 0046 C046     		.align	2
+ 458              	.L26:
+ 459 0048 40032440 		.word	1076101952
+ 460 004c C00F2440 		.word	1076105152
+ 461              		.cfi_endproc
+ 462              	.LFE8:
+ 463              		.size	BLE_HAL_Uart_UartGetByte, .-BLE_HAL_Uart_UartGetByte
+ 464              		.section	.text.BLE_HAL_Uart_UartSetRtsPolarity,"ax",%progbits
+ 465              		.align	2
+ 466              		.global	BLE_HAL_Uart_UartSetRtsPolarity
+ 467              		.code	16
+ 468              		.thumb_func
+ 469              		.type	BLE_HAL_Uart_UartSetRtsPolarity, %function
+ 470              	BLE_HAL_Uart_UartSetRtsPolarity:
+ 471              	.LFB9:
+ 600:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 601:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 602:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1)
+ 603:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /*******************************************************************************
+ 604:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Function Name: BLE_HAL_Uart_UartSetRtsPolarity
+ 605:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         ********************************************************************************
+ 606:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 607:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Summary:
+ 608:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  Sets active polarity of RTS output signal.
+ 609:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 610:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Parameters:
+ 611:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  polarity: Active polarity of RTS output signal.
+ 612:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *   BLE_HAL_Uart_UART_RTS_ACTIVE_LOW  - RTS signal is active low.
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 20
+
+
+ 613:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *   BLE_HAL_Uart_UART_RTS_ACTIVE_HIGH - RTS signal is active high.
+ 614:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 615:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Return:
+ 616:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 617:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 618:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *******************************************************************************/
+ 619:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         void BLE_HAL_Uart_UartSetRtsPolarity(uint32 polarity)
+ 620:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 472              		.loc 1 620 0
+ 473              		.cfi_startproc
+ 474 0000 80B5     		push	{r7, lr}
+ 475              		.cfi_def_cfa_offset 8
+ 476              		.cfi_offset 7, -8
+ 477              		.cfi_offset 14, -4
+ 478 0002 82B0     		sub	sp, sp, #8
+ 479              		.cfi_def_cfa_offset 16
+ 480 0004 00AF     		add	r7, sp, #0
+ 481              		.cfi_def_cfa_register 7
+ 482 0006 7860     		str	r0, [r7, #4]
+ 621:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             if(0u != polarity)
+ 483              		.loc 1 621 0
+ 484 0008 7B68     		ldr	r3, [r7, #4]
+ 485 000a 002B     		cmp	r3, #0
+ 486 000c 07D0     		beq	.L29
+ 622:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 623:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_UART_FLOW_CTRL_REG |= (uint32)  BLE_HAL_Uart_UART_FLOW_CTRL_RTS_POLARI
+ 487              		.loc 1 623 0
+ 488 000e 084B     		ldr	r3, .L31
+ 489 0010 074A     		ldr	r2, .L31
+ 490 0012 1268     		ldr	r2, [r2]
+ 491 0014 8021     		mov	r1, #128
+ 492 0016 4902     		lsl	r1, r1, #9
+ 493 0018 0A43     		orr	r2, r1
+ 494 001a 1A60     		str	r2, [r3]
+ 495 001c 05E0     		b	.L28
+ 496              	.L29:
+ 624:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 625:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             else
+ 626:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 627:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_UART_FLOW_CTRL_REG &= (uint32) ~BLE_HAL_Uart_UART_FLOW_CTRL_RTS_POLARI
+ 497              		.loc 1 627 0
+ 498 001e 044B     		ldr	r3, .L31
+ 499 0020 034A     		ldr	r2, .L31
+ 500 0022 1268     		ldr	r2, [r2]
+ 501 0024 0349     		ldr	r1, .L31+4
+ 502 0026 0A40     		and	r2, r1
+ 503 0028 1A60     		str	r2, [r3]
+ 504              	.L28:
+ 628:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 629:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 505              		.loc 1 629 0
+ 506 002a BD46     		mov	sp, r7
+ 507 002c 02B0     		add	sp, sp, #8
+ 508              		@ sp needed
+ 509 002e 80BD     		pop	{r7, pc}
+ 510              	.L32:
+ 511              		.align	2
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 21
+
+
+ 512              	.L31:
+ 513 0030 50002440 		.word	1076101200
+ 514 0034 FFFFFEFF 		.word	-65537
+ 515              		.cfi_endproc
+ 516              	.LFE9:
+ 517              		.size	BLE_HAL_Uart_UartSetRtsPolarity, .-BLE_HAL_Uart_UartSetRtsPolarity
+ 518              		.section	.text.BLE_HAL_Uart_UartSetRtsFifoLevel,"ax",%progbits
+ 519              		.align	2
+ 520              		.global	BLE_HAL_Uart_UartSetRtsFifoLevel
+ 521              		.code	16
+ 522              		.thumb_func
+ 523              		.type	BLE_HAL_Uart_UartSetRtsFifoLevel, %function
+ 524              	BLE_HAL_Uart_UartSetRtsFifoLevel:
+ 525              	.LFB10:
+ 630:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 631:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 632:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /*******************************************************************************
+ 633:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Function Name: BLE_HAL_Uart_UartSetRtsFifoLevel
+ 634:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         ********************************************************************************
+ 635:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 636:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Summary:
+ 637:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  Sets level in the RX FIFO for RTS signal activation.
+ 638:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  While the RX FIFO has fewer entries than the RX FIFO level the RTS signal
+ 639:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  remains active, otherwise the RTS signal becomes inactive.
+ 640:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 641:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Parameters:
+ 642:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  level: Level in the RX FIFO for RTS signal activation.
+ 643:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *         The range of valid level values is between 0 and RX FIFO depth - 1.
+ 644:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *         Setting level value to 0 disables RTS signal activation.
+ 645:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 646:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Return:
+ 647:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 648:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 649:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *******************************************************************************/
+ 650:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         void BLE_HAL_Uart_UartSetRtsFifoLevel(uint32 level)
+ 651:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 526              		.loc 1 651 0
+ 527              		.cfi_startproc
+ 528 0000 80B5     		push	{r7, lr}
+ 529              		.cfi_def_cfa_offset 8
+ 530              		.cfi_offset 7, -8
+ 531              		.cfi_offset 14, -4
+ 532 0002 84B0     		sub	sp, sp, #16
+ 533              		.cfi_def_cfa_offset 24
+ 534 0004 00AF     		add	r7, sp, #0
+ 535              		.cfi_def_cfa_register 7
+ 536 0006 7860     		str	r0, [r7, #4]
+ 652:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             uint32 uartFlowCtrl;
+ 653:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 654:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             uartFlowCtrl = BLE_HAL_Uart_UART_FLOW_CTRL_REG;
+ 537              		.loc 1 654 0
+ 538 0008 094B     		ldr	r3, .L34
+ 539 000a 1B68     		ldr	r3, [r3]
+ 540 000c FB60     		str	r3, [r7, #12]
+ 655:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 656:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             uartFlowCtrl &= ((uint32) ~BLE_HAL_Uart_UART_FLOW_CTRL_TRIGGER_LEVEL_MASK); /* Clear le
+ 541              		.loc 1 656 0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 22
+
+
+ 542 000e FB68     		ldr	r3, [r7, #12]
+ 543 0010 0F22     		mov	r2, #15
+ 544 0012 9343     		bic	r3, r2
+ 545 0014 FB60     		str	r3, [r7, #12]
+ 657:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             uartFlowCtrl |= ((uint32) (BLE_HAL_Uart_UART_FLOW_CTRL_TRIGGER_LEVEL_MASK & level));
+ 546              		.loc 1 657 0
+ 547 0016 7B68     		ldr	r3, [r7, #4]
+ 548 0018 0F22     		mov	r2, #15
+ 549 001a 1340     		and	r3, r2
+ 550 001c FA68     		ldr	r2, [r7, #12]
+ 551 001e 1343     		orr	r3, r2
+ 552 0020 FB60     		str	r3, [r7, #12]
+ 658:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 659:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_FLOW_CTRL_REG = uartFlowCtrl;
+ 553              		.loc 1 659 0
+ 554 0022 034B     		ldr	r3, .L34
+ 555 0024 FA68     		ldr	r2, [r7, #12]
+ 556 0026 1A60     		str	r2, [r3]
+ 660:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 557              		.loc 1 660 0
+ 558 0028 BD46     		mov	sp, r7
+ 559 002a 04B0     		add	sp, sp, #16
+ 560              		@ sp needed
+ 561 002c 80BD     		pop	{r7, pc}
+ 562              	.L35:
+ 563 002e C046     		.align	2
+ 564              	.L34:
+ 565 0030 50002440 		.word	1076101200
+ 566              		.cfi_endproc
+ 567              	.LFE10:
+ 568              		.size	BLE_HAL_Uart_UartSetRtsFifoLevel, .-BLE_HAL_Uart_UartSetRtsFifoLevel
+ 569              		.section	.text.BLE_HAL_Uart_UartPutString,"ax",%progbits
+ 570              		.align	2
+ 571              		.global	BLE_HAL_Uart_UartPutString
+ 572              		.code	16
+ 573              		.thumb_func
+ 574              		.type	BLE_HAL_Uart_UartPutString, %function
+ 575              	BLE_HAL_Uart_UartPutString:
+ 576              	.LFB11:
+ 661:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #endif /* !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1) */
+ 662:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 663:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #endif /* (BLE_HAL_Uart_UART_RX_DIRECTION) */
+ 664:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 665:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 666:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** #if(BLE_HAL_Uart_UART_TX_DIRECTION)
+ 667:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /*******************************************************************************
+ 668:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Function Name: BLE_HAL_Uart_UartPutString
+ 669:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ********************************************************************************
+ 670:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 671:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Summary:
+ 672:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Places a NULL terminated string in the transmit buffer to be sent at the
+ 673:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  next available bus time.
+ 674:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  This function is blocking and waits until there is space available to put
+ 675:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  all the requested data into the  transmit buffer.
+ 676:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 677:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Parameters:
+ 678:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  string: pointer to the null terminated string array to be placed in the
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 23
+
+
+ 679:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *          transmit buffer.
+ 680:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 681:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Return:
+ 682:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+ 683:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 684:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *******************************************************************************/
+ 685:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     void BLE_HAL_Uart_UartPutString(const char8 string[])
+ 686:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+ 577              		.loc 1 686 0
+ 578              		.cfi_startproc
+ 579 0000 80B5     		push	{r7, lr}
+ 580              		.cfi_def_cfa_offset 8
+ 581              		.cfi_offset 7, -8
+ 582              		.cfi_offset 14, -4
+ 583 0002 84B0     		sub	sp, sp, #16
+ 584              		.cfi_def_cfa_offset 24
+ 585 0004 00AF     		add	r7, sp, #0
+ 586              		.cfi_def_cfa_register 7
+ 587 0006 7860     		str	r0, [r7, #4]
+ 687:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         uint32 bufIndex;
+ 688:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 689:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         bufIndex = 0u;
+ 588              		.loc 1 689 0
+ 589 0008 0023     		mov	r3, #0
+ 590 000a FB60     		str	r3, [r7, #12]
+ 690:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 691:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /* Blocks the control flow until all data has been sent */
+ 692:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         while(string[bufIndex] != ((char8) 0))
+ 591              		.loc 1 692 0
+ 592 000c 09E0     		b	.L37
+ 593              	.L38:
+ 693:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 694:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UartPutChar((uint32) string[bufIndex]);
+ 594              		.loc 1 694 0
+ 595 000e 7A68     		ldr	r2, [r7, #4]
+ 596 0010 FB68     		ldr	r3, [r7, #12]
+ 597 0012 D318     		add	r3, r2, r3
+ 598 0014 1B78     		ldrb	r3, [r3]
+ 599 0016 181C     		mov	r0, r3
+ 600 0018 FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartWriteTxData
+ 695:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             bufIndex++;
+ 601              		.loc 1 695 0
+ 602 001c FB68     		ldr	r3, [r7, #12]
+ 603 001e 0133     		add	r3, r3, #1
+ 604 0020 FB60     		str	r3, [r7, #12]
+ 605              	.L37:
+ 692:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 606              		.loc 1 692 0
+ 607 0022 7A68     		ldr	r2, [r7, #4]
+ 608 0024 FB68     		ldr	r3, [r7, #12]
+ 609 0026 D318     		add	r3, r2, r3
+ 610 0028 1B78     		ldrb	r3, [r3]
+ 611 002a 002B     		cmp	r3, #0
+ 612 002c EFD1     		bne	.L38
+ 696:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 697:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 613              		.loc 1 697 0
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 24
+
+
+ 614 002e BD46     		mov	sp, r7
+ 615 0030 04B0     		add	sp, sp, #16
+ 616              		@ sp needed
+ 617 0032 80BD     		pop	{r7, pc}
+ 618              		.cfi_endproc
+ 619              	.LFE11:
+ 620              		.size	BLE_HAL_Uart_UartPutString, .-BLE_HAL_Uart_UartPutString
+ 621              		.section	.text.BLE_HAL_Uart_UartPutCRLF,"ax",%progbits
+ 622              		.align	2
+ 623              		.global	BLE_HAL_Uart_UartPutCRLF
+ 624              		.code	16
+ 625              		.thumb_func
+ 626              		.type	BLE_HAL_Uart_UartPutCRLF, %function
+ 627              	BLE_HAL_Uart_UartPutCRLF:
+ 628              	.LFB12:
+ 698:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 699:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 700:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     /*******************************************************************************
+ 701:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Function Name: BLE_HAL_Uart_UartPutCRLF
+ 702:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     ********************************************************************************
+ 703:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 704:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Summary:
+ 705:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  Places a byte of data followed by a carriage return (0x0D) and
+ 706:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  line feed (0x0A) into the transmit buffer.
+ 707:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  This function is blocking and waits until there is space available to put
+ 708:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  all the requested data into the  transmit buffer.
+ 709:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 710:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Parameters:
+ 711:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  txDataByte : the data to be transmitted.
+ 712:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 713:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     * Return:
+ 714:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *  None
+ 715:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *
+ 716:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     *******************************************************************************/
+ 717:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     void BLE_HAL_Uart_UartPutCRLF(uint32 txDataByte)
+ 718:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     {
+ 629              		.loc 1 718 0
+ 630              		.cfi_startproc
+ 631 0000 80B5     		push	{r7, lr}
+ 632              		.cfi_def_cfa_offset 8
+ 633              		.cfi_offset 7, -8
+ 634              		.cfi_offset 14, -4
+ 635 0002 82B0     		sub	sp, sp, #8
+ 636              		.cfi_def_cfa_offset 16
+ 637 0004 00AF     		add	r7, sp, #0
+ 638              		.cfi_def_cfa_register 7
+ 639 0006 7860     		str	r0, [r7, #4]
+ 719:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UartPutChar(txDataByte);  /* Blocks control flow until all data has been sent 
+ 640              		.loc 1 719 0
+ 641 0008 7B68     		ldr	r3, [r7, #4]
+ 642 000a 181C     		mov	r0, r3
+ 643 000c FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartWriteTxData
+ 720:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UartPutChar(0x0Du);       /* Blocks control flow until all data has been sent 
+ 644              		.loc 1 720 0
+ 645 0010 0D20     		mov	r0, #13
+ 646 0012 FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartWriteTxData
+ 721:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         BLE_HAL_Uart_UartPutChar(0x0Au);       /* Blocks control flow until all data has been sent 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 25
+
+
+ 647              		.loc 1 721 0
+ 648 0016 0A20     		mov	r0, #10
+ 649 0018 FFF7FEFF 		bl	BLE_HAL_Uart_SpiUartWriteTxData
+ 722:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     }
+ 650              		.loc 1 722 0
+ 651 001c BD46     		mov	sp, r7
+ 652 001e 02B0     		add	sp, sp, #8
+ 653              		@ sp needed
+ 654 0020 80BD     		pop	{r7, pc}
+ 655              		.cfi_endproc
+ 656              	.LFE12:
+ 657              		.size	BLE_HAL_Uart_UartPutCRLF, .-BLE_HAL_Uart_UartPutCRLF
+ 658 0022 C046     		.section	.text.BLE_HAL_Uart_UartEnableCts,"ax",%progbits
+ 659              		.align	2
+ 660              		.global	BLE_HAL_Uart_UartEnableCts
+ 661              		.code	16
+ 662              		.thumb_func
+ 663              		.type	BLE_HAL_Uart_UartEnableCts, %function
+ 664              	BLE_HAL_Uart_UartEnableCts:
+ 665              	.LFB13:
+ 723:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 724:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 725:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****     #if !(BLE_HAL_Uart_CY_SCBIP_V0 || BLE_HAL_Uart_CY_SCBIP_V1)
+ 726:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /*******************************************************************************
+ 727:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Function Name: BLE_HAL_UartSCB_UartEnableCts
+ 728:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         ********************************************************************************
+ 729:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 730:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Summary:
+ 731:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  Enables usage of CTS input signal by the UART transmitter.
+ 732:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 733:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Parameters:
+ 734:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 735:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 736:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Return:
+ 737:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 738:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 739:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *******************************************************************************/
+ 740:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         void BLE_HAL_Uart_UartEnableCts(void)
+ 741:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 666              		.loc 1 741 0
+ 667              		.cfi_startproc
+ 668 0000 80B5     		push	{r7, lr}
+ 669              		.cfi_def_cfa_offset 8
+ 670              		.cfi_offset 7, -8
+ 671              		.cfi_offset 14, -4
+ 672 0002 00AF     		add	r7, sp, #0
+ 673              		.cfi_def_cfa_register 7
+ 742:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_FLOW_CTRL_REG |= (uint32)  BLE_HAL_Uart_UART_FLOW_CTRL_CTS_ENABLE;
+ 674              		.loc 1 742 0
+ 675 0004 044B     		ldr	r3, .L41
+ 676 0006 044A     		ldr	r2, .L41
+ 677 0008 1268     		ldr	r2, [r2]
+ 678 000a 8021     		mov	r1, #128
+ 679 000c 8904     		lsl	r1, r1, #18
+ 680 000e 0A43     		orr	r2, r1
+ 681 0010 1A60     		str	r2, [r3]
+ 743:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 26
+
+
+ 682              		.loc 1 743 0
+ 683 0012 BD46     		mov	sp, r7
+ 684              		@ sp needed
+ 685 0014 80BD     		pop	{r7, pc}
+ 686              	.L42:
+ 687 0016 C046     		.align	2
+ 688              	.L41:
+ 689 0018 50002440 		.word	1076101200
+ 690              		.cfi_endproc
+ 691              	.LFE13:
+ 692              		.size	BLE_HAL_Uart_UartEnableCts, .-BLE_HAL_Uart_UartEnableCts
+ 693              		.section	.text.BLE_HAL_Uart_UartDisableCts,"ax",%progbits
+ 694              		.align	2
+ 695              		.global	BLE_HAL_Uart_UartDisableCts
+ 696              		.code	16
+ 697              		.thumb_func
+ 698              		.type	BLE_HAL_Uart_UartDisableCts, %function
+ 699              	BLE_HAL_Uart_UartDisableCts:
+ 700              	.LFB14:
+ 744:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 745:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 746:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /*******************************************************************************
+ 747:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Function Name: BLE_HAL_Uart_UartDisableCts
+ 748:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         ********************************************************************************
+ 749:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 750:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Summary:
+ 751:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  Disables usage of CTS input signal by the UART transmitter.
+ 752:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 753:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Parameters:
+ 754:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 755:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 756:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Return:
+ 757:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 758:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 759:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *******************************************************************************/
+ 760:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         void BLE_HAL_Uart_UartDisableCts(void)
+ 761:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 701              		.loc 1 761 0
+ 702              		.cfi_startproc
+ 703 0000 80B5     		push	{r7, lr}
+ 704              		.cfi_def_cfa_offset 8
+ 705              		.cfi_offset 7, -8
+ 706              		.cfi_offset 14, -4
+ 707 0002 00AF     		add	r7, sp, #0
+ 708              		.cfi_def_cfa_register 7
+ 762:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             BLE_HAL_Uart_UART_FLOW_CTRL_REG &= (uint32) ~BLE_HAL_Uart_UART_FLOW_CTRL_CTS_ENABLE;
+ 709              		.loc 1 762 0
+ 710 0004 034B     		ldr	r3, .L44
+ 711 0006 034A     		ldr	r2, .L44
+ 712 0008 1268     		ldr	r2, [r2]
+ 713 000a 0349     		ldr	r1, .L44+4
+ 714 000c 0A40     		and	r2, r1
+ 715 000e 1A60     		str	r2, [r3]
+ 763:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 716              		.loc 1 763 0
+ 717 0010 BD46     		mov	sp, r7
+ 718              		@ sp needed
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 27
+
+
+ 719 0012 80BD     		pop	{r7, pc}
+ 720              	.L45:
+ 721              		.align	2
+ 722              	.L44:
+ 723 0014 50002440 		.word	1076101200
+ 724 0018 FFFFFFFD 		.word	-33554433
+ 725              		.cfi_endproc
+ 726              	.LFE14:
+ 727              		.size	BLE_HAL_Uart_UartDisableCts, .-BLE_HAL_Uart_UartDisableCts
+ 728              		.section	.text.BLE_HAL_Uart_UartSetCtsPolarity,"ax",%progbits
+ 729              		.align	2
+ 730              		.global	BLE_HAL_Uart_UartSetCtsPolarity
+ 731              		.code	16
+ 732              		.thumb_func
+ 733              		.type	BLE_HAL_Uart_UartSetCtsPolarity, %function
+ 734              	BLE_HAL_Uart_UartSetCtsPolarity:
+ 735              	.LFB15:
+ 764:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 765:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c **** 
+ 766:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         /*******************************************************************************
+ 767:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Function Name: BLE_HAL_Uart_UartSetCtsPolarity
+ 768:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         ********************************************************************************
+ 769:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 770:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Summary:
+ 771:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  Sets active polarity of CTS input signal.
+ 772:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 773:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Parameters:
+ 774:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  polarity: Active polarity of CTS output signal.
+ 775:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *   BLE_HAL_Uart_UART_CTS_ACTIVE_LOW  - CTS signal is active low.
+ 776:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *   BLE_HAL_Uart_UART_CTS_ACTIVE_HIGH - CTS signal is active high.
+ 777:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 778:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         * Return:
+ 779:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *  None
+ 780:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *
+ 781:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         *******************************************************************************/
+ 782:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         void BLE_HAL_Uart_UartSetCtsPolarity(uint32 polarity)
+ 783:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         {
+ 736              		.loc 1 783 0
+ 737              		.cfi_startproc
+ 738 0000 80B5     		push	{r7, lr}
+ 739              		.cfi_def_cfa_offset 8
+ 740              		.cfi_offset 7, -8
+ 741              		.cfi_offset 14, -4
+ 742 0002 82B0     		sub	sp, sp, #8
+ 743              		.cfi_def_cfa_offset 16
+ 744 0004 00AF     		add	r7, sp, #0
+ 745              		.cfi_def_cfa_register 7
+ 746 0006 7860     		str	r0, [r7, #4]
+ 784:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             if (0u != polarity)
+ 747              		.loc 1 784 0
+ 748 0008 7B68     		ldr	r3, [r7, #4]
+ 749 000a 002B     		cmp	r3, #0
+ 750 000c 07D0     		beq	.L47
+ 785:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 786:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_UART_FLOW_CTRL_REG |= (uint32)  BLE_HAL_Uart_UART_FLOW_CTRL_CTS_POLARI
+ 751              		.loc 1 786 0
+ 752 000e 084B     		ldr	r3, .L49
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 28
+
+
+ 753 0010 074A     		ldr	r2, .L49
+ 754 0012 1268     		ldr	r2, [r2]
+ 755 0014 8021     		mov	r1, #128
+ 756 0016 4904     		lsl	r1, r1, #17
+ 757 0018 0A43     		orr	r2, r1
+ 758 001a 1A60     		str	r2, [r3]
+ 759 001c 05E0     		b	.L46
+ 760              	.L47:
+ 787:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 788:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             else
+ 789:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             {
+ 790:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****                 BLE_HAL_Uart_UART_FLOW_CTRL_REG &= (uint32) ~BLE_HAL_Uart_UART_FLOW_CTRL_CTS_POLARI
+ 761              		.loc 1 790 0
+ 762 001e 044B     		ldr	r3, .L49
+ 763 0020 034A     		ldr	r2, .L49
+ 764 0022 1268     		ldr	r2, [r2]
+ 765 0024 0349     		ldr	r1, .L49+4
+ 766 0026 0A40     		and	r2, r1
+ 767 0028 1A60     		str	r2, [r3]
+ 768              	.L46:
+ 791:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****             }
+ 792:.\Generated_Source\PSoC4/BLE_HAL_Uart_UART.c ****         }
+ 769              		.loc 1 792 0
+ 770 002a BD46     		mov	sp, r7
+ 771 002c 02B0     		add	sp, sp, #8
+ 772              		@ sp needed
+ 773 002e 80BD     		pop	{r7, pc}
+ 774              	.L50:
+ 775              		.align	2
+ 776              	.L49:
+ 777 0030 50002440 		.word	1076101200
+ 778 0034 FFFFFFFE 		.word	-16777217
+ 779              		.cfi_endproc
+ 780              	.LFE15:
+ 781              		.size	BLE_HAL_Uart_UartSetCtsPolarity, .-BLE_HAL_Uart_UartSetCtsPolarity
+ 782              		.text
+ 783              	.Letext0:
+ 784              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 785              		.section	.debug_info,"",%progbits
+ 786              	.Ldebug_info0:
+ 787 0000 B6020000 		.4byte	0x2b6
+ 788 0004 0400     		.2byte	0x4
+ 789 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 790 000a 04       		.byte	0x4
+ 791 000b 01       		.uleb128 0x1
+ 792 000c D4010000 		.4byte	.LASF40
+ 793 0010 01       		.byte	0x1
+ 794 0011 F0020000 		.4byte	.LASF41
+ 795 0015 14000000 		.4byte	.LASF42
+ 796 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 797 001d 00000000 		.4byte	0
+ 798 0021 00000000 		.4byte	.Ldebug_line0
+ 799 0025 02       		.uleb128 0x2
+ 800 0026 01       		.byte	0x1
+ 801 0027 06       		.byte	0x6
+ 802 0028 67030000 		.4byte	.LASF0
+ 803 002c 02       		.uleb128 0x2
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 29
+
+
+ 804 002d 01       		.byte	0x1
+ 805 002e 08       		.byte	0x8
+ 806 002f 90010000 		.4byte	.LASF1
+ 807 0033 02       		.uleb128 0x2
+ 808 0034 02       		.byte	0x2
+ 809 0035 05       		.byte	0x5
+ 810 0036 3B030000 		.4byte	.LASF2
+ 811 003a 02       		.uleb128 0x2
+ 812 003b 02       		.byte	0x2
+ 813 003c 07       		.byte	0x7
+ 814 003d 33010000 		.4byte	.LASF3
+ 815 0041 02       		.uleb128 0x2
+ 816 0042 04       		.byte	0x4
+ 817 0043 05       		.byte	0x5
+ 818 0044 4B030000 		.4byte	.LASF4
+ 819 0048 02       		.uleb128 0x2
+ 820 0049 04       		.byte	0x4
+ 821 004a 07       		.byte	0x7
+ 822 004b 21010000 		.4byte	.LASF5
+ 823 004f 02       		.uleb128 0x2
+ 824 0050 08       		.byte	0x8
+ 825 0051 05       		.byte	0x5
+ 826 0052 00000000 		.4byte	.LASF6
+ 827 0056 02       		.uleb128 0x2
+ 828 0057 08       		.byte	0x8
+ 829 0058 07       		.byte	0x7
+ 830 0059 97020000 		.4byte	.LASF7
+ 831 005d 03       		.uleb128 0x3
+ 832 005e 04       		.byte	0x4
+ 833 005f 05       		.byte	0x5
+ 834 0060 696E7400 		.ascii	"int\000"
+ 835 0064 02       		.uleb128 0x2
+ 836 0065 04       		.byte	0x4
+ 837 0066 07       		.byte	0x7
+ 838 0067 82020000 		.4byte	.LASF8
+ 839 006b 04       		.uleb128 0x4
+ 840 006c 62020000 		.4byte	.LASF11
+ 841 0070 02       		.byte	0x2
+ 842 0071 9A01     		.2byte	0x19a
+ 843 0073 48000000 		.4byte	0x48
+ 844 0077 02       		.uleb128 0x2
+ 845 0078 04       		.byte	0x4
+ 846 0079 04       		.byte	0x4
+ 847 007a D8000000 		.4byte	.LASF9
+ 848 007e 02       		.uleb128 0x2
+ 849 007f 08       		.byte	0x8
+ 850 0080 04       		.byte	0x4
+ 851 0081 AC000000 		.4byte	.LASF10
+ 852 0085 04       		.uleb128 0x4
+ 853 0086 1B010000 		.4byte	.LASF12
+ 854 008a 02       		.byte	0x2
+ 855 008b A901     		.2byte	0x1a9
+ 856 008d 91000000 		.4byte	0x91
+ 857 0091 02       		.uleb128 0x2
+ 858 0092 01       		.byte	0x1
+ 859 0093 08       		.byte	0x8
+ 860 0094 1D030000 		.4byte	.LASF13
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 30
+
+
+ 861 0098 04       		.uleb128 0x4
+ 862 0099 0E000000 		.4byte	.LASF14
+ 863 009d 02       		.byte	0x2
+ 864 009e 4402     		.2byte	0x244
+ 865 00a0 A4000000 		.4byte	0xa4
+ 866 00a4 05       		.uleb128 0x5
+ 867 00a5 6B000000 		.4byte	0x6b
+ 868 00a9 02       		.uleb128 0x2
+ 869 00aa 04       		.byte	0x4
+ 870 00ab 07       		.byte	0x7
+ 871 00ac DC020000 		.4byte	.LASF15
+ 872 00b0 06       		.uleb128 0x6
+ 873 00b1 7D000000 		.4byte	.LASF16
+ 874 00b5 01       		.byte	0x1
+ 875 00b6 E6       		.byte	0xe6
+ 876 00b7 00000000 		.4byte	.LFB2
+ 877 00bb B8000000 		.4byte	.LFE2-.LFB2
+ 878 00bf 01       		.uleb128 0x1
+ 879 00c0 9C       		.byte	0x9c
+ 880 00c1 07       		.uleb128 0x7
+ 881 00c2 AE020000 		.4byte	.LASF17
+ 882 00c6 01       		.byte	0x1
+ 883 00c7 3001     		.2byte	0x130
+ 884 00c9 00000000 		.4byte	.LFB3
+ 885 00cd 3C000000 		.4byte	.LFE3-.LFB3
+ 886 00d1 01       		.uleb128 0x1
+ 887 00d2 9C       		.byte	0x9c
+ 888 00d3 08       		.uleb128 0x8
+ 889 00d4 9E010000 		.4byte	.LASF18
+ 890 00d8 01       		.byte	0x1
+ 891 00d9 6801     		.2byte	0x168
+ 892 00db 00000000 		.4byte	.LFB4
+ 893 00df 4C000000 		.4byte	.LFE4-.LFB4
+ 894 00e3 01       		.uleb128 0x1
+ 895 00e4 9C       		.byte	0x9c
+ 896 00e5 09       		.uleb128 0x9
+ 897 00e6 B3000000 		.4byte	.LASF19
+ 898 00ea 01       		.byte	0x1
+ 899 00eb A801     		.2byte	0x1a8
+ 900 00ed 00000000 		.4byte	.LFB5
+ 901 00f1 34000000 		.4byte	.LFE5-.LFB5
+ 902 00f5 01       		.uleb128 0x1
+ 903 00f6 9C       		.byte	0x9c
+ 904 00f7 1A010000 		.4byte	0x11a
+ 905 00fb 0A       		.uleb128 0xa
+ 906 00fc 8F020000 		.4byte	.LASF21
+ 907 0100 01       		.byte	0x1
+ 908 0101 A801     		.2byte	0x1a8
+ 909 0103 6B000000 		.4byte	0x6b
+ 910 0107 02       		.uleb128 0x2
+ 911 0108 91       		.byte	0x91
+ 912 0109 6C       		.sleb128 -20
+ 913 010a 0B       		.uleb128 0xb
+ 914 010b 5E030000 		.4byte	.LASF23
+ 915 010f 01       		.byte	0x1
+ 916 0110 AA01     		.2byte	0x1aa
+ 917 0112 6B000000 		.4byte	0x6b
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 31
+
+
+ 918 0116 02       		.uleb128 0x2
+ 919 0117 91       		.byte	0x91
+ 920 0118 74       		.sleb128 -12
+ 921 0119 00       		.byte	0
+ 922 011a 09       		.uleb128 0x9
+ 923 011b F9000000 		.4byte	.LASF20
+ 924 011f 01       		.byte	0x1
+ 925 0120 C501     		.2byte	0x1c5
+ 926 0122 00000000 		.4byte	.LFB6
+ 927 0126 34000000 		.4byte	.LFE6-.LFB6
+ 928 012a 01       		.uleb128 0x1
+ 929 012b 9C       		.byte	0x9c
+ 930 012c 4F010000 		.4byte	0x14f
+ 931 0130 0A       		.uleb128 0xa
+ 932 0131 84010000 		.4byte	.LASF22
+ 933 0135 01       		.byte	0x1
+ 934 0136 C501     		.2byte	0x1c5
+ 935 0138 6B000000 		.4byte	0x6b
+ 936 013c 02       		.uleb128 0x2
+ 937 013d 91       		.byte	0x91
+ 938 013e 6C       		.sleb128 -20
+ 939 013f 0B       		.uleb128 0xb
+ 940 0140 5E030000 		.4byte	.LASF23
+ 941 0144 01       		.byte	0x1
+ 942 0145 C701     		.2byte	0x1c7
+ 943 0147 6B000000 		.4byte	0x6b
+ 944 014b 02       		.uleb128 0x2
+ 945 014c 91       		.byte	0x91
+ 946 014d 74       		.sleb128 -12
+ 947 014e 00       		.byte	0
+ 948 014f 0C       		.uleb128 0xc
+ 949 0150 69020000 		.4byte	.LASF25
+ 950 0154 01       		.byte	0x1
+ 951 0155 F201     		.2byte	0x1f2
+ 952 0157 6B000000 		.4byte	0x6b
+ 953 015b 00000000 		.4byte	.LFB7
+ 954 015f 40000000 		.4byte	.LFE7-.LFB7
+ 955 0163 01       		.uleb128 0x1
+ 956 0164 9C       		.byte	0x9c
+ 957 0165 79010000 		.4byte	0x179
+ 958 0169 0B       		.uleb128 0xb
+ 959 016a 7D010000 		.4byte	.LASF24
+ 960 016e 01       		.byte	0x1
+ 961 016f F401     		.2byte	0x1f4
+ 962 0171 6B000000 		.4byte	0x6b
+ 963 0175 02       		.uleb128 0x2
+ 964 0176 91       		.byte	0x91
+ 965 0177 74       		.sleb128 -12
+ 966 0178 00       		.byte	0
+ 967 0179 0C       		.uleb128 0xc
+ 968 017a 93000000 		.4byte	.LASF26
+ 969 017e 01       		.byte	0x1
+ 970 017f 2202     		.2byte	0x222
+ 971 0181 6B000000 		.4byte	0x6b
+ 972 0185 00000000 		.4byte	.LFB8
+ 973 0189 50000000 		.4byte	.LFE8-.LFB8
+ 974 018d 01       		.uleb128 0x1
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 32
+
+
+ 975 018e 9C       		.byte	0x9c
+ 976 018f B2010000 		.4byte	0x1b2
+ 977 0193 0B       		.uleb128 0xb
+ 978 0194 7D010000 		.4byte	.LASF24
+ 979 0198 01       		.byte	0x1
+ 980 0199 2402     		.2byte	0x224
+ 981 019b 6B000000 		.4byte	0x6b
+ 982 019f 02       		.uleb128 0x2
+ 983 01a0 91       		.byte	0x91
+ 984 01a1 74       		.sleb128 -12
+ 985 01a2 0B       		.uleb128 0xb
+ 986 01a3 54030000 		.4byte	.LASF27
+ 987 01a7 01       		.byte	0x1
+ 988 01a8 2502     		.2byte	0x225
+ 989 01aa 6B000000 		.4byte	0x6b
+ 990 01ae 02       		.uleb128 0x2
+ 991 01af 91       		.byte	0x91
+ 992 01b0 70       		.sleb128 -16
+ 993 01b1 00       		.byte	0
+ 994 01b2 09       		.uleb128 0x9
+ 995 01b3 B4010000 		.4byte	.LASF28
+ 996 01b7 01       		.byte	0x1
+ 997 01b8 6B02     		.2byte	0x26b
+ 998 01ba 00000000 		.4byte	.LFB9
+ 999 01be 38000000 		.4byte	.LFE9-.LFB9
+ 1000 01c2 01       		.uleb128 0x1
+ 1001 01c3 9C       		.byte	0x9c
+ 1002 01c4 D8010000 		.4byte	0x1d8
+ 1003 01c8 0A       		.uleb128 0xa
+ 1004 01c9 CA020000 		.4byte	.LASF29
+ 1005 01cd 01       		.byte	0x1
+ 1006 01ce 6B02     		.2byte	0x26b
+ 1007 01d0 6B000000 		.4byte	0x6b
+ 1008 01d4 02       		.uleb128 0x2
+ 1009 01d5 91       		.byte	0x91
+ 1010 01d6 74       		.sleb128 -12
+ 1011 01d7 00       		.byte	0
+ 1012 01d8 09       		.uleb128 0x9
+ 1013 01d9 5C000000 		.4byte	.LASF30
+ 1014 01dd 01       		.byte	0x1
+ 1015 01de 8A02     		.2byte	0x28a
+ 1016 01e0 00000000 		.4byte	.LFB10
+ 1017 01e4 34000000 		.4byte	.LFE10-.LFB10
+ 1018 01e8 01       		.uleb128 0x1
+ 1019 01e9 9C       		.byte	0x9c
+ 1020 01ea 0D020000 		.4byte	0x20d
+ 1021 01ee 0A       		.uleb128 0xa
+ 1022 01ef 45030000 		.4byte	.LASF31
+ 1023 01f3 01       		.byte	0x1
+ 1024 01f4 8A02     		.2byte	0x28a
+ 1025 01f6 6B000000 		.4byte	0x6b
+ 1026 01fa 02       		.uleb128 0x2
+ 1027 01fb 91       		.byte	0x91
+ 1028 01fc 6C       		.sleb128 -20
+ 1029 01fd 0B       		.uleb128 0xb
+ 1030 01fe 73030000 		.4byte	.LASF32
+ 1031 0202 01       		.byte	0x1
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 33
+
+
+ 1032 0203 8C02     		.2byte	0x28c
+ 1033 0205 6B000000 		.4byte	0x6b
+ 1034 0209 02       		.uleb128 0x2
+ 1035 020a 91       		.byte	0x91
+ 1036 020b 74       		.sleb128 -12
+ 1037 020c 00       		.byte	0
+ 1038 020d 0D       		.uleb128 0xd
+ 1039 020e 46010000 		.4byte	.LASF33
+ 1040 0212 01       		.byte	0x1
+ 1041 0213 AD02     		.2byte	0x2ad
+ 1042 0215 00000000 		.4byte	.LFB11
+ 1043 0219 34000000 		.4byte	.LFE11-.LFB11
+ 1044 021d 01       		.uleb128 0x1
+ 1045 021e 9C       		.byte	0x9c
+ 1046 021f 42020000 		.4byte	0x242
+ 1047 0223 0A       		.uleb128 0xa
+ 1048 0224 D1000000 		.4byte	.LASF34
+ 1049 0228 01       		.byte	0x1
+ 1050 0229 AD02     		.2byte	0x2ad
+ 1051 022b 42020000 		.4byte	0x242
+ 1052 022f 02       		.uleb128 0x2
+ 1053 0230 91       		.byte	0x91
+ 1054 0231 6C       		.sleb128 -20
+ 1055 0232 0B       		.uleb128 0xb
+ 1056 0233 D3020000 		.4byte	.LASF35
+ 1057 0237 01       		.byte	0x1
+ 1058 0238 AF02     		.2byte	0x2af
+ 1059 023a 6B000000 		.4byte	0x6b
+ 1060 023e 02       		.uleb128 0x2
+ 1061 023f 91       		.byte	0x91
+ 1062 0240 74       		.sleb128 -12
+ 1063 0241 00       		.byte	0
+ 1064 0242 0E       		.uleb128 0xe
+ 1065 0243 04       		.byte	0x4
+ 1066 0244 48020000 		.4byte	0x248
+ 1067 0248 0F       		.uleb128 0xf
+ 1068 0249 85000000 		.4byte	0x85
+ 1069 024d 0D       		.uleb128 0xd
+ 1070 024e 22030000 		.4byte	.LASF36
+ 1071 0252 01       		.byte	0x1
+ 1072 0253 CD02     		.2byte	0x2cd
+ 1073 0255 00000000 		.4byte	.LFB12
+ 1074 0259 22000000 		.4byte	.LFE12-.LFB12
+ 1075 025d 01       		.uleb128 0x1
+ 1076 025e 9C       		.byte	0x9c
+ 1077 025f 73020000 		.4byte	0x273
+ 1078 0263 0A       		.uleb128 0xa
+ 1079 0264 E5020000 		.4byte	.LASF37
+ 1080 0268 01       		.byte	0x1
+ 1081 0269 CD02     		.2byte	0x2cd
+ 1082 026b 6B000000 		.4byte	0x6b
+ 1083 026f 02       		.uleb128 0x2
+ 1084 0270 91       		.byte	0x91
+ 1085 0271 74       		.sleb128 -12
+ 1086 0272 00       		.byte	0
+ 1087 0273 07       		.uleb128 0x7
+ 1088 0274 DE000000 		.4byte	.LASF38
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 34
+
+
+ 1089 0278 01       		.byte	0x1
+ 1090 0279 E402     		.2byte	0x2e4
+ 1091 027b 00000000 		.4byte	.LFB13
+ 1092 027f 1C000000 		.4byte	.LFE13-.LFB13
+ 1093 0283 01       		.uleb128 0x1
+ 1094 0284 9C       		.byte	0x9c
+ 1095 0285 07       		.uleb128 0x7
+ 1096 0286 61010000 		.4byte	.LASF39
+ 1097 028a 01       		.byte	0x1
+ 1098 028b F802     		.2byte	0x2f8
+ 1099 028d 00000000 		.4byte	.LFB14
+ 1100 0291 1C000000 		.4byte	.LFE14-.LFB14
+ 1101 0295 01       		.uleb128 0x1
+ 1102 0296 9C       		.byte	0x9c
+ 1103 0297 10       		.uleb128 0x10
+ 1104 0298 80030000 		.4byte	.LASF43
+ 1105 029c 01       		.byte	0x1
+ 1106 029d 0E03     		.2byte	0x30e
+ 1107 029f 00000000 		.4byte	.LFB15
+ 1108 02a3 38000000 		.4byte	.LFE15-.LFB15
+ 1109 02a7 01       		.uleb128 0x1
+ 1110 02a8 9C       		.byte	0x9c
+ 1111 02a9 0A       		.uleb128 0xa
+ 1112 02aa CA020000 		.4byte	.LASF29
+ 1113 02ae 01       		.byte	0x1
+ 1114 02af 0E03     		.2byte	0x30e
+ 1115 02b1 6B000000 		.4byte	0x6b
+ 1116 02b5 02       		.uleb128 0x2
+ 1117 02b6 91       		.byte	0x91
+ 1118 02b7 74       		.sleb128 -12
+ 1119 02b8 00       		.byte	0
+ 1120 02b9 00       		.byte	0
+ 1121              		.section	.debug_abbrev,"",%progbits
+ 1122              	.Ldebug_abbrev0:
+ 1123 0000 01       		.uleb128 0x1
+ 1124 0001 11       		.uleb128 0x11
+ 1125 0002 01       		.byte	0x1
+ 1126 0003 25       		.uleb128 0x25
+ 1127 0004 0E       		.uleb128 0xe
+ 1128 0005 13       		.uleb128 0x13
+ 1129 0006 0B       		.uleb128 0xb
+ 1130 0007 03       		.uleb128 0x3
+ 1131 0008 0E       		.uleb128 0xe
+ 1132 0009 1B       		.uleb128 0x1b
+ 1133 000a 0E       		.uleb128 0xe
+ 1134 000b 55       		.uleb128 0x55
+ 1135 000c 17       		.uleb128 0x17
+ 1136 000d 11       		.uleb128 0x11
+ 1137 000e 01       		.uleb128 0x1
+ 1138 000f 10       		.uleb128 0x10
+ 1139 0010 17       		.uleb128 0x17
+ 1140 0011 00       		.byte	0
+ 1141 0012 00       		.byte	0
+ 1142 0013 02       		.uleb128 0x2
+ 1143 0014 24       		.uleb128 0x24
+ 1144 0015 00       		.byte	0
+ 1145 0016 0B       		.uleb128 0xb
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 35
+
+
+ 1146 0017 0B       		.uleb128 0xb
+ 1147 0018 3E       		.uleb128 0x3e
+ 1148 0019 0B       		.uleb128 0xb
+ 1149 001a 03       		.uleb128 0x3
+ 1150 001b 0E       		.uleb128 0xe
+ 1151 001c 00       		.byte	0
+ 1152 001d 00       		.byte	0
+ 1153 001e 03       		.uleb128 0x3
+ 1154 001f 24       		.uleb128 0x24
+ 1155 0020 00       		.byte	0
+ 1156 0021 0B       		.uleb128 0xb
+ 1157 0022 0B       		.uleb128 0xb
+ 1158 0023 3E       		.uleb128 0x3e
+ 1159 0024 0B       		.uleb128 0xb
+ 1160 0025 03       		.uleb128 0x3
+ 1161 0026 08       		.uleb128 0x8
+ 1162 0027 00       		.byte	0
+ 1163 0028 00       		.byte	0
+ 1164 0029 04       		.uleb128 0x4
+ 1165 002a 16       		.uleb128 0x16
+ 1166 002b 00       		.byte	0
+ 1167 002c 03       		.uleb128 0x3
+ 1168 002d 0E       		.uleb128 0xe
+ 1169 002e 3A       		.uleb128 0x3a
+ 1170 002f 0B       		.uleb128 0xb
+ 1171 0030 3B       		.uleb128 0x3b
+ 1172 0031 05       		.uleb128 0x5
+ 1173 0032 49       		.uleb128 0x49
+ 1174 0033 13       		.uleb128 0x13
+ 1175 0034 00       		.byte	0
+ 1176 0035 00       		.byte	0
+ 1177 0036 05       		.uleb128 0x5
+ 1178 0037 35       		.uleb128 0x35
+ 1179 0038 00       		.byte	0
+ 1180 0039 49       		.uleb128 0x49
+ 1181 003a 13       		.uleb128 0x13
+ 1182 003b 00       		.byte	0
+ 1183 003c 00       		.byte	0
+ 1184 003d 06       		.uleb128 0x6
+ 1185 003e 2E       		.uleb128 0x2e
+ 1186 003f 00       		.byte	0
+ 1187 0040 3F       		.uleb128 0x3f
+ 1188 0041 19       		.uleb128 0x19
+ 1189 0042 03       		.uleb128 0x3
+ 1190 0043 0E       		.uleb128 0xe
+ 1191 0044 3A       		.uleb128 0x3a
+ 1192 0045 0B       		.uleb128 0xb
+ 1193 0046 3B       		.uleb128 0x3b
+ 1194 0047 0B       		.uleb128 0xb
+ 1195 0048 27       		.uleb128 0x27
+ 1196 0049 19       		.uleb128 0x19
+ 1197 004a 11       		.uleb128 0x11
+ 1198 004b 01       		.uleb128 0x1
+ 1199 004c 12       		.uleb128 0x12
+ 1200 004d 06       		.uleb128 0x6
+ 1201 004e 40       		.uleb128 0x40
+ 1202 004f 18       		.uleb128 0x18
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 36
+
+
+ 1203 0050 9742     		.uleb128 0x2117
+ 1204 0052 19       		.uleb128 0x19
+ 1205 0053 00       		.byte	0
+ 1206 0054 00       		.byte	0
+ 1207 0055 07       		.uleb128 0x7
+ 1208 0056 2E       		.uleb128 0x2e
+ 1209 0057 00       		.byte	0
+ 1210 0058 3F       		.uleb128 0x3f
+ 1211 0059 19       		.uleb128 0x19
+ 1212 005a 03       		.uleb128 0x3
+ 1213 005b 0E       		.uleb128 0xe
+ 1214 005c 3A       		.uleb128 0x3a
+ 1215 005d 0B       		.uleb128 0xb
+ 1216 005e 3B       		.uleb128 0x3b
+ 1217 005f 05       		.uleb128 0x5
+ 1218 0060 27       		.uleb128 0x27
+ 1219 0061 19       		.uleb128 0x19
+ 1220 0062 11       		.uleb128 0x11
+ 1221 0063 01       		.uleb128 0x1
+ 1222 0064 12       		.uleb128 0x12
+ 1223 0065 06       		.uleb128 0x6
+ 1224 0066 40       		.uleb128 0x40
+ 1225 0067 18       		.uleb128 0x18
+ 1226 0068 9742     		.uleb128 0x2117
+ 1227 006a 19       		.uleb128 0x19
+ 1228 006b 00       		.byte	0
+ 1229 006c 00       		.byte	0
+ 1230 006d 08       		.uleb128 0x8
+ 1231 006e 2E       		.uleb128 0x2e
+ 1232 006f 00       		.byte	0
+ 1233 0070 3F       		.uleb128 0x3f
+ 1234 0071 19       		.uleb128 0x19
+ 1235 0072 03       		.uleb128 0x3
+ 1236 0073 0E       		.uleb128 0xe
+ 1237 0074 3A       		.uleb128 0x3a
+ 1238 0075 0B       		.uleb128 0xb
+ 1239 0076 3B       		.uleb128 0x3b
+ 1240 0077 05       		.uleb128 0x5
+ 1241 0078 27       		.uleb128 0x27
+ 1242 0079 19       		.uleb128 0x19
+ 1243 007a 11       		.uleb128 0x11
+ 1244 007b 01       		.uleb128 0x1
+ 1245 007c 12       		.uleb128 0x12
+ 1246 007d 06       		.uleb128 0x6
+ 1247 007e 40       		.uleb128 0x40
+ 1248 007f 18       		.uleb128 0x18
+ 1249 0080 9642     		.uleb128 0x2116
+ 1250 0082 19       		.uleb128 0x19
+ 1251 0083 00       		.byte	0
+ 1252 0084 00       		.byte	0
+ 1253 0085 09       		.uleb128 0x9
+ 1254 0086 2E       		.uleb128 0x2e
+ 1255 0087 01       		.byte	0x1
+ 1256 0088 3F       		.uleb128 0x3f
+ 1257 0089 19       		.uleb128 0x19
+ 1258 008a 03       		.uleb128 0x3
+ 1259 008b 0E       		.uleb128 0xe
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 37
+
+
+ 1260 008c 3A       		.uleb128 0x3a
+ 1261 008d 0B       		.uleb128 0xb
+ 1262 008e 3B       		.uleb128 0x3b
+ 1263 008f 05       		.uleb128 0x5
+ 1264 0090 27       		.uleb128 0x27
+ 1265 0091 19       		.uleb128 0x19
+ 1266 0092 11       		.uleb128 0x11
+ 1267 0093 01       		.uleb128 0x1
+ 1268 0094 12       		.uleb128 0x12
+ 1269 0095 06       		.uleb128 0x6
+ 1270 0096 40       		.uleb128 0x40
+ 1271 0097 18       		.uleb128 0x18
+ 1272 0098 9742     		.uleb128 0x2117
+ 1273 009a 19       		.uleb128 0x19
+ 1274 009b 01       		.uleb128 0x1
+ 1275 009c 13       		.uleb128 0x13
+ 1276 009d 00       		.byte	0
+ 1277 009e 00       		.byte	0
+ 1278 009f 0A       		.uleb128 0xa
+ 1279 00a0 05       		.uleb128 0x5
+ 1280 00a1 00       		.byte	0
+ 1281 00a2 03       		.uleb128 0x3
+ 1282 00a3 0E       		.uleb128 0xe
+ 1283 00a4 3A       		.uleb128 0x3a
+ 1284 00a5 0B       		.uleb128 0xb
+ 1285 00a6 3B       		.uleb128 0x3b
+ 1286 00a7 05       		.uleb128 0x5
+ 1287 00a8 49       		.uleb128 0x49
+ 1288 00a9 13       		.uleb128 0x13
+ 1289 00aa 02       		.uleb128 0x2
+ 1290 00ab 18       		.uleb128 0x18
+ 1291 00ac 00       		.byte	0
+ 1292 00ad 00       		.byte	0
+ 1293 00ae 0B       		.uleb128 0xb
+ 1294 00af 34       		.uleb128 0x34
+ 1295 00b0 00       		.byte	0
+ 1296 00b1 03       		.uleb128 0x3
+ 1297 00b2 0E       		.uleb128 0xe
+ 1298 00b3 3A       		.uleb128 0x3a
+ 1299 00b4 0B       		.uleb128 0xb
+ 1300 00b5 3B       		.uleb128 0x3b
+ 1301 00b6 05       		.uleb128 0x5
+ 1302 00b7 49       		.uleb128 0x49
+ 1303 00b8 13       		.uleb128 0x13
+ 1304 00b9 02       		.uleb128 0x2
+ 1305 00ba 18       		.uleb128 0x18
+ 1306 00bb 00       		.byte	0
+ 1307 00bc 00       		.byte	0
+ 1308 00bd 0C       		.uleb128 0xc
+ 1309 00be 2E       		.uleb128 0x2e
+ 1310 00bf 01       		.byte	0x1
+ 1311 00c0 3F       		.uleb128 0x3f
+ 1312 00c1 19       		.uleb128 0x19
+ 1313 00c2 03       		.uleb128 0x3
+ 1314 00c3 0E       		.uleb128 0xe
+ 1315 00c4 3A       		.uleb128 0x3a
+ 1316 00c5 0B       		.uleb128 0xb
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 38
+
+
+ 1317 00c6 3B       		.uleb128 0x3b
+ 1318 00c7 05       		.uleb128 0x5
+ 1319 00c8 27       		.uleb128 0x27
+ 1320 00c9 19       		.uleb128 0x19
+ 1321 00ca 49       		.uleb128 0x49
+ 1322 00cb 13       		.uleb128 0x13
+ 1323 00cc 11       		.uleb128 0x11
+ 1324 00cd 01       		.uleb128 0x1
+ 1325 00ce 12       		.uleb128 0x12
+ 1326 00cf 06       		.uleb128 0x6
+ 1327 00d0 40       		.uleb128 0x40
+ 1328 00d1 18       		.uleb128 0x18
+ 1329 00d2 9642     		.uleb128 0x2116
+ 1330 00d4 19       		.uleb128 0x19
+ 1331 00d5 01       		.uleb128 0x1
+ 1332 00d6 13       		.uleb128 0x13
+ 1333 00d7 00       		.byte	0
+ 1334 00d8 00       		.byte	0
+ 1335 00d9 0D       		.uleb128 0xd
+ 1336 00da 2E       		.uleb128 0x2e
+ 1337 00db 01       		.byte	0x1
+ 1338 00dc 3F       		.uleb128 0x3f
+ 1339 00dd 19       		.uleb128 0x19
+ 1340 00de 03       		.uleb128 0x3
+ 1341 00df 0E       		.uleb128 0xe
+ 1342 00e0 3A       		.uleb128 0x3a
+ 1343 00e1 0B       		.uleb128 0xb
+ 1344 00e2 3B       		.uleb128 0x3b
+ 1345 00e3 05       		.uleb128 0x5
+ 1346 00e4 27       		.uleb128 0x27
+ 1347 00e5 19       		.uleb128 0x19
+ 1348 00e6 11       		.uleb128 0x11
+ 1349 00e7 01       		.uleb128 0x1
+ 1350 00e8 12       		.uleb128 0x12
+ 1351 00e9 06       		.uleb128 0x6
+ 1352 00ea 40       		.uleb128 0x40
+ 1353 00eb 18       		.uleb128 0x18
+ 1354 00ec 9642     		.uleb128 0x2116
+ 1355 00ee 19       		.uleb128 0x19
+ 1356 00ef 01       		.uleb128 0x1
+ 1357 00f0 13       		.uleb128 0x13
+ 1358 00f1 00       		.byte	0
+ 1359 00f2 00       		.byte	0
+ 1360 00f3 0E       		.uleb128 0xe
+ 1361 00f4 0F       		.uleb128 0xf
+ 1362 00f5 00       		.byte	0
+ 1363 00f6 0B       		.uleb128 0xb
+ 1364 00f7 0B       		.uleb128 0xb
+ 1365 00f8 49       		.uleb128 0x49
+ 1366 00f9 13       		.uleb128 0x13
+ 1367 00fa 00       		.byte	0
+ 1368 00fb 00       		.byte	0
+ 1369 00fc 0F       		.uleb128 0xf
+ 1370 00fd 26       		.uleb128 0x26
+ 1371 00fe 00       		.byte	0
+ 1372 00ff 49       		.uleb128 0x49
+ 1373 0100 13       		.uleb128 0x13
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 39
+
+
+ 1374 0101 00       		.byte	0
+ 1375 0102 00       		.byte	0
+ 1376 0103 10       		.uleb128 0x10
+ 1377 0104 2E       		.uleb128 0x2e
+ 1378 0105 01       		.byte	0x1
+ 1379 0106 3F       		.uleb128 0x3f
+ 1380 0107 19       		.uleb128 0x19
+ 1381 0108 03       		.uleb128 0x3
+ 1382 0109 0E       		.uleb128 0xe
+ 1383 010a 3A       		.uleb128 0x3a
+ 1384 010b 0B       		.uleb128 0xb
+ 1385 010c 3B       		.uleb128 0x3b
+ 1386 010d 05       		.uleb128 0x5
+ 1387 010e 27       		.uleb128 0x27
+ 1388 010f 19       		.uleb128 0x19
+ 1389 0110 11       		.uleb128 0x11
+ 1390 0111 01       		.uleb128 0x1
+ 1391 0112 12       		.uleb128 0x12
+ 1392 0113 06       		.uleb128 0x6
+ 1393 0114 40       		.uleb128 0x40
+ 1394 0115 18       		.uleb128 0x18
+ 1395 0116 9742     		.uleb128 0x2117
+ 1396 0118 19       		.uleb128 0x19
+ 1397 0119 00       		.byte	0
+ 1398 011a 00       		.byte	0
+ 1399 011b 00       		.byte	0
+ 1400              		.section	.debug_aranges,"",%progbits
+ 1401 0000 84000000 		.4byte	0x84
+ 1402 0004 0200     		.2byte	0x2
+ 1403 0006 00000000 		.4byte	.Ldebug_info0
+ 1404 000a 04       		.byte	0x4
+ 1405 000b 00       		.byte	0
+ 1406 000c 0000     		.2byte	0
+ 1407 000e 0000     		.2byte	0
+ 1408 0010 00000000 		.4byte	.LFB2
+ 1409 0014 B8000000 		.4byte	.LFE2-.LFB2
+ 1410 0018 00000000 		.4byte	.LFB3
+ 1411 001c 3C000000 		.4byte	.LFE3-.LFB3
+ 1412 0020 00000000 		.4byte	.LFB4
+ 1413 0024 4C000000 		.4byte	.LFE4-.LFB4
+ 1414 0028 00000000 		.4byte	.LFB5
+ 1415 002c 34000000 		.4byte	.LFE5-.LFB5
+ 1416 0030 00000000 		.4byte	.LFB6
+ 1417 0034 34000000 		.4byte	.LFE6-.LFB6
+ 1418 0038 00000000 		.4byte	.LFB7
+ 1419 003c 40000000 		.4byte	.LFE7-.LFB7
+ 1420 0040 00000000 		.4byte	.LFB8
+ 1421 0044 50000000 		.4byte	.LFE8-.LFB8
+ 1422 0048 00000000 		.4byte	.LFB9
+ 1423 004c 38000000 		.4byte	.LFE9-.LFB9
+ 1424 0050 00000000 		.4byte	.LFB10
+ 1425 0054 34000000 		.4byte	.LFE10-.LFB10
+ 1426 0058 00000000 		.4byte	.LFB11
+ 1427 005c 34000000 		.4byte	.LFE11-.LFB11
+ 1428 0060 00000000 		.4byte	.LFB12
+ 1429 0064 22000000 		.4byte	.LFE12-.LFB12
+ 1430 0068 00000000 		.4byte	.LFB13
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 40
+
+
+ 1431 006c 1C000000 		.4byte	.LFE13-.LFB13
+ 1432 0070 00000000 		.4byte	.LFB14
+ 1433 0074 1C000000 		.4byte	.LFE14-.LFB14
+ 1434 0078 00000000 		.4byte	.LFB15
+ 1435 007c 38000000 		.4byte	.LFE15-.LFB15
+ 1436 0080 00000000 		.4byte	0
+ 1437 0084 00000000 		.4byte	0
+ 1438              		.section	.debug_ranges,"",%progbits
+ 1439              	.Ldebug_ranges0:
+ 1440 0000 00000000 		.4byte	.LFB2
+ 1441 0004 B8000000 		.4byte	.LFE2
+ 1442 0008 00000000 		.4byte	.LFB3
+ 1443 000c 3C000000 		.4byte	.LFE3
+ 1444 0010 00000000 		.4byte	.LFB4
+ 1445 0014 4C000000 		.4byte	.LFE4
+ 1446 0018 00000000 		.4byte	.LFB5
+ 1447 001c 34000000 		.4byte	.LFE5
+ 1448 0020 00000000 		.4byte	.LFB6
+ 1449 0024 34000000 		.4byte	.LFE6
+ 1450 0028 00000000 		.4byte	.LFB7
+ 1451 002c 40000000 		.4byte	.LFE7
+ 1452 0030 00000000 		.4byte	.LFB8
+ 1453 0034 50000000 		.4byte	.LFE8
+ 1454 0038 00000000 		.4byte	.LFB9
+ 1455 003c 38000000 		.4byte	.LFE9
+ 1456 0040 00000000 		.4byte	.LFB10
+ 1457 0044 34000000 		.4byte	.LFE10
+ 1458 0048 00000000 		.4byte	.LFB11
+ 1459 004c 34000000 		.4byte	.LFE11
+ 1460 0050 00000000 		.4byte	.LFB12
+ 1461 0054 22000000 		.4byte	.LFE12
+ 1462 0058 00000000 		.4byte	.LFB13
+ 1463 005c 1C000000 		.4byte	.LFE13
+ 1464 0060 00000000 		.4byte	.LFB14
+ 1465 0064 1C000000 		.4byte	.LFE14
+ 1466 0068 00000000 		.4byte	.LFB15
+ 1467 006c 38000000 		.4byte	.LFE15
+ 1468 0070 00000000 		.4byte	0
+ 1469 0074 00000000 		.4byte	0
+ 1470              		.section	.debug_line,"",%progbits
+ 1471              	.Ldebug_line0:
+ 1472 0000 AA010000 		.section	.debug_str,"MS",%progbits,1
+ 1472      02006700 
+ 1472      00000201 
+ 1472      FB0E0D00 
+ 1472      01010101 
+ 1473              	.LASF6:
+ 1474 0000 6C6F6E67 		.ascii	"long long int\000"
+ 1474      206C6F6E 
+ 1474      6720696E 
+ 1474      7400
+ 1475              	.LASF14:
+ 1476 000e 72656733 		.ascii	"reg32\000"
+ 1476      3200
+ 1477              	.LASF42:
+ 1478 0014 433A5C55 		.ascii	"C:\\Users\\zpstrwy\\Documents\\PSoC Creator\\BLE_Fi"
+ 1478      73657273 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 41
+
+
+ 1478      5C7A7073 
+ 1478      74727779 
+ 1478      5C446F63 
+ 1479 0042 6E644D65 		.ascii	"ndMe01\\BLE_FindMe01.cydsn\000"
+ 1479      30315C42 
+ 1479      4C455F46 
+ 1479      696E644D 
+ 1479      6530312E 
+ 1480              	.LASF30:
+ 1481 005c 424C455F 		.ascii	"BLE_HAL_Uart_UartSetRtsFifoLevel\000"
+ 1481      48414C5F 
+ 1481      55617274 
+ 1481      5F556172 
+ 1481      74536574 
+ 1482              	.LASF16:
+ 1483 007d 424C455F 		.ascii	"BLE_HAL_Uart_UartInit\000"
+ 1483      48414C5F 
+ 1483      55617274 
+ 1483      5F556172 
+ 1483      74496E69 
+ 1484              	.LASF26:
+ 1485 0093 424C455F 		.ascii	"BLE_HAL_Uart_UartGetByte\000"
+ 1485      48414C5F 
+ 1485      55617274 
+ 1485      5F556172 
+ 1485      74476574 
+ 1486              	.LASF10:
+ 1487 00ac 646F7562 		.ascii	"double\000"
+ 1487      6C6500
+ 1488              	.LASF19:
+ 1489 00b3 424C455F 		.ascii	"BLE_HAL_Uart_UartSetRxAddress\000"
+ 1489      48414C5F 
+ 1489      55617274 
+ 1489      5F556172 
+ 1489      74536574 
+ 1490              	.LASF34:
+ 1491 00d1 73747269 		.ascii	"string\000"
+ 1491      6E6700
+ 1492              	.LASF9:
+ 1493 00d8 666C6F61 		.ascii	"float\000"
+ 1493      7400
+ 1494              	.LASF38:
+ 1495 00de 424C455F 		.ascii	"BLE_HAL_Uart_UartEnableCts\000"
+ 1495      48414C5F 
+ 1495      55617274 
+ 1495      5F556172 
+ 1495      74456E61 
+ 1496              	.LASF20:
+ 1497 00f9 424C455F 		.ascii	"BLE_HAL_Uart_UartSetRxAddressMask\000"
+ 1497      48414C5F 
+ 1497      55617274 
+ 1497      5F556172 
+ 1497      74536574 
+ 1498              	.LASF12:
+ 1499 011b 63686172 		.ascii	"char8\000"
+ 1499      3800
+ 1500              	.LASF5:
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 42
+
+
+ 1501 0121 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1501      20756E73 
+ 1501      69676E65 
+ 1501      6420696E 
+ 1501      7400
+ 1502              	.LASF3:
+ 1503 0133 73686F72 		.ascii	"short unsigned int\000"
+ 1503      7420756E 
+ 1503      7369676E 
+ 1503      65642069 
+ 1503      6E7400
+ 1504              	.LASF33:
+ 1505 0146 424C455F 		.ascii	"BLE_HAL_Uart_UartPutString\000"
+ 1505      48414C5F 
+ 1505      55617274 
+ 1505      5F556172 
+ 1505      74507574 
+ 1506              	.LASF39:
+ 1507 0161 424C455F 		.ascii	"BLE_HAL_Uart_UartDisableCts\000"
+ 1507      48414C5F 
+ 1507      55617274 
+ 1507      5F556172 
+ 1507      74446973 
+ 1508              	.LASF24:
+ 1509 017d 72784461 		.ascii	"rxData\000"
+ 1509      746100
+ 1510              	.LASF22:
+ 1511 0184 61646472 		.ascii	"addressMask\000"
+ 1511      6573734D 
+ 1511      61736B00 
+ 1512              	.LASF1:
+ 1513 0190 756E7369 		.ascii	"unsigned char\000"
+ 1513      676E6564 
+ 1513      20636861 
+ 1513      7200
+ 1514              	.LASF18:
+ 1515 019e 424C455F 		.ascii	"BLE_HAL_Uart_UartStop\000"
+ 1515      48414C5F 
+ 1515      55617274 
+ 1515      5F556172 
+ 1515      7453746F 
+ 1516              	.LASF28:
+ 1517 01b4 424C455F 		.ascii	"BLE_HAL_Uart_UartSetRtsPolarity\000"
+ 1517      48414C5F 
+ 1517      55617274 
+ 1517      5F556172 
+ 1517      74536574 
+ 1518              	.LASF40:
+ 1519 01d4 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1519      4320342E 
+ 1519      392E3320 
+ 1519      32303135 
+ 1519      30333033 
+ 1520 0207 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 1520      20726576 
+ 1520      6973696F 
+ 1520      6E203232 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 43
+
+
+ 1520      31323230 
+ 1521 023a 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1521      66756E63 
+ 1521      74696F6E 
+ 1521      2D736563 
+ 1521      74696F6E 
+ 1522              	.LASF11:
+ 1523 0262 75696E74 		.ascii	"uint32\000"
+ 1523      333200
+ 1524              	.LASF25:
+ 1525 0269 424C455F 		.ascii	"BLE_HAL_Uart_UartGetChar\000"
+ 1525      48414C5F 
+ 1525      55617274 
+ 1525      5F556172 
+ 1525      74476574 
+ 1526              	.LASF8:
+ 1527 0282 756E7369 		.ascii	"unsigned int\000"
+ 1527      676E6564 
+ 1527      20696E74 
+ 1527      00
+ 1528              	.LASF21:
+ 1529 028f 61646472 		.ascii	"address\000"
+ 1529      65737300 
+ 1530              	.LASF7:
+ 1531 0297 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1531      206C6F6E 
+ 1531      6720756E 
+ 1531      7369676E 
+ 1531      65642069 
+ 1532              	.LASF17:
+ 1533 02ae 424C455F 		.ascii	"BLE_HAL_Uart_UartPostEnable\000"
+ 1533      48414C5F 
+ 1533      55617274 
+ 1533      5F556172 
+ 1533      74506F73 
+ 1534              	.LASF29:
+ 1535 02ca 706F6C61 		.ascii	"polarity\000"
+ 1535      72697479 
+ 1535      00
+ 1536              	.LASF35:
+ 1537 02d3 62756649 		.ascii	"bufIndex\000"
+ 1537      6E646578 
+ 1537      00
+ 1538              	.LASF15:
+ 1539 02dc 73697A65 		.ascii	"sizetype\000"
+ 1539      74797065 
+ 1539      00
+ 1540              	.LASF37:
+ 1541 02e5 74784461 		.ascii	"txDataByte\000"
+ 1541      74614279 
+ 1541      746500
+ 1542              	.LASF41:
+ 1543 02f0 2E5C4765 		.ascii	".\\Generated_Source\\PSoC4\\BLE_HAL_Uart_UART.c\000"
+ 1543      6E657261 
+ 1543      7465645F 
+ 1543      536F7572 
+ 1543      63655C50 
+ARM GAS  C:\Users\zpstrwy\AppData\Local\Temp\ccc2TrQq.s 			page 44
+
+
+ 1544              	.LASF13:
+ 1545 031d 63686172 		.ascii	"char\000"
+ 1545      00
+ 1546              	.LASF36:
+ 1547 0322 424C455F 		.ascii	"BLE_HAL_Uart_UartPutCRLF\000"
+ 1547      48414C5F 
+ 1547      55617274 
+ 1547      5F556172 
+ 1547      74507574 
+ 1548              	.LASF2:
+ 1549 033b 73686F72 		.ascii	"short int\000"
+ 1549      7420696E 
+ 1549      7400
+ 1550              	.LASF31:
+ 1551 0345 6C657665 		.ascii	"level\000"
+ 1551      6C00
+ 1552              	.LASF4:
+ 1553 034b 6C6F6E67 		.ascii	"long int\000"
+ 1553      20696E74 
+ 1553      00
+ 1554              	.LASF27:
+ 1555 0354 746D7053 		.ascii	"tmpStatus\000"
+ 1555      74617475 
+ 1555      7300
+ 1556              	.LASF23:
+ 1557 035e 6D617463 		.ascii	"matchReg\000"
+ 1557      68526567 
+ 1557      00
+ 1558              	.LASF0:
+ 1559 0367 7369676E 		.ascii	"signed char\000"
+ 1559      65642063 
+ 1559      68617200 
+ 1560              	.LASF32:
+ 1561 0373 75617274 		.ascii	"uartFlowCtrl\000"
+ 1561      466C6F77 
+ 1561      4374726C 
+ 1561      00
+ 1562              	.LASF43:
+ 1563 0380 424C455F 		.ascii	"BLE_HAL_Uart_UartSetCtsPolarity\000"
+ 1563      48414C5F 
+ 1563      55617274 
+ 1563      5F556172 
+ 1563      74536574 
+ 1564              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
